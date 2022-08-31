@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title><%= title %></title>
+    <%- include('../partials/head') %>
+  </head>
+  <body>
+    <header>
+      <%- include('../partials/header') %>
+      <div class="container-fluid">
+        <h1 class="text-center">Web interface for positive selection</h1>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="form-mod">
+        <form method="post" action="/upload_files" enctype="multipart/form-data">
+          <div class="row mb-3">
+            <div class="form-check form-switch">
+              <input id="isNuc" class="form-check-input" type="checkbox" name="isNuc" checked>
+              <label class="form-check-label" for="isNuc">Codons</label>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="form-check form-switch">
+              <input id="logBranchLength" class="form-check-input" type="checkbox" name="logBranchLength">
+              <label class="form-check-label" for="logBranchLength">Log branch length</label>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="form-check form-switch">
+              <input id="skipMissingSites" class="form-check-input" type="checkbox" name="skipMissingSites">
+              <label class="form-check-label" for="skipMissingSites">Disregard site numbers</label>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <label class="form-check-label" for="">Results type</label>
+            <div class="d-flex input-group">
+              <input type="radio" class="btn-check" name="resultsType" id="siteMode" value="siteMode" checked>
+              <label class="btn btn-outline-secondary flex-fill" for="siteMode">Site</label>
+
+              <input type="radio" class="btn-check" name="resultsType" id="branchSiteMode" value="branchSiteMode">
+              <label class="btn btn-outline-secondary flex-fill" for="branchSiteMode">Branch-site</label>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
+              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Tree file</i>
+              <input id="tree-file-input" type="file" name="file_t" class="inputfile" style="display: none;" required />
+              <p class="filename"></p>
+            </label>
+          </div>
+          <div class="row mb-2">
+            <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
+              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Alignment file</i>
+              <input id="alignment-file-input" type="file" name="file_a" class="inputfile" style="display: none;" required />
+              <p class="filename"></p>
+            </label>
+          </div>
+          <div class="row mb-3">
+            <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
+              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Results file</i>
+              <input id="results-file-input" type="file" name="file_r" clas="inputfile" style="display: none;" required />
+              <p class="filename"></p>
+            </label>
+          </div>
+          
+          <div id="statcol-field" class="row mb-3">
+            <label for="statcol">Statistics column</label>
+            <input id="statcol" class="form-control" type="number" name="statcol" value="1" min="0" step="1" required />
+          </div>
+
+          <div class="row mb-2">
+            <!-- <label for="nostat">Missing statistics value</label> -->
+            <input id="nostat" class="form-control" type="hidden" name="nostat" value="-1" step="1" required />
+          </div>
+
+          <div class="row">
+            <input id="submit" class="btn btn-light" type="submit" value="Display" />
+          </div>
+        </form>
+      </div>
+
+      <!-- Exemple d'affichage -->
+
+      <div class="container-fluid text-center">
+        <h2 class="text-center"><span class="text-muted">An example of display...</span></h2>
+        <img src="media/ExempleAffichage.png" alt="exemple d'affichage" />
+        <h2 class="text-center"><span class="text-muted">...and its various options</span></h2>
+      </div>
+
+      <!-- Description des options d'affichage -->
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">On click</h5>
+            <p class="text-center">Reverse branches Select nodes to display</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">Expand/Compact tree</h5>
+            <p class="text-center">Increase/Decrease spaces between branches</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option text-center">AlignmentNature</h5>
+            <p class="text-center">Display of nucleotid or protein sequences</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">WidthSize +/-</h5>
+            <p class="text-center">Increase/Decrease the tree's width</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">HeightSize +/-</h5>
+            <p class="text-center">Increase/Decrease the tree's height</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">ExportSVG</h5>
+            <p class="text-center">Results export in svg format</p>
+          </div>
+        </div>
+        <div class="d-flex col align-items-start">
+          <div>
+            <h5 class="Option">Upper / Lower threshold</h5>
+            <p class="text-center">Choice of upper/lower threshold of positive selection values</p>
+          </div>
+        </div>
+      </div>
+      
+      <hr class="featurette-divider">
+
+      <footer class="container text-center">
+        <p class="float-end no-decoration"><a href="#">Back to top</a></p>
+        <p>Université Lyon 1 - Master Bioinformatique</p>
+      </footer>
+    </main>
+  </body>
+  <script type="text/javascript">
+  var uploadIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">'
+  +'<path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707V11.5z"/>'
+  +'<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>'
+  +'</svg>';
+  var checkIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-check" viewBox="0 0 16 16">'
+    +'<path d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>'
+    +'<path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>'
+    +'</svg>';
+  var checkFillIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-check-fill" viewBox="0 0 16 16">'
+    +'<path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1.146 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/>'
+    +'</svg>';
+  var warningIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">'
+    +'<path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>'
+    +'<path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>'
+    +'</svg>';
+  var warningFillIconHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">'
+    +'<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>'
+    +'</svg>';
+
+  $(document).ready(function() {
+    function updateForm() {
+      console.log('checked:', isChecked('branchSiteMode'));
+      if (isChecked('branchSiteMode')) {
+        $('#statcol-field').hide();
+      } else {
+        $('#statcol-field').show();
+      }
+    }
+    function isChecked(checkboxId) {
+      return $('#'+checkboxId).is(':checked');
+    }
+    $('#branchSiteMode').ready(function(e) {
+      // console.log('branchSite ready');
+      updateForm();
+    });
+    $('#siteMode, #branchSiteMode').change(function (e) {
+      // console.log('branchSite updated');
+      updateForm();
+    });
+
+    $('[id$="-file-input"]').each(function(i, elt) {
+      if ($('#'+elt.id).val() != '') {
+        $("#"+elt.id+" + .filename").html(''+$('#'+elt.id)[0].files[0].name);
+      } else {
+        $("#"+elt.id+" + .filename").html('');
+      }
+    });
+    
+    $('input[type="file"]').change(function(e) {
+      var filename = e.target.files[0].name;
+      console.log('File changed on input with id: ' + e.target.id);
+      var selectedFile = document.getElementById(e.target.id).files[0];
+      // var content = document.getElementById(e.target.id.split('-')[0]+'-file-content');
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var lines = this.result.split('\n');
+        var treeRegex = new RegExp('^[\(][A-Za-z0-9\.\-_,\(\):;]+');
+        var alignmentRegex = new RegExp('^>.*(\r)?\n[ACGTU\-]+');
+        var resultsRegex = new RegExp('[0-9]+((\t| )[\-]?[0-9]+[\.]?[0-9]+)+');
+        console.log(reader.result);
+        var isMatch = null;
+        if (e.target.id.substring(0, 4) === 'tree') {
+          isMatch = treeRegex.test(reader.result);
+        } else if (e.target.id.substring(0, 4) === 'alig') {
+          isMatch = alignmentRegex.test(reader.result);
+        } else if (e.target.id.substring(0, 4) === 'resu') {
+          isMatch = resultsRegex.test(reader.result);
+        } else {
+          console.log('Unrecognized ID: '+e.target.id);
+        }
+        console.log(isMatch);
+        if (isMatch) {
+          $("#"+e.target.id+" + .filename").html(checkIconHTML+'<br/>'+filename); 
+        } else {
+          $("#"+e.target.id+" + .filename").html(warningIconHTML+'<br/>'+filename); 
+        }
+        // content.innerHTML = '';
+        for (var i = 0; i < Math.min(lines.length, 4); i ++) {
+          // content.innerHTML += lines[i].substring(0, 80)+'<br>';
+          console.log(lines[i].substring(0, 80));
+        }
+      };
+      reader.readAsText(selectedFile);
+    });
+  });
+  </script>
+</html>
