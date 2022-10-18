@@ -80,8 +80,7 @@ router.post("/upload_files", upload.fields([
       +' -c '+statcol
       +' -n '+nostat
       +(branchSite?' -b ':'')
-      +(skipMissingSites?' --skipmissing ':'')
-      +(isNuc?' --codons ':''),
+      +(skipMissingSites?' --skipmissing ':''),
   (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);
