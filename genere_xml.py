@@ -18,6 +18,7 @@ import random
 import os
 from Bio import Phylo
 from io import StringIO
+from math import *
 
 from lxml import etree
 from xml.etree import ElementTree
@@ -41,9 +42,12 @@ parser.add_argument('-o', '--output', dest='output', action='store',\
     help='Name of the output XML file (if not specified, the XML will have \
     the same name as the tree file)')
 ## Other parameters
-parser.add_argument('-c', '--col', dest='statcol', action='store', type=int,\
+# parser.add_argument('-c', '--col', dest='statcol', action='store', type=int,\
+#     default=1,\
+#     help='Index of the results column to use')
+parser.add_argument('-e', '--exp', dest='exprcol', action='store', type=str,\
     default=1,\
-    help='Index of the results column to use')
+    help='Formula to be applied on the column values')
 parser.add_argument('-n', '--nostat', dest='nostat', action='store', type=float,\
     default=-1.0,\
     help='Value to use in case there is no statistic associated\
@@ -154,9 +158,11 @@ def loadAlignment(alignmentFile):
     return alignmentDict, maxSeqIdLength
 
 
-def loadResultsSites(resultsFile, statcol=1, nostat_value=-1.0, skipMissingSites=False):
-    '''Loads site results from column with index <statcol>.'''
+def loadResultsSites(resultsFile, exprcol="[1]", nostat_value=-1.0, skipMissingSites=False):
+    '''Loads site results from formula exprcol on columns.'''
 
+    expr=exprcol.replace("[","float(line[")
+    expr=expr.replace("]","])")
     resultsDict = {}
     with open(resultsFile, 'r') as f:
         i = -1
@@ -165,7 +171,7 @@ def loadResultsSites(resultsFile, statcol=1, nostat_value=-1.0, skipMissingSites
             if re.search('^[0-9]+$', line[0]): # results line
                 try:
                     site = int(line[0])
-                    res = float(line[statcol])
+                    res = float(eval(expr))
                 except ValueError:
                     print(f"Conversion failed in line {line}")
                 else:
@@ -468,7 +474,7 @@ print ("OK")
 
 print ("Loading results... ")
 if not args.isBranchsite:
-  results =  loadResultsSites(args.resultsFile, args.statcol, args.nostat, skipMissingSites=args.skipMissingSites)
+  results =  loadResultsSites(args.resultsFile, args.exprcol, args.nostat, skipMissingSites=args.skipMissingSites)
 else:
   results = loadResultsBranchSite(args.resultsFile)
 

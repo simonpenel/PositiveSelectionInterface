@@ -78,13 +78,18 @@
               <input id="results-file-input" type="file" name="file_r" clas="inputfile" style="display: none;" required />
 
               <div id="statlink-bsmode" class="row mb-3">
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_branch-site_results.txt"
+                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_branch-site_results_long.txt"
                    download="results.txt" target=_blank>
                   Example</a><br>
+                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_branch-site_results.txt"
+                   download="results.txt" target=_blank>
+                  Codon Example</a><br>
               </div>
               <div id="statlink-smode" class="row mb-3">
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_site_results.txt" download="results.txt" target=_blank>
+                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_site_results_long.txt" download="results.txt" target=_blank>
                   Example</a><br>
+                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_site_results.txt" download="results.txt" target=_blank>
+                  Codon Example</a><br>
               </div>
 
               <p class="filename"></p>
@@ -93,7 +98,7 @@
           
           <div id="statcol-field" class="row mb-3">
             <label for="statcol">Statistics column</label>
-            <input id="statcol" class="form-control" type="number" name="statcol" value="1" min="0" step="1" required />
+            <input id="statcol" class="form-control" type="string" name="statcol" value="[1]" required />
           </div>
 
           <div class="row mb-2">

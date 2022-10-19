@@ -109,24 +109,24 @@
         </div>
 
         <!-- Bornes gauche et droite -->
-        <div id="boundaries-group" class="btn-group" role="group" aria-label="">
-          <button class="btn btn-sm btn-outline-secondary">
-            <div class="input-group align-items-center">
-              <label for="left-boundary">Boundaries</label>
-              <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/>
-              <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/>
-            </div>
-          </button>
-          <div class="btn btn-sm btn-outline-secondary d-flex align-items-center">
-            <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" />
-            <label for="automatic-boundaries">Update on scroll</label>
-          </div>
-          <div class="btn-group" role="group" aria-label="">
-            <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary">
-              <span>Reset</span>
-            </button>
-          </div>
-        </div>
+        <!-- <div id="boundaries-group" class="btn-group" role="group" aria-label=""> -->
+        <!--   <button class="btn btn-sm btn-outline-secondary"> -->
+        <!--     <div class="input-group align-items-center"> -->
+        <!--       <label for="left-boundary">Boundaries</label> -->
+        <!--       <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/> -->
+        <!--       <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/> -->
+        <!--     </div> -->
+        <!--   </button> -->
+        <!--   <div class="btn btn-sm btn-outline-secondary d-flex align-items-center"> -->
+        <!--     <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" /> -->
+        <!--     <label for="automatic-boundaries">Update on scroll</label> -->
+        <!--   </div> -->
+        <!--   <div class="btn-group" role="group" aria-label=""> -->
+        <!--     <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary"> -->
+        <!--       <span>Reset</span> -->
+        <!--     </button> -->
+        <!--   </div> -->
+        <!-- </div> -->
       <!-- </div> -->
     </nav>
     <div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
@@ -2089,8 +2089,6 @@ $(document).ready(function() {
 
   if (!isCodon) {
       $('#alignment-type').hide();
-    // $('#codons-display').hide();
-    // $('#aminoacid-display').text('Default');
   }
     
   if (!branchSite) {
