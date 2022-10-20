@@ -77,11 +77,10 @@ router.post("/upload_files", upload.fields([
       +' -a '+upload_dir+fname_a
       +' -r '+upload_dir+fname_r
       +' -o '+xml_dir+fname_xml
-      +' -c '+statcol
+      +' -e "'+statcol+'"'
       +' -n '+nostat
       +(branchSite?' -b ':'')
-      +(skipMissingSites?' --skipmissing ':'')
-      +(isNuc?' --codons ':''),
+      +(skipMissingSites?' --skipmissing ':''),
   (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`);

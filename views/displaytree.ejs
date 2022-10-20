@@ -80,7 +80,7 @@
         
         <!-- Bouton Export -->
         <div id="export" class="dropdown">
-          <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose alignment type">
+          <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
             Export
           </button>
           <ul class="dropdown-menu" aria-labelledby="export">
@@ -109,24 +109,24 @@
         </div>
 
         <!-- Bornes gauche et droite -->
-        <div id="boundaries-group" class="btn-group" role="group" aria-label="">
-          <button class="btn btn-sm btn-outline-secondary">
-            <div class="input-group align-items-center">
-              <label for="left-boundary">Boundaries</label>
-              <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/>
-              <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/>
-            </div>
-          </button>
-          <div class="btn btn-sm btn-outline-secondary d-flex align-items-center">
-            <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" />
-            <label for="automatic-boundaries">Update on scroll</label>
-          </div>
-          <div class="btn-group" role="group" aria-label="">
-            <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary">
-              <span>Reset</span>
-            </button>
-          </div>
-        </div>
+        <!-- <div id="boundaries-group" class="btn-group" role="group" aria-label=""> -->
+        <!--   <button class="btn btn-sm btn-outline-secondary"> -->
+        <!--     <div class="input-group align-items-center"> -->
+        <!--       <label for="left-boundary">Boundaries</label> -->
+        <!--       <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/> -->
+        <!--       <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/> -->
+        <!--     </div> -->
+        <!--   </button> -->
+        <!--   <div class="btn btn-sm btn-outline-secondary d-flex align-items-center"> -->
+        <!--     <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" /> -->
+        <!--     <label for="automatic-boundaries">Update on scroll</label> -->
+        <!--   </div> -->
+        <!--   <div class="btn-group" role="group" aria-label=""> -->
+        <!--     <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary"> -->
+        <!--       <span>Reset</span> -->
+        <!--     </button> -->
+        <!--   </div> -->
+        <!-- </div> -->
       <!-- </div> -->
     </nav>
     <div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
@@ -152,16 +152,15 @@
 
 <!-- Code JS pour l'affichage de l'arbre -->
 <script type="text/javascript">
-// Recuperation des variables envoyee via Express
+// Recuperation des variables envoyees via Express
 // ----------------------------------------------
 var recTree = <%- arbre %>;
 var pattern = <%- pattern %>;
 pattern = '';
 var branchSite = <%- branchSite %>;
 var logBranchLength = <%- logBranchLength %>;
-var isNuc = <%- isNuc %>;
-// console.log('isNuc', isNuc);
-// Variables globales
+
+  // Variables globales
 // ------------------
 var treeRoot;
 var cladeRoot;
@@ -203,6 +202,9 @@ var psBelowThresholdBgColor = "#DDDDDD";
 // var psBelowThresholdBgColor = "#FFFFFF";
 var psMissingBgColor = "#FFFFFF";
 var seq_lg = xmlparser.flatTree(recTree.phyloxml.phylogeny.maxSeqIdLength)*10;
+//  var isCodon = Boolean(xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon));
+  var isCodon = (xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon)=="true");
+  console.log("isCodon",isCodon);                                   
 // var resultsText = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
 // var resultsText = '';
 var collapseMode = 'collapseOff';
@@ -1198,7 +1200,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // | Début : blocs de séquences |
   // ==============================
   seq_dataset = [];
-  var leaves_sequences = leaves.filter(function(d) {return (isNuc ? d.data.lastEvent.dnaAlign : d.data.lastEvent.aaAlign);});
+  // var leaves_sequences = leaves.filter(function(d) {return (isNuc ? d.data.lastEvent.dnaAlign : d.data.lastEvent.aaAlign);});
+  var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
     leaves_sequences.forEach (function (d,i) {
       var leaf_name = d.data.lastEvent.name;
       var dna_sequence = d.data.lastEvent.dnaAlign;
@@ -2084,10 +2087,10 @@ $(document).ready(function() {
     updateLayout(cladeRoot);
   });
 
-  if (!isNuc) {
-    $('#codons-display').hide();
-    $('#aminoacid-display').text('Default');
+  if (!isCodon) {
+      $('#alignment-type').hide();
   }
+    
   if (!branchSite) {
     $('#left-boundary, #right-boundary').prop('disabled', true);
   }
@@ -2133,6 +2136,7 @@ $(document).ready(function() {
   $(window).on('ready resize', function() {
     $('main').css('margin-top', $('header').outerHeight());
   });
+    
   // Gestion du bouton pour le type d'alignement
   $('#alignment-type').on('click', function(event, dropdownData) {
     var target = event.toElement || event.relatedTarget || event.target || function () { throw "Failed to attach an event target!"; }
@@ -2171,6 +2175,7 @@ $(document).ready(function() {
       default:
     }
   });
+    
   // leftBoundary = leftBoundaryInput.val();
   // rightBoundary = rightBoundaryInput.val();
   // Gestion de la modification des limites
