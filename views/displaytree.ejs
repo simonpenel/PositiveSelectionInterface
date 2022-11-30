@@ -1531,7 +1531,8 @@ function saveSVGTree(){
       .html(style);
   var as_text = new XMLSerializer().serializeToString(treeSvg.node());
   img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(as_text)));
-  window.open().document.write('<p>Please copy or save the the image (it may not display if it is too large) <img src="' + img.src + '"/>');
+  // window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page) <img src="' + img.src + '"/>');
+  window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page)</p> <img src="' + img.src + '"/>');
 };
 
 function saveSVGAlignment(){
@@ -1557,7 +1558,7 @@ function saveSVGAlignment(){
       .html(style);
   var as_text = new XMLSerializer().serializeToString(alignmentSvg.node());
   img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(as_text)));
-  window.open().document.write('<p>Please copy or save the the image (it may not display if it is too large) <img src="' + img.src + '"/>');
+  window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page)</p> <img src="' + img.src + '"/>');
   // var as_text = new XMLSerializer().serializeToString(alignmentSvg.node());
   // img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(as_text)));
   // window.open().document.write('<p>Please copy or save the the image (it may not display if it is too large) <img src="' + img.src + '"/>');
