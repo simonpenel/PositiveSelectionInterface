@@ -1427,18 +1427,12 @@ function updateNodeColors() {
 }
 
 function scrollAlignment(event) {
-  // globalI ++;
-  // console.log(globalI, 'scrollAlignment()');
-
   // Get the site's number (mouse position in pixels) and navigate to this site in the large window
-  // console.log('compactWindow.scrollLeft()', compactWindow.scrollLeft());
   var siteNumber = event.pageX + compactWindow.scrollLeft();
   var leftScroll = 50 + seq_lg + 10 + siteNumber*hStep - alignmentWindow.innerWidth()/2;
   var rightScroll = 50 + seq_lg + 10 + siteNumber*hStep + alignmentWindow.innerWidth()/2;
   var leftSiteNumber = Math.trunc((leftScroll - (60 + seq_lg))/hStep)+2;
   var rightSiteNumber = Math.trunc((rightScroll - (60 + seq_lg))/hStep)+2;
-  // console.log('Navigating to site', siteNumber);
-  // console.log(leftSiteNumber, rightSiteNumber);
   alignmentWindow.scrollLeft(leftScroll, 0);
 
   if (automaticBoundaries) {
@@ -1450,7 +1444,6 @@ function scrollAlignment(event) {
 }
 
 function updateScroll() {
-  // console.log('update scroll');
   // Hack to keep the navigation window visible after a branch change
   alignmentWindow
     .scrollLeft(alignmentWindow.scrollLeft()+1)
@@ -1481,10 +1474,6 @@ function getPositiveRateJSON(textResultsList, leftB, rightB) {
       }
     }
   });
-  console.log('nb pos:', nbPos);
-  console.log('thr low:', psThresholdLow);
-  console.log('thr high:', psThresholdHigh);
-  console.log(psThresholdHigh + psThresholdLow);
   leftBoundary = leftBoundaryInput.val();
   rightBoundary = rightBoundaryInput.val();
   return nbPos/(rightBoundary - leftBoundary + 1);
@@ -2086,14 +2075,11 @@ $(document).ready(function() {
     resetBoundaries();
   });
   $('input#automatic-boundaries').change(function (e) {
-    // console.log('this', this);
-    // console.log($(this).is(':checked'));
     if ($(this).is(':checked')) {
       automaticBoundaries = true;
     } else {
       automaticBoundaries = false;
     }
-    // console.log('automaticBoundaries', automaticBoundaries);
   });
   var tooltips = document.querySelectorAll('.tooltip');
   window.onmousemove = function (e) {
@@ -2129,34 +2115,27 @@ $(document).ready(function() {
   $('#alignment-type').on('click', function(event, dropdownData) {
     var target = event.toElement || event.relatedTarget || event.target || function () { throw "Failed to attach an event target!"; }
     myStorage.setItem("alignment-type",target.text);
-    // console.log('Alignment type:', target.text);
     switch (target.text) {
       case "Codons": // Codons to Amino Acids
         if (displaySeqType != 'Nuc') {
           displaySeqType = "Nuc";
-          // console.log("Displaying codons");
           $(".aa-sequence").css("display", "none");
           $(".dna-sequence").css("display", "block");
           $("#toggle-seqtype").html("Current display: "+displaySeqType);
           $("#codons-display").css('color', '#FF0000');
           $("#aminoacid-display").css('color', '#000000');
           updateLayout(cladeRoot);
-          // console.log('alignmentWindow.scrollLeft():', alignmentWindow.scrollLeft());
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()*3);
-          // console.log('alignmentWindow.scrollLeft():', alignmentWindow.scrollLeft());
         }
         break;
       case "Amino Acids": // Amino Acids to Codons
         if (displaySeqType != 'AA') {
           displaySeqType = "AA";
-          // console.log("Displaying amino acids");
           $(".dna-sequence").css("display", "none");
           $(".aa-sequence").css("display", "block");
           $("#codons-display").css('color', '#000000');
           $("#aminoacid-display").css('color', '#FF0000');
-          // console.log('alignmentWindow.scrollLeft():', alignmentWindow.scrollLeft());
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()/3);
-          // console.log('alignmentWindow.scrollLeft():', alignmentWindow.scrollLeft());
           updateLayout(cladeRoot);
         }
         break;
@@ -2172,7 +2151,6 @@ $(document).ready(function() {
     // Correct values
     var leftB = parseFloat(leftBoundaryInput.val());
     var rightB = parseFloat(rightBoundaryInput.val());
-    // console.log('Thresholds:', psHighVal, '>=', psLowVal);
     if (rightB - 1 < leftB) {
       if (event.currentTarget.id == 'right-boundary') {
         // Left boundary > right boundary
@@ -2187,7 +2165,6 @@ $(document).ready(function() {
     // Réaffectation des variables globales
     leftBoundary = leftB;
     rightBoundary = rightB;
-    // console.log('>> ', psThresholdHigh, '>=', psThresholdLow);
     updateLayout(cladeRoot);
   });
   // Gestion de la modification des seuils
@@ -2197,7 +2174,6 @@ $(document).ready(function() {
     // Correction des valeurs en présence d'incohérences
     var psHighVal = parseFloat($('#ps-threshold-high').val());
     var psLowVal = parseFloat($('#ps-threshold-low').val());
-    // console.log('Thresholds:', psHighVal, '>=', psLowVal);
     if (psHighVal < psLowVal) {
       if (event.currentTarget.id == 'ps-threshold-high') {
         // On a descendu le seuil supérieur plus bas que le seuil inférieur
@@ -2216,12 +2192,6 @@ $(document).ready(function() {
     // Réaffectation des variables globales
     psThresholdHigh = psHighVal;
     psThresholdLow = psLowVal;
-    // console.log('>> ', psThresholdHigh, '>=', psThresholdLow);
-    // if (psThresholdsChanged) {
-    //   // console.log('Updating... (lower = '+psThresholdLow+' ; upper = '+psThresholdHigh+')');
-    //   updateLayout(cladeRoot);
-    //   psThresholdsChanged = false;
-    // }
     updateLayout(cladeRoot);
   });
 });
