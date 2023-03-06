@@ -56,8 +56,6 @@
               <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Tree file</i>
               <input id="tree-file-input" type="file" name="file_t"
                      class="inputfile" style="display: none;" required />
-              <a download="basic_tree.txt" href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/1_basic_tree.txt" target=_blank>
-                Example</a><br>
 
               <p class="filename"></p>
             </label>
@@ -66,8 +64,6 @@
             <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
               <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Alignment file</i>
               <input id="alignment-file-input" type="file" name="file_a" class="inputfile" style="display: none;" required />
-              <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/2_basic_alignment.txt" download="basic_alignment.txt" target=_blank>
-                Example</a><br>
 
               <p class="filename"></p>
             </label>
@@ -77,27 +73,12 @@
               <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Results file</i>
               <input id="results-file-input" type="file" name="file_r" clas="inputfile" style="display: none;" required />
 
-              <div id="statlink-bsmode" class="row mb-3">
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_branch-site_results_long.txt"
-                   download="results.txt" target=_blank>
-                  Example</a><br>
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_branch-site_results.txt"
-                   download="results.txt" target=_blank>
-                  Codon Example</a><br>
-              </div>
-              <div id="statlink-smode" class="row mb-3">
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_site_results_long.txt" download="results.txt" target=_blank>
-                  Example</a><br>
-                <a href="https://raw.githubusercontent.com/gnoiret/PositiveSelectionInterface/main/examples/basic_example/3_basic_site_results.txt" download="results.txt" target=_blank>
-                  Codon Example</a><br>
-              </div>
-
               <p class="filename"></p>
             </label>
           </div>
           
           <div id="statcol-field" class="row mb-3">
-            <label for="statcol">Statistics column</label>
+            <label for="statcol">Statistics formula</label>
             <input id="statcol" class="form-control" type="string" name="statcol" value="[1]" required />
           </div>
 
