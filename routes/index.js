@@ -19,7 +19,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 // Home
 // ----
 router.get('/', function(req, res) {
-  res.render('index.ejs', {title: 'M1 Internship : Positive Selection Interface'});
+  res.render('index.ejs', {title: 'Branch Site Interface'});
 });
 
 // POST upload_files
@@ -77,7 +77,7 @@ router.post("/upload_files", upload.fields([
       +' -a '+upload_dir+fname_a
       +' -r '+upload_dir+fname_r
       +' -o '+xml_dir+fname_xml
-      +' -e "'+statcol+'"'
+      +' -e "\''+statcol+'\'"'
       +' -n '+nostat
       +(branchSite?' -b ':'')
       +(skipMissingSites?' --skipmissing ':''),

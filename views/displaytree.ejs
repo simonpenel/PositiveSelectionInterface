@@ -1,146 +1,146 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Data visualization</title>
-  <script src="d3.js" charset="urf-8"></script>
-  <%- include('../partials/head') %>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <title>Data visualization</title>
+    <script src="d3.js" charset="urf-8"></script>
+    <%- include('../partials/head') %>
+  </head>
 
-<body>
-  <header>
-    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
-      <%- include('../partials/header') %>
-    
-      <!-- <div class="d-flex w-100 justify-content-start"> -->
-        <!-- Bouton Action -->
-        <div id="action" class="dropdown">
-          <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose action on node">
-            On click
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="action">
-            <li><a id="branch-res" class="dropdown-item" href="#">View Branch Results</a></li>
-            <li><a id="switch" class="dropdown-item" href="#">Switch children</a></li>
-            <li><a id="collapse" class="dropdown-item" href="#">Collapse/Expand</a></li>
-            <li><a id="subtree" class="dropdown-item" href="#">Sub Tree/Upper Tree</a></li>
-          </ul>
-        </div>
+  <body>
+    <header>
+      <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
+        <%- include('../partials/header') %>
         
-        <!-- Bouton Collapse -->
-        <!-- <button type="button" class="btn btn-default btn-sm" aria-label="Collapse" data-toggle="tooltip" data-placement="top" title="Collapse the tree" id="globalcollapse">
-          <span>Compact tree</span>
-        </button> -->
-        
-        <!-- Bouton Expand -->
-        <div class="btn-group" role="group" aria-label="">
-          <button id="globalexpand" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Expand" data-toggle="tooltip" data-placement="top" title="Expand the tree (takes time on big trees!)">
-            <span>Expand tree</span>
-          </button>
-        </div>
-      
-        <!-- Boutons Width / Height -->
-        <div class="btn-group" role="group" aria-label="Tree size buttons">
-          <div class="btn-group" role="group" aria-label="Width buttons">
-            <!-- Bouton Reduce width -->
+        <!-- <div class="d-flex w-100 justify-content-start"> -->
+          <!-- Bouton Action -->
+          <div id="action" class="dropdown">
+            <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose action on node">
+              On click
             </button>
-            <button id="lessWidth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Less width" data-toggle="tooltip" data-placement="top" title="Reduce tree width">
-              <span>Width -</span>
-              <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-            </button>
-            <!-- Bouton Increase width -->
-            <button id="moreWidth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="More width" data-toggle="tooltip" data-placement="top" title="Increase tree width">
-              <span>Width +</span>
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <ul class="dropdown-menu" aria-labelledby="action">
+              <li><a id="branch-res" class="dropdown-item" href="#">View Branch Results</a></li>
+              <li><a id="switch" class="dropdown-item" href="#">Switch children</a></li>
+              <li><a id="collapse" class="dropdown-item" href="#">Collapse/Expand</a></li>
+              <li><a id="subtree" class="dropdown-item" href="#">Sub Tree/Upper Tree</a></li>
+            </ul>
+          </div>
+          
+          <!-- Bouton Collapse -->
+          <!-- <button type="button" class="btn btn-default btn-sm" aria-label="Collapse" data-toggle="tooltip" data-placement="top" title="Collapse the tree" id="globalcollapse">
+               <span>Compact tree</span>
+          </button> -->
+          
+          <!-- Bouton Expand -->
+          <div class="btn-group" role="group" aria-label="">
+            <button id="globalexpand" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Expand" data-toggle="tooltip" data-placement="top" title="Expand the tree (takes time on big trees!)">
+              <span>Expand tree</span>
             </button>
           </div>
-          <div class="btn-group" role="group" aria-label="Height buttons">
-            <!-- Bouton Reduce height -->
-            <button id="lessHeigth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Reduce tree height">
-              <span>Height -</span>
-              <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-            </button>
-            <!-- Bouton Increase height -->
-            <button id="moreHeigth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Increase tree height">
-              <span>Height +</span>
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Bouton Alignement -->
-        <div id="alignment-type" class="dropdown">
-          <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose alignment type">
-            Alignment type
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="alignment-type">
-            <li><a id="aminoacid-display" class="dropdown-item" href="#">Amino Acids</a></li>
-            <li><a id="codons-display" class="dropdown-item" href="#">Codons</a></li>
-          </ul>
-        </div>
-        
-        <!-- Bouton Export -->
-        <div id="export" class="dropdown">
-          <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
-            Export
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="export">
-            <li><a id="tree" class="dropdown-item" href="#">Tree</a></li>
-            <li><a id="selecp" class="dropdown-item" href="#">Alignment</a></li>
-          </ul>
-        </div>
-        
-        <!-- Champs Seuils sup. et inf. -->
-        <div id="thresholds-group" class="btn-group" role="group" aria-label="">
-          <button class="btn btn-sm btn-outline-secondary">
-            <div class="input-group align-items-center">
-              <label for="ps-threshold-low">Thresholds</label>
-              <input id="ps-threshold-low" type="number" min="0.0" step="0.05" placeholder="PS Threshold" value="0.9" style="width: 5em;"/>
-              <input id="ps-threshold-high" type="number" min="0.0" step="0.05" placeholder="PS Threshold" value="1.0" style="width: 5em;"/>
-            </div>
-          </button>
-          <div>
-            <div class="input-group">
-              <input type="radio" class="btn-check" name="selectedThreshold" id="lowerSelected" value="lowerSelected">
-              <label class="btn btn-outline-secondary" for="lowerSelected" style="margin-left: 0.5rem;"><</label>
-              <input type="radio" class="btn-check" name="selectedThreshold" id="upperSelected" value="upperSelected" checked>
-              <label class="btn btn-outline-secondary" for="upperSelected" style="margin-left: -0.25rem;">></label>
-            </div>
-          </div>
-        </div>
+          
+          <!-- Boutons Width / Height -->
+          <div class="btn-group" role="group" aria-label="Tree size buttons">
+            <div class="btn-group" role="group" aria-label="Width buttons">
+              <!-- Bouton Reduce width -->
+</button>
+<button id="lessWidth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Less width" data-toggle="tooltip" data-placement="top" title="Reduce tree width">
+  <span>Width -</span>
+  <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+</button>
+<!-- Bouton Increase width -->
+<button id="moreWidth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="More width" data-toggle="tooltip" data-placement="top" title="Increase tree width">
+  <span>Width +</span>
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</button>
+</div>
+<div class="btn-group" role="group" aria-label="Height buttons">
+  <!-- Bouton Reduce height -->
+  <button id="lessHeigth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Reduce tree height">
+    <span>Height -</span>
+    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+  </button>
+  <!-- Bouton Increase height -->
+  <button id="moreHeigth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="Increase tree height">
+    <span>Height +</span>
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  </button>
+</div>
+</div>
 
-        <!-- Bornes gauche et droite -->
-        <!-- <div id="boundaries-group" class="btn-group" role="group" aria-label=""> -->
-        <!--   <button class="btn btn-sm btn-outline-secondary"> -->
-        <!--     <div class="input-group align-items-center"> -->
-        <!--       <label for="left-boundary">Boundaries</label> -->
-        <!--       <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/> -->
-        <!--       <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/> -->
-        <!--     </div> -->
-        <!--   </button> -->
-        <!--   <div class="btn btn-sm btn-outline-secondary d-flex align-items-center"> -->
-        <!--     <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" /> -->
-        <!--     <label for="automatic-boundaries">Update on scroll</label> -->
-        <!--   </div> -->
-        <!--   <div class="btn-group" role="group" aria-label=""> -->
-        <!--     <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary"> -->
-        <!--       <span>Reset</span> -->
-        <!--     </button> -->
-        <!--   </div> -->
-        <!-- </div> -->
-      <!-- </div> -->
-    </nav>
-    <div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
-      <svg id="svg0"></svg>
+<!-- Bouton Alignement -->
+<div id="alignment-type" class="dropdown">
+  <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose alignment type">
+    Alignment type
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="alignment-type">
+    <li><a id="aminoacid-display" class="dropdown-item" href="#">Amino Acids</a></li>
+    <li><a id="codons-display" class="dropdown-item" href="#">Codons</a></li>
+  </ul>
+</div>
+
+<!-- Bouton Export -->
+<div id="export" class="dropdown">
+  <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
+    Export
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="export">
+    <li><a id="tree" class="dropdown-item" href="#">Tree</a></li>
+    <li><a id="selecp" class="dropdown-item" href="#">Alignment</a></li>
+  </ul>
+</div>
+
+<!-- Champs Seuils sup. et inf. -->
+<div id="thresholds-group" class="btn-group" role="group" aria-label="">
+  <button class="btn btn-sm btn-outline-secondary">
+    <div class="input-group align-items-center">
+      <label for="ps-threshold-low">Thresholds</label>
+      <input id="ps-threshold-low" type="number" step="0.05" placeholder="PS Threshold" value="0.9" style="width: 5em;"/>
+      <input id="ps-threshold-high" type="number" step="0.05" placeholder="PS Threshold" value="1.0" style="width: 5em;"/>
     </div>
-  </header>
-  <main>
-    <div id="tree-container" style="border:2px solid lightgrey; float: left; overflow-y: auto; width: 40%;">
-      <svg id="svg1"></svg>
+  </button>
+  <div>
+    <div class="input-group">
+      <input type="radio" class="btn-check" name="selectedThreshold" id="lowerSelected" value="lowerSelected">
+      <label class="btn btn-outline-secondary" for="lowerSelected" style="margin-left: 0.5rem;"><</label>
+                                                                                                  <input type="radio" class="btn-check" name="selectedThreshold" id="upperSelected" value="upperSelected" checked>
+                                                                                                  <label class="btn btn-outline-secondary" for="upperSelected" style="margin-left: -0.25rem;">></label>
     </div>
-    <div id="alignment-container" style="border:2px solid lightgrey; overflow-x: auto; overflow-y: auto;">
-      <svg id="svg2"></svg>
-    </div>
-  </main>
+  </div>
+</div>
+
+<!-- Bornes gauche et droite -->
+<!-- <div id="boundaries-group" class="btn-group" role="group" aria-label=""> -->
+  <!--   <button class="btn btn-sm btn-outline-secondary"> -->
+    <!--     <div class="input-group align-items-center"> -->
+      <!--       <label for="left-boundary">Boundaries</label> -->
+      <!--       <input id="left-boundary" type="number" step="1" placeholder="Left boundary" style="width: 5em;"/> -->
+      <!--       <input id="right-boundary" type="number" step="1" placeholder="Right boundary" style="width: 5em;"/> -->
+      <!--     </div> -->
+    <!--   </button> -->
+  <!--   <div class="btn btn-sm btn-outline-secondary d-flex align-items-center"> -->
+    <!--     <input id="automatic-boundaries" type="checkbox" name="automatic-boundaries" /> -->
+    <!--     <label for="automatic-boundaries">Update on scroll</label> -->
+    <!--   </div> -->
+  <!--   <div class="btn-group" role="group" aria-label=""> -->
+    <!--     <button id="reset-boundaries" class="btn btn-sm btn-outline-secondary"> -->
+      <!--       <span>Reset</span> -->
+      <!--     </button> -->
+    <!--   </div> -->
+  <!-- </div> -->
+<!-- </div> -->
+</nav>
+<div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
+  <svg id="svg0"></svg>
+</div>
+</header>
+<main>
+  <div id="tree-container" style="border:2px solid lightgrey; float: left; overflow-y: auto; width: 40%;">
+    <svg id="svg1"></svg>
+  </div>
+  <div id="alignment-container" style="border:2px solid lightgrey; overflow-x: auto; overflow-y: auto;">
+    <svg id="svg2"></svg>
+  </div>
+</main>
 </body>
 
 <script src="xmltree.js" charset="utf-8"></script>
@@ -152,481 +152,484 @@
 
 <!-- Code JS pour l'affichage de l'arbre -->
 <script type="text/javascript">
-// Recuperation des variables envoyees via Express
-// ----------------------------------------------
-var recTree = <%- arbre %>;
-var pattern = <%- pattern %>;
-pattern = '';
-var branchSite = <%- branchSite %>;
-var logBranchLength = <%- logBranchLength %>;
+  // Recuperation des variables envoyees via Express
+  // ----------------------------------------------
+  var recTree = <%- arbre %>;
+  var pattern = <%- pattern %>;
+  pattern = '';
+  var branchSite = <%- branchSite %>;
+  var logBranchLength = <%- logBranchLength %>;
 
   // Variables globales
-// ------------------
-var treeRoot;
-var cladeRoot;
-var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees en cladograme
-var nodeWidth = 80;                  // Largeur
-var nodeHeight = 15;                  // Hauteur
-// var x0Align = 350;                  // Cordonee horizonatle de l'alignement
-var stringWidth;                      // Largeur affichage arbre
-var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
-var svg;                              // La div SVG
-var g;                                // Conteneur principal
-var diagonal = svgLinks.shoulder;     // cf links.js
-var symbol = d3.symbol().size(128);   // Symbol des noeuds
-var color = d3.scaleOrdinal(d3.schemeCategory20); // Echelle des couleurs
-var options ;                         // Options d'affichage
-var action;                           // Action associee au clic
-var selectedCrossref ;                // Reference croisée choisie (nom de la sequence)
-var selectedCrossrefURL ;             // URL associe
-var crossref;                         // Objet decrivant les differentes ref croisees associees a la famille
-var spattern=pattern.split('\n');     // pattern a chercher et a afficher dans l'arbre
-// Exemple getfam?fam=CLU_005912_4_2_C&pattern=0:PETMA_GL476433.PE1+0:ANOCA_6.PE486+1:XENTR_GL172641_1.PE38+1:XENTR_GL172642_1.PE97
-pattern=spattern;
-var patterns= [];
-var div;
-var myStorage = window.localStorage;    // utilisation de localStorage pour consrever les preferences
-var displaySeqType = 'AA';
-var hStepBase = 12;
-var hStep;
-var alignmentLetterSpacing = hStepBase - 10;
-var psThresholdHigh = $('#ps-threshold-high').val() || 1.0;
-var psThresholdLow = $('#ps-threshold-low').val() || 0.9;
-// var psThresholdsChanged = false;
-// var psThresholdHighBgColor = "#FC6565";
-var psThresholdHighBgColor = "#FF0000";
-var psThresholdLowBgColor = "#FFFF00";
-// var psBelowThresholdBgColor = "#6FDCF7";
-// var psBelowThresholdBgColor = "#000000";
-var psBelowThresholdBgColor = "#DDDDDD";
-// var psBelowThresholdBgColor = "#FFFFFF";
-var psMissingBgColor = "#FFFFFF";
-var seq_lg = xmlparser.flatTree(recTree.phyloxml.phylogeny.maxSeqIdLength)*10;
-//  var isCodon = Boolean(xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon));
+  // ------------------
+  var treeRoot;
+  var cladeRoot;
+  var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees en cladograme
+  var nodeWidth = 80;                  // Largeur
+  var nodeHeight = 15;                  // Hauteur
+  // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
+  var stringWidth;                      // Largeur affichage arbre
+  var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
+  var svg;                              // La div SVG
+  var g;                                // Conteneur principal
+  var diagonal = svgLinks.shoulder;     // cf links.js
+  var symbol = d3.symbol().size(128);   // Symbol des noeuds
+  var color = d3.scaleOrdinal(d3.schemeCategory20); // Echelle des couleurs
+  var options ;                         // Options d'affichage
+  var action;                           // Action associee au clic
+  var selectedCrossref ;                // Reference croisée choisie (nom de la sequence)
+  var selectedCrossrefURL ;             // URL associe
+  var crossref;                         // Objet decrivant les differentes ref croisees associees a la famille
+  var spattern=pattern.split('\n');     // pattern a chercher et a afficher dans l'arbre
+  // Exemple getfam?fam=CLU_005912_4_2_C&pattern=0:PETMA_GL476433.PE1+0:ANOCA_6.PE486+1:XENTR_GL172641_1.PE38+1:XENTR_GL172642_1.PE97
+  pattern=spattern;
+  var patterns= [];
+  var div;
+  var myStorage = window.localStorage;    // utilisation de localStorage pour consrever les preferences
+  var displaySeqType = 'AA';
+  var hStepBase = 12;
+  var hStep;
+  var alignmentLetterSpacing = hStepBase - 10;
+  var psThresholdHigh = $('#ps-threshold-high').val() || 1.0;
+  var psThresholdLow = $('#ps-threshold-low').val() || 0.9;
+  // var psThresholdsChanged = false;
+  // var psThresholdHighBgColor = "#FC6565";
+  var psThresholdHighBgColor = "#FF0000";
+  var psThresholdLowBgColor = "#FFFF00";
+  // var psBelowThresholdBgColor = "#6FDCF7";
+  // var psBelowThresholdBgColor = "#000000";
+  var psBelowThresholdBgColor = "#DDDDDD";
+  // var psBelowThresholdBgColor = "#FFFFFF";
+  var psMissingBgColor = "#FFFFFF";
+  var seq_lg = xmlparser.flatTree(recTree.phyloxml.phylogeny.maxSeqIdLength)*10;
+  //  var isCodon = Boolean(xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon));
   var isCodon = (xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon)=="true");
   console.log("isCodon",isCodon);                                   
-// var resultsText = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
-// var resultsText = '';
-var collapseMode = 'collapseOff';
-var navWindowColor = '#000000';
-var alignmentWindow = $('#alignment-container');
-var compactWindow = $('#navigator-container');
-var resultsJSON = null;
-// var x;
-// var y;
-var resultsShown;
-// var nbSites;
-// var maxSeqLen = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.maxSeqLen);
-var maxSeqLen = 0;
-var updateNodesTimeout = null;
-var selectedNode = null;
-var globalI = 0;
-var leftBoundaryInput = $('#left-boundary');
-var rightBoundaryInput = $('#right-boundary');
-var boundariesOn = true;
-var leftBoundary = leftBoundaryInput.val();
-var rightBoundary = rightBoundaryInput.val();
-var firstLoad = 1;
-var alignmentWindowOnScroll = false;
-var compactWindowOnClick = false;
-var blackWhite = false;
-var automaticBoundaries = $('#automatic-boundaries').is(':checked');
-var resultsLength = 0;
-var siteOffset = 0;
-var nbBranches = 0;
-var nbLeaves = 0;
-var nbSites = 0;
-var upperThresholdMode = true;
+  // var resultsText = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
+  // var resultsText = '';
+  var collapseMode = 'collapseOff';
+  var navWindowColor = '#000000';
+  var alignmentWindow = $('#alignment-container');
+  var compactWindow = $('#navigator-container');
+  var resultsJSON = null;
+  // var x;
+  // var y;
+  var resultsShown;
+  // var nbSites;
+  // var maxSeqLen = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.maxSeqLen);
+  var maxSeqLen = 0;
+  var updateNodesTimeout = null;
+  var selectedNode = null;
+  var globalI = 0;
+  var leftBoundaryInput = $('#left-boundary');
+  var rightBoundaryInput = $('#right-boundary');
+  var boundariesOn = true;
+  var leftBoundary = leftBoundaryInput.val();
+  var rightBoundary = rightBoundaryInput.val();
+  var firstLoad = 1;
+  var alignmentWindowOnScroll = false;
+  var compactWindowOnClick = false;
+  var blackWhite = false;
+  var automaticBoundaries = $('#automatic-boundaries').is(':checked');
+  var resultsLength = 0;
+  var siteOffset = 0;
+  var nbBranches = 0;
+  var nbLeaves = 0;
+  var nbSites = 0;
+  var upperThresholdMode = true;
 
-if (!isStorageSupported(myStorage)) {
-  console.log("window.localStorage problem");
-  $(testnav).append('It seems that <b>window.localStorage</b> is full or is not supported by your browser<br>Please check this <a href="/clear/">here</a> ');
-}
-else {
-  main_display();
-}
+  if (!isStorageSupported(myStorage)) {
+      console.log("window.localStorage problem");
+      $(testnav).append('It seems that <b>window.localStorage</b> is full or is not supported by your browser<br>Please check this <a href="/clear/">here</a> ');
+  }
+  else {
+      main_display();
+  }
 
-// Fonction d'affichage principale
-// ---------------------------------------
-function  main_display() {
-  // Arbre d'especes (lu dans monarbre.js)
-  // var speciesTreeRoot = d3.hierarchy(cladeRootSpecies, function(d) {
-    // return d.clade;
-  // });
-  // Transforme le tableau de [index:sequences] en tableau de tableau de [sequences].
-  // a ameliorer, pas tres propre
-  pattern.forEach(function(d,i){
-    var buf = d.split(':');
-    if (buf.length > 1){
-      var indexPatt = buf[0];
-      if (!patterns[indexPatt]){
-        patterns[indexPatt]  = [];
+  // Fonction d'affichage principale
+  // ---------------------------------------
+  function  main_display() {
+      // Arbre d'especes (lu dans monarbre.js)
+      // var speciesTreeRoot = d3.hierarchy(cladeRootSpecies, function(d) {
+      // return d.clade;
+      // });
+      // Transforme le tableau de [index:sequences] en tableau de tableau de [sequences].
+      // a ameliorer, pas tres propre
+      pattern.forEach(function(d,i){
+          var buf = d.split(':');
+          if (buf.length > 1){
+              var indexPatt = buf[0];
+              if (!patterns[indexPatt]){
+                  patterns[indexPatt]  = [];
+              }
+              patterns[indexPatt].push(buf[1]);
+          }
+          else {
+              // console.log("PATTERN ERROR : "+buf);
+          }
+      });
+      // Test si l'arbre est du type
+      // -recPhymloXML ( pas de distance, evenements de perte et transfert)
+      // -phyloxml ()
+      if (recTree.recGeneTree) {
+          cladeRoot = recTree.recGeneTree.phylogeny.clade;
+          // treeRoot = recTree.recGeneTree.phylogeny;
       }
-      patterns[indexPatt].push(buf[1]);
-    }
-    else {
-      // console.log("PATTERN ERROR : "+buf);
-    }
-  });
-  // Test si l'arbre est du type
-  // -recPhymloXML ( pas de distance, evenements de perte et transfert)
-  // -phyloxml ()
-  if (recTree.recGeneTree) {
-    cladeRoot = recTree.recGeneTree.phylogeny.clade;
-    // treeRoot = recTree.recGeneTree.phylogeny;
-  }
-  if (recTree.recPhylo) {
-    cladeRoot = recTree.recPhylo.recGeneTree.phylogeny.clade;
-    // treeRoot = recTree.recPhylo.recGeneTree.phylogeny;
-  }
-  if (recTree.phyloxml) {
-    cladeRoot = recTree.phyloxml.phylogeny.clade;
-    // treeRoot = recTree.phyloxml.phylogeny;
-    tagSimpleGene = true;
-  }
+      if (recTree.recPhylo) {
+          cladeRoot = recTree.recPhylo.recGeneTree.phylogeny.clade;
+          // treeRoot = recTree.recPhylo.recGeneTree.phylogeny;
+      }
+      if (recTree.phyloxml) {
+          cladeRoot = recTree.phyloxml.phylogeny.clade;
+          // treeRoot = recTree.phyloxml.phylogeny;
+          tagSimpleGene = true;
+      }
 
-  // Creation du SVG
-  // ===============
-  // Definit  la div tooltip
-  div = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 1)
-    .style('position', 'absolute');
-  svg1 = d3.select("#svg1");   // selectionne la div svg1
-  g = svg1.append("g")      // ajoute element au svg1
-    .attr("id", "treeAlign");
-  var transition = d3.transition();
-  margin = {
-    top: 100,
-    down: 20,
-    left: 200,
-    right: 300
-  }
+      // Creation du SVG
+      // ===============
+      // Definit  la div tooltip
+      div = d3.select("body").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 1)
+          .style('position', 'absolute');
+      svg1 = d3.select("#svg1");   // selectionne la div svg1
+      g = svg1.append("g")      // ajoute element au svg1
+          .attr("id", "treeAlign");
+      var transition = d3.transition();
+      margin = {
+          top: 100,
+          down: 20,
+          left: 200,
+          right: 300
+      }
 
-  // Option d'affichage
-  stringOptions = myStorage.getItem("options");
-  if (stringOptions === null || stringOptions === undefined || stringOptions === "undefined"){
-    stringOptions = "name,species";
-  }
-  options = stringOptions.split(",");
+      // Option d'affichage
+      stringOptions = myStorage.getItem("options");
+      if (stringOptions === null || stringOptions === undefined || stringOptions === "undefined"){
+          stringOptions = "name,species";
+      }
+      options = stringOptions.split(",");
 
-  // Action associee au click
-  // action = svgEvents.switchChildren;
-  action = svgEvents.showBranchResults;
-  var stringAction = myStorage.getItem("action");
-  if ((stringAction === null )||(stringAction === undefined)||(stringAction === "undefined")){
-    stringAction = 'View Branch Results';
-    myStorage.setItem("action",stringAction);
-  }
-  switch (myStorage.getItem("action")) {
-    case 'View Branch Results':
+      // Action associee au click
+      // action = svgEvents.switchChildren;
       action = svgEvents.showBranchResults;
-      break;
-    case "Switch children":
-      action = svgEvents.switchChildren;
-      break;
-    case "Collapse/Expand":
-      action = svgEvents.collapse;
-      break;
-    case "Sub Tree/Upper Tree":
-      action = svgEvents.focus;
-      break;
-    default:
-      console.log(action);
-      break;
-  }
-
-  // Largeur de l'arbre
-  if (tagSimpleGene === false) {
-    nodeWidth = nodeWidth / 5 ;
-  }
-  stringWidth = myStorage.getItem("width");
-  if ((stringWidth === null )||(stringWidth === undefined)||(stringWidth === "undefined")){
-    stringWidth = nodeWidth;
-    myStorage.setItem("width",stringWidth);
-  }
-
-  // Concerne les arbres recphyloxml
-  var flatTreeConfig = {
-    transferBack :false,
-    speciationLoss : false,
-    speciationOutLoss : false,
-  }
-
-  // Operation effectuee si il s'agt d'un arbre RecPhyloXML
-  if (tagSimpleGene === false) {
-    // cladeRoot est la racine hierarchisee en clade avec des modifs
-    // specifiques aux arbres recPhyloXML
-    cladeRoot =  xmlparser.flatTree(cladeRoot,flatTreeConfig);
-  }
-  var _cladeRoot = null;
-  var _Parent = null;
-  treeRoot = d3.hierarchy(cladeRoot, function(d) {
-    return d.clade;
-  });
-  addNumberSeqSpec(treeRoot);
-  updateLayout(cladeRoot,1);
-}
-
-// Definitions des autres fonctions
-// --------------------------------
-// Fonction de mise a jour de l'affichage
-// ---------------------------------------
-function updateLayout(cRoot,firstLoad=0) {
-  var treeRoot = d3.hierarchy(cRoot, function(d) {
-    return d.clade;
-  });
-  treeRoot.each(function (d) {
-    var eventsRec = d.data.eventsRec;
-    // Test si on a un noeud enrichi avec l'info eventsRec (type RecPhyloXML) ou non (type phyloxml)
-    if (eventsRec){
-      d.data.lastEvent = eventsRec[eventsRec.length - 1];
-    }
-    else {
-      // Lors de la premiere lecture de l'arbre phyloxml, il n'y a pas de data.lastEvent defini aux noeuds
-      // (Sauf les noeuds ecrases par la monophylie)
-      // Mais ensuite ils sont definis : on choisit "speciation" meme si il ne s'agit pas d'une speciation en
-      // realité, mais cela permet d'utiliser les code graphiques de speciation. eventType peut etre "speciation".
-      // Par contre il ne doit plus etre   "collapsed" car c'est lie a la representation dans le DOM. Utiliser nodeinfo.status
-      if (d.children) {
-        if (!d.data.lastEvent) {
-          d.data.lastEvent =  {eventType : "speciation"};
-        }
+      var stringAction = myStorage.getItem("action");
+      if ((stringAction === null )||(stringAction === undefined)||(stringAction === "undefined")){
+          stringAction = 'View Branch Results';
+          myStorage.setItem("action",stringAction);
       }
-    }
-  });
-  layout.nodeSize([nodeWidth, nodeHeight]); // *i*
-  layout(treeRoot);
-  // Traitement des distances dans le cas d'un arbre de gene de type phyloxml
-  if (tagSimpleGene) {
-    phylogeny(treeRoot,nodeWidth);
-  } else {
-    phylogeny_setloss(treeRoot,nodeWidth);
-  }
-  updateSvg(treeRoot,firstLoad);
-  updateScroll();
-}
-
-// Fonction principale : mise a jour du svg
-// ----------------------------------------
-function updateSvg(treeRoot,firstLoad ,config = {}) {
-  // console.log('firstLoad', firstLoad);
-
-  // Suppression de l'ancien affichage de l'alignement et du graphe
-  d3.selectAll('#ps-graph, #sequences-container').remove();
-
-  // ====================================================
-  // | Début modif : variables pour graphe et séquences |
-  // ====================================================
-  // Ajustement du pas selon le type de séquences affichées
-  hStep = displaySeqType == 'AA' ? hStepBase : hStepBase*3;
-  var seqblocks = d3.selectAll('.seqblock');
-  // var results = JSON.parse(resultsText);
-  // console.log(results);
-  // var results = resultsText;
-  // console.log('firstLoad:', firstLoad);
-  // console.log('results:', results);
-  if (!resultsJSON && branchSite) {
-    showTooltip();
-    writeTooltip('Please click a node to display branch data');
-    resultsJSON = new Array(maxSeqLen).fill(-1);
-    // console.log('Results undefined, branch-site');
-    // resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
-    // resultsJSON = undefined;
-    // var fakeResults = resultsJSON.forEach(function (i) {
-    //   console.log(i);
-    //   return 0;
-    // });
-    // resultsJSON = fakeResults;
-    // console.log('!resultsJSON', resultsJSON);
-    // console.log('global results:', xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
-    // console.log('global results JSON:', resultsJSON);
-  // } else if (firstLoad && resultsText) {
-  //   var results = resultsText;
-  // } else if (!firstLoad && resultsText) {
-  //   var results = resultsText;
-  } else if (!resultsJSON && !branchSite) {
-    hideTooltip();
-    resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
-    // console.log('Results undefined, not branch-site');
-  } else {
-    maxSeqLen = resultsJSON.length;
-  }
-  // else {
-  //   // console.log('resultsJSON:', resultsJSON);
-  //   // resultsJSON = JSON.parse(resultsText);
-  //   resultsJSON = resultsJSON;
-  // }
-  // var results = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
-
-  // console.log('resultsJSON', resultsJSON);
-  
-  // results = results.split(' ');
-  // var resultsJSON = [];
-  // // var site = 0;
-  // // var stat = 0.0;
-  // results.forEach(function (d,i) {
-  //   d = d.split(':');
-  //   result = {site:parseInt(d[0]), stat:parseFloat(d[1])};
-  //   resultsJSON.push(result);
-  // });
-  resultsJSON = resultsJSON;
-  // console.log(resultsJSON);
-  var psGraphMargins = {top: 20, right: 50, bottom: 50, left: 50+seq_lg};
-  var psGraphWidth = resultsJSON.length*hStep;
-  var psGraphHeight = 100;
-  // ==============================================================
-  // Fin modif : variables pour graphe et séquences
-  // ==============================================================
-  var scrollref=0;
-  var configLayout = {
-    layout : config.layout || "cladogramSpecial",
-    links : config.links || "shoulder",
-    symbolSize : config.symbolSize || 128,
-    lengthLinkLoss : config.lengthLinkLoss || 10,
-    linkStrokeSize : config.linkStrokeSize || 3,
-    nodeWidth : config.nodeWidth || 30,
-    nodeHeight : config.nodeHeight || 30,
-    margin : config.margin || { top: 10, down: 20, left: 500  , right: 50},
-    color : config.color || {
-      speciation : "#2F4F4F",
-      speciationOutLoss : "#2CA02C",
-      branchingOut : "#D62728",
-      speciationOut : "#2CA02C",
-      bifurcationOut : "#000000",
-      transferBack : "#D62728",
-      duplication : "#9467BD",
-      speciationLoss : "#1F77B4",
-      leaf : "#FF7F0E",
-      loss : "#000000"
-    },
-    symbols : config.symbols || {
-      speciation : "symbolCircle",
-      collapsed : "symbolCircle",
-      speciationOutLoss : "symbolCircle",
-      branchingOut : "symbolSquare",
-      speciationOut : "symbolCircle",
-      bifurcationOut : "symbolCircle",
-      transferBack : "symbolDiamond",
-      duplication : "symbolSquare",
-      speciationLoss : "symbolCircle"
-    }
-  }
-
-  var nodes = treeRoot.descendants();
-  var links = treeRoot.links();
-
-  // console.log('treeRoot', treeRoot);
-  // console.log('nodes', nodes);
-  // console.log('links', links);
-
-  // Coloration du pattern si il existe
-  if ((pattern != "none") && (pattern !== ' ') && (pattern !== undefined)) {
-    // Boucle sur les differents patterns
-    patterns.forEach(function (d,i) {
-      // Traite le pattern d avec comme index i
-      // var subNodes = subnode(nodes,d,i);
-      scrollref = subnode(nodes,d,i);
-    });
-  }
-
-  var minX = d3.min(nodes, function(d) {
-    return d.x;
-  });
-  var maxX = d3.max(nodes, function(d) {
-    return d.x;
-  });
-  var minY = d3.min(nodes, function(d) {
-    return d.y;
-  });
-  var maxY = d3.max(nodes, function(d) {
-    return d.y;
-  });
-  var widthSVG = maxX - minX;
-  var heightSVG = maxY - minY;
-  var ajustementX = resultsJSON.length*hStep - 120;
-  var ajustementY = -200;
-  var decalageY = -90;
-
-  svg1.attr("width", widthSVG + margin.right + margin.left);
-  svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
-  g.attr("transform", "translate(" + (margin.right - minX - 250) + "," + (margin.top - minY + 50 + psGraphHeight + decalageY) + ")");
-
-  // console.log(links);
-
-  // ====================
-  //  D3: Objets LINK
-  // ====================
-  var link = g.selectAll(".link").data(links);  // associe l'element link a la donnee links
-  //EXIT gere les elements qui ont disparu
-  link.exit().remove();
-  //ENTER gere les elements nouveaux
-  var linkEnter =
-    link
-    .enter()
-    .append("path")
-    .attr("class", "link");
-  // affichage des branches
-  linkEnter
-    .merge(link)  // fusionne les nouveaux elements avec les anciens
-    .attr("fill","none")
-    .attr("stroke-width",configLayout.linkStrokeSize)
-    .attr("stroke",function (d) {
-      if (d.target.data.lastEvent !== undefined) {
-        var pa = d.target.data.lastEvent.pattern;
-        if (pa !== undefined) {
-          return "red";
-        }
+      switch (myStorage.getItem("action")) {
+      case 'View Branch Results':
+          action = svgEvents.showBranchResults;
+          break;
+      case "Switch children":
+          action = svgEvents.switchChildren;
+          break;
+      case "Collapse/Expand":
+          action = svgEvents.collapse;
+          break;
+      case "Sub Tree/Upper Tree":
+          action = svgEvents.focus;
+          break;
+      default:
+          console.log(action);
+          break;
       }
-      if (d.target.data.deadSpecies)
-        {
-          return "#ffffff";
-        }
-      else {
-        return "#0e2e2e";
+
+      // Largeur de l'arbre
+      if (tagSimpleGene === false) {
+          nodeWidth = nodeWidth / 5 ;
       }
-    })
-    .on('mouseover',function (d) {
-      var pattIndex =  d.target.data.lastEvent.pattern;
-      if (pattIndex !== undefined) {
-        var sel1 = g.selectAll(".link").filter(function(e) {
-          var pa = e.target.data.lastEvent.pattern;
-          if (pa !== undefined) {
-            // pa est le tableau des index des pattern  associee au noeud
-            // pattIndex[0] est l'index de la pattern  associee au noeud survole
-            return (pa.indexOf(pattIndex[0]) > -1)
+      stringWidth = myStorage.getItem("width");
+      if ((stringWidth === null )||(stringWidth === undefined)||(stringWidth === "undefined")){
+          stringWidth = nodeWidth;
+          myStorage.setItem("width",stringWidth);
+      }
+
+      // Concerne les arbres recphyloxml
+      var flatTreeConfig = {
+          transferBack :false,
+          speciationLoss : false,
+          speciationOutLoss : false,
+      }
+
+      // Operation effectuee si il s'agt d'un arbre RecPhyloXML
+      if (tagSimpleGene === false) {
+          // cladeRoot est la racine hierarchisee en clade avec des modifs
+          // specifiques aux arbres recPhyloXML
+          cladeRoot =  xmlparser.flatTree(cladeRoot,flatTreeConfig);
+      }
+      var _cladeRoot = null;
+      var _Parent = null;
+      treeRoot = d3.hierarchy(cladeRoot, function(d) {
+          return d.clade;
+      });
+      addNumberSeqSpec(treeRoot);
+      updateLayout(cladeRoot,1);
+  }
+
+  // Definitions des autres fonctions
+  // --------------------------------
+  // Fonction de mise a jour de l'affichage
+  // ---------------------------------------
+  function updateLayout(cRoot,firstLoad=0) {
+      var treeRoot = d3.hierarchy(cRoot, function(d) {
+          return d.clade;
+      });
+      treeRoot.each(function (d) {
+          var eventsRec = d.data.eventsRec;
+          // Test si on a un noeud enrichi avec l'info eventsRec (type RecPhyloXML) ou non (type phyloxml)
+          if (eventsRec){
+              d.data.lastEvent = eventsRec[eventsRec.length - 1];
           }
-          return (false)
-        });
-      }
-    })
-    .on('mouseout',function (d){
-      var pattIndex =  d.target.data.lastEvent.pattern;
-      if (pattIndex !== undefined) {
-        var sel1 = g.selectAll(".link").filter(function(e) {
-          var pa = e.target.data.lastEvent.pattern;
-          if (pa !== undefined) {
-            // pa est le tableau des index des pattern  associee au noeud
-            // pattIndex[0] est l'index de la pattern  associee au noeud survole
-            return (pa.indexOf(pattIndex[0]) > -1)
+          else {
+              // Lors de la premiere lecture de l'arbre phyloxml, il n'y a pas de data.lastEvent defini aux noeuds
+              // (Sauf les noeuds ecrases par la monophylie)
+              // Mais ensuite ils sont definis : on choisit "speciation" meme si il ne s'agit pas d'une speciation en
+              // realité, mais cela permet d'utiliser les code graphiques de speciation. eventType peut etre "speciation".
+              // Par contre il ne doit plus etre   "collapsed" car c'est lie a la representation dans le DOM. Utiliser nodeinfo.status
+              if (d.children) {
+                  if (!d.data.lastEvent) {
+                      d.data.lastEvent =  {eventType : "speciation"};
+                  }
+              }
           }
-          return (false)
-        });
-        sel1.style("stroke-width",configLayout.linkStrokeSize)
+      });
+      layout.nodeSize([nodeWidth, nodeHeight]); // *i*
+      layout(treeRoot);
+      // Traitement des distances dans le cas d'un arbre de gene de type phyloxml
+      if (tagSimpleGene) {
+          phylogeny(treeRoot,nodeWidth);
+      } else {
+          phylogeny_setloss(treeRoot,nodeWidth);
       }
-    })
-    .attr("d", diagonal)
-    .attr('stroke-dasharray',function(d){
-      var et = d.target.data.lastEvent.eventType;
-      // var sl = d.target.data.lastEvent.speciesLocation;
-      // if (et === "transferBack" || et === "bifurcationOut" || sl == "Out") return '5,5';
-      if (et === "transferBack" || et === "bifurcationOut") return '5,5';
-    });
-  // ====================
-  // D3:  Objets NODE
-  // ====================
-  var node = g.selectAll(".node").data(nodes);
-  //EXIT
+      updateSvg(treeRoot,firstLoad);
+      updateScroll();
+  }
+
+  // Fonction principale : mise a jour du svg
+  // ----------------------------------------
+  function updateSvg(treeRoot,firstLoad ,config = {}) {
+      // console.log('firstLoad', firstLoad);
+
+      // Suppression de l'ancien affichage de l'alignement et du graphe
+      d3.selectAll('#ps-graph, #sequences-container').remove();
+
+      // ====================================================
+      // | Début modif : variables pour graphe et séquences |
+      // ====================================================
+      // Ajustement du pas selon le type de séquences affichées
+      hStep = displaySeqType == 'AA' ? hStepBase : hStepBase*3;
+      var seqblocks = d3.selectAll('.seqblock');
+      // var results = JSON.parse(resultsText);
+      // console.log(results);
+      // var results = resultsText;
+      // console.log('firstLoad:', firstLoad);
+      // console.log('results:', results);
+      if (!resultsJSON && branchSite) {
+          showTooltip();
+          writeTooltip('Please click a node to display branch data');
+          resultsJSON = new Array(maxSeqLen).fill(-1);
+          // console.log('Results undefined, branch-site');
+          // resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
+          // resultsJSON = undefined;
+          // var fakeResults = resultsJSON.forEach(function (i) {
+          //   console.log(i);
+          //   return 0;
+          // });
+          // resultsJSON = fakeResults;
+          // console.log('!resultsJSON', resultsJSON);
+          // console.log('global results:', xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
+          // console.log('global results JSON:', resultsJSON);
+          // } else if (firstLoad && resultsText) {
+          //   var results = resultsText;
+          // } else if (!firstLoad && resultsText) {
+          //   var results = resultsText;
+      } else if (!resultsJSON && !branchSite) {
+          hideTooltip();
+          resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
+          // console.log('Results undefined, not branch-site');
+      } else {
+          maxSeqLen = resultsJSON.length;
+      }
+      // else {
+      //   // console.log('resultsJSON:', resultsJSON);
+      //   // resultsJSON = JSON.parse(resultsText);
+      //   resultsJSON = resultsJSON;
+      // }
+      // var results = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
+
+      // console.log('resultsJSON', resultsJSON);
+      
+      // results = results.split(' ');
+      // var resultsJSON = [];
+      // // var site = 0;
+      // // var stat = 0.0;
+      // results.forEach(function (d,i) {
+      //   d = d.split(':');
+      //   result = {site:parseInt(d[0]), stat:parseFloat(d[1])};
+      //   resultsJSON.push(result);
+      // });
+      resultsJSON = resultsJSON;
+      // console.log(resultsJSON);
+      var psGraphMargins = {top: 20, right: 50, bottom: 50, left: 50+seq_lg};
+      var psGraphWidth = resultsJSON.length*hStep;
+      var psGraphHeight = 100;
+      // ==============================================================
+      // Fin modif : variables pour graphe et séquences
+      // ==============================================================
+      var scrollref=0;
+      var configLayout = {
+          layout : config.layout || "cladogramSpecial",
+          links : config.links || "shoulder",
+          symbolSize : config.symbolSize || 128,
+          lengthLinkLoss : config.lengthLinkLoss || 10,
+          linkStrokeSize : config.linkStrokeSize || 3,
+          nodeWidth : config.nodeWidth || 30,
+          nodeHeight : config.nodeHeight || 30,
+          margin : config.margin || { top: 10, down: 20, left: 500  , right: 50},
+          color : config.color || {
+              speciation : "#2F4F4F",
+              speciationOutLoss : "#2CA02C",
+              branchingOut : "#D62728",
+              speciationOut : "#2CA02C",
+              bifurcationOut : "#000000",
+              transferBack : "#D62728",
+              duplication : "#9467BD",
+              speciationLoss : "#1F77B4",
+              leaf : "#FF7F0E",
+              loss : "#000000"
+          },
+          symbols : config.symbols || {
+              speciation : "symbolCircle",
+              collapsed : "symbolCircle",
+              speciationOutLoss : "symbolCircle",
+              branchingOut : "symbolSquare",
+              speciationOut : "symbolCircle",
+              bifurcationOut : "symbolCircle",
+              transferBack : "symbolDiamond",
+              duplication : "symbolSquare",
+              speciationLoss : "symbolCircle"
+          }
+      }
+
+      var nodes = treeRoot.descendants();
+      var links = treeRoot.links();
+
+      // console.log('treeRoot', treeRoot);
+      // console.log('nodes', nodes);
+      // console.log('links', links);
+
+      // Coloration du pattern si il existe
+      if ((pattern != "none") && (pattern !== ' ') && (pattern !== undefined)) {
+          // Boucle sur les differents patterns
+          patterns.forEach(function (d,i) {
+              // Traite le pattern d avec comme index i
+              // var subNodes = subnode(nodes,d,i);
+              scrollref = subnode(nodes,d,i);
+          });
+      }
+
+      var minX = d3.min(nodes, function(d) {
+          return d.x;
+      });
+      var maxX = d3.max(nodes, function(d) {
+          return d.x;
+      });
+      var minY = d3.min(nodes, function(d) {
+          return d.y;
+      });
+      var maxY = d3.max(nodes, function(d) {
+          return d.y;
+      });
+      var widthSVG = maxX - minX;
+      var heightSVG = maxY - minY;
+      var ajustementX = resultsJSON.length*hStep - 120;
+      var ajustementY = -200;
+      var decalageY = -90;
+
+      svg1.attr("width", widthSVG + margin.right + margin.left);
+      svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
+      g.attr("transform", "translate(" + (margin.right - minX - 250) + "," + (margin.top - minY + 50 + psGraphHeight + decalageY) + ")");
+
+      // console.log(links);
+
+      // ====================
+      //  D3: Objets LINK
+      // ====================
+      var link = g.selectAll(".link").data(links);  // associe l'element link a la donnee links
+      //EXIT gere les elements qui ont disparu
+      link.exit().remove();
+      //ENTER gere les elements nouveaux
+      var linkEnter =
+          link
+          .enter()
+          .append("path")
+          .attr("class", "link");
+      // affichage des branches
+      linkEnter
+          .merge(link)  // fusionne les nouveaux elements avec les anciens
+          .attr("fill","none")
+          .attr("stroke-width",configLayout.linkStrokeSize)
+          .attr("stroke",function (d) {
+              if (d.target.data.lastEvent !== undefined) {
+                  var pa = d.target.data.lastEvent.pattern;
+                  if (pa !== undefined) {
+                      return "red";
+                  }
+              }
+              if (d.target.data.deadSpecies)
+              {
+                  return "#ffffff";
+              }
+              else {
+                  return "#0e2e2e";
+              }
+          })
+          .on('mouseover',function (d) {
+              var pattIndex =  d.target.data.lastEvent.pattern;
+              if (pattIndex !== undefined) {
+                  var sel1 = g.selectAll(".link").filter(function(e) {
+                      var pa = e.target.data.lastEvent.pattern;
+                      if (pa !== undefined) {
+  // pa est le tableau des index des pattern
+  // associee au noeud
+  // pattIndex[0] est l'index de la pattern
+  // associee au noeud survole
+                          return (pa.indexOf(pattIndex[0]) > -1)
+                      }
+                      return (false)
+                  });
+              }
+          })
+          .on('mouseout',function (d){
+              var pattIndex =  d.target.data.lastEvent.pattern;
+              if (pattIndex !== undefined) {
+                  var sel1 = g.selectAll(".link").filter(function(e) {
+                      var pa = e.target.data.lastEvent.pattern;
+                      if (pa !== undefined) {
+                          // pa est le tableau des index des pattern  associee au noeud
+                          // pattIndex[0] est l'index de la pattern  associee au noeud survole
+                          return (pa.indexOf(pattIndex[0]) > -1)
+                      }
+                      return (false)
+                  });
+                  sel1.style("stroke-width",configLayout.linkStrokeSize)
+              }
+          })
+          .attr("d", diagonal)
+          .attr('stroke-dasharray',function(d){
+              var et = d.target.data.lastEvent.eventType;
+              // var sl = d.target.data.lastEvent.speciesLocation;
+              // if (et === "transferBack" || et === "bifurcationOut" || sl == "Out") return '5,5';
+              if (et === "transferBack" || et === "bifurcationOut") return '5,5';
+          });
+      
+      // ====================
+      // D3:  Objets NODE
+      // ====================
+      var node = g.selectAll(".node").data(nodes);
+      //EXIT
   node.exit().remove();
   //ENTER
   var nodeEnter =
@@ -675,7 +678,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
             selectedNode = d3.select(this);
           }
         });
-  if (firstLoad) {
+
+      if (firstLoad) {
     d3.selectAll('path.symbol')
       .style('stroke-width', '0')
       .style('stroke', '#888888')
@@ -1117,7 +1121,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .range([0, psGraphWidth]);
   // === Définition de l'échelle pour l'axe y ===
   var y = d3.scaleLinear()
-    .domain([0, maxStatJSON(resultsJSON)])
+      .domain([minStatJSON(resultsJSON), maxStatJSON(resultsJSON)])
     .range([psGraphHeight, 0]);
   // === Ajout du graphe des résultats au SVG ===
   var psGraph = svg2.append('g')
@@ -1153,10 +1157,22 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       //   return d.site;  
       // })
       .attr('width', function(d) { return hStep; })
-      .attr('height', function(d) { return y(0) - y(d); })
+          .attr('height', function(d) { if (y(0)>y(d))
+                                        {
+                                            return y(0) - y(d);}
+                                        else {
+                                            return y(d) - y(0);
+                                        }
+                                      })
       // .attr('x', function(d) { return x(d.site + siteOffset); })
-      .attr('x', function(d) { i ++; return x(i - siteOffset); })
-      .attr('y', function(d) { return y(d); })
+          .attr('x', function(d) { i ++; return x(i - siteOffset); })
+          .attr('y', function(d) { if (y(d)<y(0))
+                                   { return y(d);}
+                                   else {
+                                       return y(0);
+                                   }
+                                 }
+               )
       .style('fill', function(d) {
         return getColorFromResult(d);
       })
@@ -1319,13 +1335,14 @@ function getColorFromResult(res) {
       return psThresholdHighBgColor;
     } else if (res >= psThresholdLow) {
       return psThresholdLowBgColor;
-    } else if (res >= 0) {
+    } else // if (res >= 0)
+      {
       return psBelowThresholdBgColor;
-    } else {
-      return psMissingBgColor;
-    }
+    } // else {
+    //   return psMissingBgColor;
+    // }
   } else {
-    if (res >= 0) {
+    // if (res >= 0) {
       if (res <= psThresholdLow) {
         return psThresholdHighBgColor;
       } else if (res <= psThresholdHigh) {
@@ -1333,9 +1350,9 @@ function getColorFromResult(res) {
       } else {
         return psBelowThresholdBgColor;
       }
-    } else {
-      return psMissingBgColor;
-    }
+    // } else {
+    //   return psMissingBgColor;
+    // }
   }
 }
 
@@ -1353,27 +1370,29 @@ function maxStatJSON(jsonResultsList) {
         currentmax = res;
       }
     });
-    if (currentmax >= 2) {
-      return 2;
-    } else {
-      return currentmax;
-    }
+    // if (currentmax >= 2) {
+    //   return 2;
+    // } else {
+    //   return currentmax;
+    // }
     return currentmax;
-  }
+}
+  
   function minStatJSON(jsonResultsList) {
-    var currentmin = jsonResultsList[0];
-    jsonResultsList.forEach(function(res) {
+      var currentmin = jsonResultsList[0];
+      jsonResultsList.forEach(function(res) {
       if (res < currentmin) {
-        currentmin = res;
+          currentmin = res;
       }
-    });
-    if (currentmin <= 0) {
+      });
       return currentmin;
-    } else {
-      return 0;
-    }
+      // if (currentmin <= 0) {
+      //   return currentmin;
+      // } else {
+      //   return 0;
+      // }
   }
-
+  
 function updateBoundaries() {
   leftBoundary = leftBoundaryInput.val();
   rightBoundary = rightBoundaryInput.val();
@@ -1500,7 +1519,7 @@ function getPositiveRateJSON(textResultsList, leftB, rightB) {
   });
   leftBoundary = leftBoundaryInput.val();
   rightBoundary = rightBoundaryInput.val();
-  return nbPos/(rightBoundary - leftBoundary + 1);
+    return nbPos;///(rightBoundary - leftBoundary + 1);
 }
 
 // Fonction de test du support local.storage

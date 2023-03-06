@@ -158,10 +158,12 @@ def loadAlignment(alignmentFile):
     return alignmentDict, maxSeqIdLength
 
 
-def loadResultsSites(resultsFile, exprcol="[1]", nostat_value=-1.0, skipMissingSites=False):
+def loadResultsSites(resultsFile, exprcol="'[1]'", nostat_value=-1.0, skipMissingSites=False):
     '''Loads site results from formula exprcol on columns.'''
 
-    expr=exprcol.replace("[","float(line[")
+    if len(exprcol)>30:
+      return
+    expr=exprcol[1:-1].replace("[","float(line[")
     expr=expr.replace("]","])")
     resultsDict = {}
     with open(resultsFile, 'r') as f:
@@ -233,12 +235,14 @@ def loadResultsBranchSite(resultsFile, nostat_value=-1.0, skipMissingSites=False
       ## d_cols {'38': ['0.00885554', '0.25866598', '0.03920189'], ...}
         
     d_cols_2 = dict(d_cols)
+    nbs=len(d_cols['0'])
+    print(nbs)
     for col_key in d_cols:
       ## For every branch
       if re.search(r'^[0-9]+$', col_key):
         col_text = ''
         ## Add each result to the text
-        for i in range(len(d_cols['0'])):
+        for i in range(nbs):
           col_text += f'{d_cols[col_key][i]}, '
           ## col_text: '0.1248, 0.12381, ...'
           ## Add brackets for JSON format
@@ -433,9 +437,6 @@ def createPhyloXML(fam,newick,results):
     
     print ("Number of leaves : ")
     print (nbfeuille)
-    nbspecies = len(famspecies)
-    print ("Number of species : ")
-    print (nbspecies)
     print ("Length of sequences : ")
     print (lenseq)
     print ("Length of results : ")
@@ -446,7 +447,6 @@ def createPhyloXML(fam,newick,results):
     
     treesize =  etree.Element("size")
     treesize.set('leaves',str(nbfeuille))
-    treesize.set('species',str(nbspecies))
     treesize.set('isCodon',str(isCodon))
     e=subtree[0].find('phylogeny')
     e.append(treesize)
@@ -500,17 +500,17 @@ else:
 xmloutputfile = open(output_name,"w")
 
 for line in treefile:
-    tline = re.split(' ',line)
-    if len(tline) > 1:
-        newick=tline[1]
-        fam=tline[0]
-    else:
-        newick = tline[0]
-        fam = ''
+    # tline = re.split(' ',line)
+    # if len(tline) > 1:
+    #     newick=tline[1]
+    #     fam=tline[0]
+    # else:
+    #     newick = tline[0]
+    #     fam = ''
     current_branch = -1
-    phyloxmltree = createPhyloXML(fam,newick,results)
+    phyloxmltree = createPhyloXML("",line,results)
     xmloutputfile.write(phyloxmltree)
-    print("Famille "+fam+" OK")
+    print("Tree OK")
 
 treefile.close()
 xmloutputfile.close()
