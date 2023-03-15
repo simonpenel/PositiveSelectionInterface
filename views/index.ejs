@@ -1,3 +1,11 @@
+<!-- 
+
+Modified by Genna BEN HASSEN, Camille SIHARATH and Grégoire ALIZADEH NOIRET, 16 December 2021
+Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
+Modified by Laurent GUÉGUEN, 6 March 2023
+
+-->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,13 +18,14 @@
   <body>
     <header>
       <%- include('../partials/header') %>
-      <div class="container-fluid">
-        <h1 class="text-center">Web interface for Branch Site Statistics</h1>
-        </div>
-      </div>
+      <!-- <div class="container-fluid">
+        <h1 class="main-title text-center">Web interface for Branch Site Statistics</h1>
+      </div> -->
     </header>
 
     <main>
+      <h1 class="main-title text-center">Web interface for Branch Site Statistics</h1>
+
       <div class="form-mod">
         <form method="post" action="/upload_files" enctype="multipart/form-data">
           <!-- <div class="row mb-3"> -->
@@ -42,37 +51,34 @@
           
           <div class="row mb-3">
             <label class="form-check-label">Results type</label>
-            <div class="d-flex input-group">
+            <div class="btn-group input-group" role="group" aria-label="Choice between site mode and branch-site mode">
               <input type="radio" class="btn-check" name="resultsType" id="siteMode" value="siteMode" checked>
-              <label class="btn btn-outline-secondary flex-fill" for="siteMode">Site</label>
+              <label class="btn btn-outline-secondary" for="siteMode">Site</label>
 
               <input type="radio" class="btn-check" name="resultsType" id="branchSiteMode" value="branchSiteMode">
-              <label class="btn btn-outline-secondary flex-fill" for="branchSiteMode">Branch-site</label>
+              <label class="btn btn-outline-secondary" for="branchSiteMode">Branch-site</label>
             </div>
           </div>
 
-          <div class="row mb-2">
+          <div class="row mb-2 custom-file-input">
             <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
-              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Tree file</i>
+              <i class="fa fa-upload fa-2x" aria-hidden="true">Tree file</i>
               <input id="tree-file-input" type="file" name="file_t"
                      class="inputfile" style="display: none;" required />
-
               <p class="filename"></p>
             </label>
           </div>
-          <div class="row mb-2">
+          <div class="row mb-2 custom-file-input">
             <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
-              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Alignment file</i>
+              <i class="fa fa-upload fa-2x" aria-hidden="true">Alignment file</i>
               <input id="alignment-file-input" type="file" name="file_a" class="inputfile" style="display: none;" required />
-
               <p class="filename"></p>
             </label>
           </div>
-          <div class="row mb-3">
+          <div class="row mb-3 custom-file-input">
             <label class="btn btn-light btn-sm btn-file d-flex flex-column justify-content-center">
-              <i class="fa fa-upload fa-2x" aria-hidden="true"><br>Results file</i>
+              <i class="fa fa-upload fa-2x" aria-hidden="true">Results file</i>
               <input id="results-file-input" type="file" name="file_r" clas="inputfile" style="display: none;" required />
-
               <p class="filename"></p>
             </label>
           </div>
@@ -90,6 +96,10 @@
           <div class="row">
             <input id="submit" class="btn btn-light" type="submit" value="Display" />
           </div>
+
+          <div class="row mt-3">
+            <button onclick="window.location.href='/display_example';" class="btn btn-light">Display example</div>
+          </div>
         </form>
       </div>
 
@@ -104,43 +114,43 @@
       <!-- Description des options d'affichage -->
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">On click</h5>
             <p class="text-center">Reverse branches Select nodes to display</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">Expand/Compact tree</h5>
             <p class="text-center">Increase/Decrease spaces between branches</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option text-center">Alignment Type</h5>
             <p class="text-center">Display of nucleotid or protein sequences</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">WidthSize +/-</h5>
             <p class="text-center">Increase/Decrease the tree's width</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">HeightSize +/-</h5>
             <p class="text-center">Increase/Decrease the tree's height</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">ExportSVG</h5>
             <p class="text-center">Results export in svg format</p>
           </div>
         </div>
-        <div class="d-flex col align-items-start">
+        <div class="col align-items-center">
           <div>
             <h5 class="Option">Upper / Lower threshold</h5>
             <p class="text-center">Choice of upper/lower threshold of positive selection values</p>
@@ -148,11 +158,12 @@
         </div>
       </div>
       
-      <hr class="featurette-divider">
+      <!-- <hr class="featurette-divider"> -->
 
       <footer class="container text-center">
-        <p class="float-end no-decoration"><a href="#">Back to top</a></p>
-        <p>Université Lyon 1 - Master Bioinformatique</p>
+        <!-- <p class="float-end no-decoration"><a href="#">Back to top</a></p> -->
+        <p>Laboratory of Biometry and Evolutionary Biology</p>
+        <p>Claude Bernard Lyon 1 University</p>
       </footer>
     </main>
   </body>
