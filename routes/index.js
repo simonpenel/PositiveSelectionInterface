@@ -165,4 +165,43 @@ router.post("/upload_files", upload.fields([
   });
 });
 
+// GET display_example
+// -------------------
+router.get('/display_example', function(req, res) {
+  // Read XML tree as JSON and display data
+
+  const fname = 'examples/basic_example/4_basic_example_branch_site.xml';
+
+  fs.readFile(fname, 'utf8' , (err, data) => {
+    if (err) {
+      res.render('error.ejs', {message:"Erreur de lecture",error:err});
+    }
+    var xml_digester = require("xml-digester");
+    var handler = new xml_digester.OrderedElementsHandler("eventType");
+    var options = {
+      "handler": [{
+        "path": "eventsRec/*",
+        "handler": handler
+      }]
+    };
+    var digester = xml_digester.XmlDigester(options);
+    digester.digest(data, function(err, results) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      var JSONtree = JSON.stringify(results);
+      var JSONpattern = JSON.stringify(""); // Sequence to highlight
+      console.log('Rendering view');
+      res.render('displaytree.ejs',
+      {
+        arbre: JSONtree,
+        pattern: JSONpattern,
+        branchSite: true,
+        logBranchLength: true
+      });
+    });
+  });
+});
+
 module.exports = router;
