@@ -1,3 +1,10 @@
+/*
+
+Modified by Genna BEN HASSEN, Camille SIHARATH and Grégoire ALIZADEH NOIRET, 16 December 2021
+Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
+
+*/
+
 /* <style> index.ejs */
 .bd-placeholder-img {
   font-size: 1.125rem;
@@ -120,18 +127,14 @@ input[type="checkbox"], input[type="radio"] {
   cursor: pointer;
 }
 
-/* #submit{
-  text-align: center;
-  margin-top: 15px;
-  margin-left:10%;
-  width: 200px;
-  background-color: #ffffff;
-  border-radius: 5px;
+/* .input-group {
+  z-index: 0;
 } */
 
-#submit:hover {
-    /* background-color: #dddddd; */
-}
+/* h1.main-title {
+  background: #F00;
+  z-index: 10000000000;
+} */
 
 
 nav label {
@@ -251,11 +254,12 @@ header {
 }
 main {
   margin-top: calc(80px + 62px);
+  /* margin-top: 80px; */
 }
 
-header button, header input {
+/* header button, header input {
   height: 100%;
-}
+} */
 
 /* Bootstrap 5 */
 
@@ -263,10 +267,10 @@ header button, header input {
   background-color: #ddd;
   border-color: #ddd;
 }
-.form-check-input:checked {
+/* .form-check-input:checked {
   background-color: var(--bs-gray);
   border-color: var(--bs-gray);
-}
+} */
 ::selection {
   /* color: red; */
   background-color: bisque;
@@ -274,4 +278,8 @@ header button, header input {
 }
 a {
   text-decoration: none;
+}
+
+.custom-file-input {
+  min-height: 75px;
 }
