@@ -202,6 +202,28 @@ var nbLeaves = 0;
 var nbSites = 0;
 var upperThresholdMode = true;
 
+// Simon
+var coloraa = new Object();
+coloraa["H"] = "red";
+coloraa["K"] = "red";
+coloraa["R"] = "red";
+
+
+coloraa["G"] = "orange";
+coloraa["P"] = "orange";
+coloraa["S"] = "orange";
+coloraa["T"] = "orange";
+
+coloraa["F"] = "blue";
+coloraa["W"] = "blue";
+coloraa["Y"] = "blue";
+
+coloraa["I"] = "green";
+coloraa["L"] = "green";
+coloraa["M"] = "green";
+coloraa["V"] = "green";
+
+
 console.log("isCodon",isCodon);
 
 if (!isStorageSupported(myStorage)) {
@@ -1103,6 +1125,12 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // ====================================================
   // | Fin : graphe des résultats de sélection positive |
   // ====================================================
+
+
+
+
+
+
   
   // ==============================
   // | Début : blocs de séquences |
@@ -1182,7 +1210,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       targetSequence.append('rect')
         .attr('x', function(d) {return (i - siteOffset)*hStep;})
         .attr('width', hStep)
-        .attr('y', function(d) {return minYSeq - d.y - hStepBase;})
+        .attr('y', function(d) {
+          return minYSeq - d.y - hStepBase;})
         .attr('height', maxYSeq - minYSeq + hStepBase*2)
         .style('fill', () => {
           return getColorFromResult(resultsJSON[i]);
@@ -1198,12 +1227,155 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         });
   }
   
-  // Alignement : ajout des AA / codons (version séquence entière)
-  seqTextAA.append('text')
+// Simon : Alignement : ajout des AA / codons (version séquence entière)
+// Simon bloc d'AA
+
+aa_dataset = []
+d3.selectAll(".aa_block").remove(); 
+/*$("#div1").remove();*/
+var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+    leaves_sequences.forEach (function (d,i) {
+      var index = i;
+      var aa_sequence = d.data.lastEvent.aaAlign;
+      var aas = aa_sequence.split("");
+      aas.forEach (function (aa,j) {
+      console.log(j+"=>"+aa);
+      var opac =  getOpacFromResult(resultsJSON[j]);
+/*      var resu =  resultsJSON[j];*/
+      console.log(j+"=>"+opac);
+        var locnode = {
+        index:i, 
+        name:d.data.name,
+        y:d.y,
+        pos:j,
+        aa:aa,
+        opac:opac,
+      };
+      aa_dataset.push(locnode);
+      })
+    });
+
+  var aaDiv = d3.select('#svg2')
+    .append('g')
+    .attr('id', 'aa-container')
+    .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
+
+    var aablock =
+      aaDiv.selectAll(".aa_block")
+      .data(aa_dataset);
+      //EXIT
+      aablock.exit().remove();
+      //ENTER
+      var aablockEnter =
+      aablock
+      .enter()
+      .append("g")
+      .attr("class", "aa_block");
+      //ENTER + updatesATE
+      aablockEnter
+      .merge(aablock)
+      .attr("transform",function(d,i) {
+        var transx = (d.pos)*hStep + margin.left  - 50 + 3;
+        var transy = d.y +5;
+        return "translate("+transx+", "+transy+")";
+      })
+//      .append("text")
+//      .text(function(d) {return d.aa;})
+      .append("rect")
+      .attr('width', function(d) { return hStep; })
+      .attr('height', function(d) { return 10 })
+      .style("fill", function(d){
+        if (d.aa in coloraa) {
+          return coloraa[d.aa];
+        }
+        else {
+          return "violet"
+        }
+      })
+      .style("opacity", function(d){
+        if (displaySeqType != "AA") {
+          return 0          
+        } else {
+          return d.opac
+        }
+      });
+
+
+// Simon bloc DNA
+
+dna_dataset = []
+d3.selectAll(".dna_block").remove(); 
+var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.dnaAlign);});
+    leaves_sequences.forEach (function (d,i) {
+      var index = i;
+      var dna_sequence = d.data.lastEvent.dnaAlign;
+      var dnas = dna_sequence.split("");
+      dnas.forEach (function (dna,j) {
+            var locnode = {
+        index:i, 
+        name:d.data.name,
+        y:d.y,
+        pos:j,
+        dna:dna,
+      };
+      dna_dataset.push(locnode);
+      })
+    });
+
+  var dnaDiv = d3.select('#svg2')
+    .append('g')
+    .attr('id', 'dna-container')
+    .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
+
+    var dnablock =
+      dnaDiv.selectAll(".dna_block")
+      .data(dna_dataset);
+      //EXIT
+      dnablock.exit().remove();
+      //ENTER
+      var dnablockEnter =
+      dnablock
+      .enter()
+      .append("g")
+      .attr("class", "dna_block");
+      //ENTER + updatesATE
+      dnablockEnter
+      .merge(dnablock)
+      .attr("transform",function(d,i) {
+        var transx = (d.pos)*hStep/3 + margin.left  - 50 + 3;
+        var transy = d.y +5;
+        return "translate("+transx+", "+transy+")";
+      })
+      .append("text")
+      .text(function(d) {return d.dna;})
+      .style("fill", function(d){
+        if (d.dna in coloraa) {
+          return coloraa[d.dna];
+        }
+        else {
+          return "violet"
+        }
+      })
+      .style("opacity", function(d){
+        if (displaySeqType != "Nuc") {
+          return 0          
+        } else {
+          return 1
+        }
+      });
+
+
+
+
+/* a supprime par simon*/
+seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
+
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
@@ -1243,6 +1415,42 @@ function getColorFromResult(res) {
       }
     } else {
       return psMissingBgColor;
+    }
+  }
+}
+
+
+// Simon
+function getOpacFromResult(res) {
+  if (upperThresholdMode) {
+    if (res >= psThresholdHigh) {
+      //return psThresholdHighBgColor;
+      return 1.0;
+    } else if (res >= psThresholdLow) {
+//      return psThresholdLowBgColor;
+      return 0.5;
+    } else if (res >= 0) {
+      //return psBelowThresholdBgColor;
+      return 0.25;
+    } else {
+      //return psMissingBgColor;
+      return 0.1;
+    }
+  } else {
+    if (res >= 0) {
+      if (res <= psThresholdLow) {
+        //return psThresholdHighBgColor;
+        return 1.0;
+      } else if (res <= psThresholdHigh) {
+        //return psThresholdLowBgColor;
+        return 0.5;
+      } else {
+        //return psBelowThresholdBgColor;
+        return 0.25;
+      }
+    } else {
+      // return psMissingBgColor;
+      return 0.1;
     }
   }
 }
