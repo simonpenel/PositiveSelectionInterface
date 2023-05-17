@@ -1205,7 +1205,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var aaSequence = d3.select('.aa-sequence');
   var dnaSequence = d3.select('.dna-sequence');
   var targetSequence = displaySeqType == 'AA' ? aaSequence : dnaSequence;
-  for (i = 0; i < resultsJSON.length; i ++) {
+/*  for (i = 0; i < resultsJSON.length; i ++) {
       // Ajout d'un rectangle coloré par site
       targetSequence.append('rect')
         .attr('x', function(d) {return (i - siteOffset)*hStep;})
@@ -1225,7 +1225,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
           //   return psMissingBgColor;
           // }
         });
-  }
+  }*/
   
 // Simon : Alignement : ajout des AA / codons (version séquence entière)
 // Simon bloc d'AA
