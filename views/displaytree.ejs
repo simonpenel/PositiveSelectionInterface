@@ -203,10 +203,14 @@ var nbSites = 0;
 var upperThresholdMode = true;
 
 // Simon
+// Dico des aa ( a ameliorer)
+
 var coloraa = new Object();
 coloraa["H"] = "red";
 coloraa["K"] = "red";
 coloraa["R"] = "red";
+coloraa["Q"] = "red";
+coloraa["N"] = "red";
 
 
 coloraa["G"] = "orange";
@@ -394,25 +398,24 @@ function updateLayout(cRoot,firstLoad=0) {
     phylogeny_setloss(treeRoot,nodeWidth);
   }
 
+  // Remplissage du dico nom de sequence => tableau de couleurs
   if (firstLoad == 1) {
-  var nodes_ini = treeRoot.descendants()
-  var leaves_ini = nodes_ini.filter(function (e) {
-    return !e.children;
-  });
-  var leaves_sequences = leaves_ini.filter(function(d) {return (d.data.lastEvent.aaAlign);});
-  leaves_sequences.forEach (function (d,i) {
+    var nodes_ini = treeRoot.descendants()
+    var leaves_ini = nodes_ini.filter(function (e) {
+      return !e.children;
+    });
+    var leaves_sequences = leaves_ini.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+    leaves_sequences.forEach (function (d,i) {
       var leaf_name = d.data.name;
       var col_aas = [];
-      console.log("NAME = "+leaf_name);
+      console.log("SEQUENCE NAME = "+leaf_name);
       var dna_sequence = d.data.lastEvent.dnaAlign;
       var aa_sequence = d.data.lastEvent.aaAlign;
       var aas = aa_sequence.split("");
       aas.forEach (function (aa,j) {
-        console.log("INI "+aa)
         var col = coloraa[aa];
         if (col == undefined) {col  = "grey"};
         col_aas.push(col);
-        // console.log(col)
       })
       dico_aa[leaf_name] = col_aas;
     })
@@ -1253,23 +1256,18 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         });
   }*/
 
-// Simon : Alignement : ajout des AA / codons (version séquence entière)
+// Simon : Alignement : ajout des coelurs AA
 
- aa_dataset = []
- d3.selectAll(".aa_block").remove();
-var  leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
-     leaves_sequences.forEach (function (d,i) {
-      var index = i;
-      var seqname =  d.data.name;
-      //var aa_sequence = d.data.lastEvent.aaAlign;
-      // var aas = aa_sequence.split("");
-      var aas = dico_aa[seqname];
-      aas.forEach (function (aa,j) {
-      // console.log("DEBUG "+j+"=>"+aa);
+  aa_dataset = []
+  d3.selectAll(".aa_block").remove(); // on vire  tout
+  var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+  leaves_sequences.forEach (function (d,i) {
+    var index = i;
+    var seqname =  d.data.name;
+    var aas = dico_aa[seqname];
+    aas.forEach (function (aa,j) {
       var opac =  getOpacFromResult(resultsJSON[j]);
-/*      var resu =  resultsJSON[j];*/
-
-        var locnode = {
+      var locnode = {
         index:i,
         name:d.data.name,
         y:d.y,
@@ -1281,52 +1279,7 @@ var  leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAl
       })
     });
 
-  // var aaDiv = d3.select('#svg2')
-  //   .append('g')
-  //   .attr('id', 'aa-container')
-  //   .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-  //
-
-//     var aablock =
-//       aaDiv.selectAll(".aa_block")
-//       .data(aa_dataset);
-//       //EXIT
-//       aablock.exit().remove();
-//       //ENTER
-//       var aablockEnter =
-//       aablock
-//       .enter()
-//       .append("g")
-//       .attr("class", "aa_block");
-//       //ENTER + updatesATE
-//       aablockEnter
-//       .merge(aablock)
-//       .attr("transform",function(d,i) {
-//         var transx = (d.pos)*hStep + margin.left + 30 ;
-//         var transy = d.y +5;
-//         return "translate("+transx+", "+transy+")";
-//       })
-// //      .append("text")
-// //      .text(function(d) {return d.aa;})
-//       .append("rect")
-//       .attr('width', function(d) { return hStep; })
-//       .attr('height', function(d) { return 10 })
-//       .style("fill", function(d){ return (d.col)})
-//         // if (d.aa in coloraa) {
-//         //   return coloraa[d.aa];
-//         // }
-//         // else {
-//         //   return "violet"
-//         // }
-//       // })
-//       .style("opacity", function(d){
-//         if (displaySeqType != "AA") {
-//           return 0
-//         } else {
-//           return d.opac
-//         }
-//       });
-
+  
 
 // Simon bloc DNA
 
