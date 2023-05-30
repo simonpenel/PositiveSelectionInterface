@@ -149,7 +149,7 @@ var treeRoot;
 var cladeRoot;
 var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees en cladograme
 var nodeWidth = 80;                  // Largeur
-var nodeHeight = 15;                  // Hauteur
+var nodeHeight = 30;                  // Hauteur
 // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
 var stringWidth;                      // Largeur affichage arbre
 var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
@@ -2157,8 +2157,8 @@ $('#moreHeigth').on('click', function(event, dropdownData) {
   updateLayout(cladeRoot);
 });
 $('#lessHeigth').on('click', function(event, dropdownData) {
-  // if (nodeHeight - modStepY >= 15 ) {
-  if (true) {
+  if (nodeHeight - modStepY >= 30 ) {
+  // if (true) {
     nodeHeight -= modStepY;
     updateLayout(cladeRoot);
   }
