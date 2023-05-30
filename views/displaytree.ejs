@@ -227,9 +227,19 @@ coloraa["L"] = "green";
 coloraa["M"] = "green";
 coloraa["V"] = "green";
 
+
+
 coloraa["-"] = "white";
 
+var colordna = new Object();
+colordna["---"] = "white";
+colordna["GAT"] = "red";
+colordna["GGG"] = "yellow";
+colordna["GCC"] = "green";
+colordna["AAA"] = "blue";
+
 var  dico_aa = new Object();
+var  dico_dna = new Object();
 console.log("isCodon",isCodon);
 
 if (!isStorageSupported(myStorage)) {
@@ -408,6 +418,7 @@ function updateLayout(cRoot,firstLoad=0) {
     leaves_sequences.forEach (function (d,i) {
       var leaf_name = d.data.name;
       var col_aas = [];
+      var col_dnas = [];
       console.log("SEQUENCE NAME = "+leaf_name);
       var dna_sequence = d.data.lastEvent.dnaAlign;
       var aa_sequence = d.data.lastEvent.aaAlign;
@@ -418,6 +429,22 @@ function updateLayout(cRoot,firstLoad=0) {
         col_aas.push(col);
       })
       dico_aa[leaf_name] = col_aas;
+
+      var dnas = dna_sequence.split("");
+      for (i = 0; i < dnas.length-3; i+=3) {
+        var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
+        var col = colordna[codon];
+        if (col == undefined) {col  = "grey"};
+        col_dnas.push(col);
+        console.log("DNA "+codon);
+      }
+      // dnas.forEach (function (dna,j) {
+      //   var col = colordna[dna];
+      //   if (col == undefined) {col  = "grey"};
+      //   col_dnas.push(col);
+      // })
+      dico_dna[leaf_name] = col_dnas;
+
     })
   }
   updateSvg(treeRoot,firstLoad);
@@ -1069,7 +1096,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // ======================================================
   // | Début : graphe des résultats de sélection positive |
   // ======================================================
-  var svg2 = d3.select("#svg2");
+  var  svg2 = d3.select("#svg2");
   svg2
     .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50)
     .attr("height",  heightSVG + margin.top + margin.down + 100);
@@ -1279,7 +1306,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       })
     });
 
-  
+
 
 // Simon bloc DNA
 
@@ -1288,68 +1315,22 @@ d3.selectAll(".dna_block").remove();
 var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.dnaAlign);});
     leaves_sequences.forEach (function (d,i) {
       var index = i;
-      var dna_sequence = d.data.lastEvent.dnaAlign;
-      // var dnas = dna_sequence.split("");
-      var dnas = [];
+      var seqname =  d.data.name;
+      var dnas = dico_dna[seqname];
       dnas.forEach (function (dna,j) {
-            var locnode = {
+        var opac =  getOpacFromResult(resultsJSON[j]);
+        var locnode = {
         index:i,
         name:d.data.name,
         y:d.y,
         pos:j,
-        dna:dna,
+        col:dna,
+        opac:opac,
       };
       dna_dataset.push(locnode);
       })
     });
 
-  var dnaDiv = d3.select('#svg2')
-    .append('g')
-    .attr('id', 'dna-container')
-    .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-
-
-    var dnablock =
-      dnaDiv.selectAll(".dna_block")
-      .data(dna_dataset);
-      //EXIT
-      dnablock.exit().remove();
-      //ENTER
-      var dnablockEnter =
-      dnablock
-      .enter()
-      .append("g")
-      .attr("class", "dna_block");
-      //ENTER + updatesATE
-      dnablockEnter
-      .merge(dnablock)
-      .attr("transform",function(d,i) {
-        var transx = (d.pos)*hStep/3 + margin.left  - 50 + 3;
-        var transy = d.y +5;
-        return "translate("+transx+", "+transy+")";
-      })
-      .append("text")
-      .text(function(d) {return d.dna;})
-      .style("fill", function(d){
-        if (d.dna in coloraa) {
-          return coloraa[d.dna];
-        }
-        else {
-          return "violet"
-        }
-      })
-      .style("opacity", function(d){
-        if (displaySeqType != "Nuc") {
-          return 0
-        } else {
-          return 1
-        }
-      });
-
-
-
-
-/* a supprime par simon*/
 seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
@@ -1387,19 +1368,10 @@ seqTextAA.append('text')
         var transy = d.y +5;
         return "translate("+transx+", "+transy+")";
       })
-//      .append("text")
-//      .text(function(d) {return d.aa;})
       .append("rect")
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 10 })
       .style("fill", function(d){ return (d.col)})
-        // if (d.aa in coloraa) {
-        //   return coloraa[d.aa];
-        // }
-        // else {
-        //   return "violet"
-        // }
-      // })
       .style("opacity", function(d){
         if (displaySeqType != "AA") {
           return 0
@@ -1407,6 +1379,45 @@ seqTextAA.append('text')
           return d.opac
         }
       });
+
+
+      var dnaDiv = d3.select('#svg2')
+        .append('g')
+        .attr('id', 'dna-container')
+        .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
+
+      var dnablock =
+        dnaDiv.selectAll(".dna_block")
+        .data(dna_dataset);
+        //EXIT
+        dnablock.exit().remove();
+        //ENTER
+        var dnablockEnter =
+        dnablock
+        .enter()
+        .append("g")
+        .attr("class", "dna_block");
+        //ENTER + updatesATE
+        dnablockEnter
+        .merge(dnablock)
+        .attr("transform",function(d,i) {
+          var transx = (d.pos)*hStep + margin.left + 30 ;
+          var transy = d.y +5;
+          return "translate("+transx+", "+transy+")";
+        })
+        .append("rect")
+        .attr('width', function(d) { return hStep; })
+        .attr('height', function(d) { return 10 })
+        .style("fill", function(d){ return (d.col)})
+        .style("opacity", function(d){
+          if (displaySeqType != "Nuc") {
+            return 0
+          } else {
+            return d.opac
+          }
+        });
+
 
   // ==============================================================
   // Fin modif : blocs de séquences
