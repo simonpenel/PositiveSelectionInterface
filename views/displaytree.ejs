@@ -1,4 +1,4 @@
-<!-- 
+<!--
 
 Modified by Genna BEN HASSEN, Camille SIHARATH and Grégoire ALIZADEH NOIRET, 16 December 2021
 Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
@@ -18,7 +18,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
   <header>
     <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
       <%- include('../partials/header') %>
-    
+
       <!-- Bouton Action -->
       <div id="action" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose action on node">
@@ -31,19 +31,19 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="subtree" class="dropdown-item" href="#">Sub Tree/Upper Tree</a></li>
         </ul>
       </div>
-      
+
       <!-- Bouton Collapse -->
       <!-- <button type="button" class="btn btn-default btn-sm" aria-label="Collapse" data-toggle="tooltip" data-placement="top" title="Collapse the tree" id="globalcollapse">
         <span>Compact tree</span>
       </button> -->
-      
+
       <!-- Bouton Expand -->
       <div class="btn-group" role="group" aria-label="">
         <button id="globalexpand" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Expand" data-toggle="tooltip" data-placement="top" title="Expand the tree (takes time on big trees!)">
           <span>Expand tree</span>
         </button>
       </div>
-    
+
       <!-- Boutons Width / Height -->
       <div class="btn-group" role="group" aria-label="Tree size buttons">
         <div class="btn-group" role="group" aria-label="Width buttons">
@@ -72,7 +72,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           </button>
         </div>
       </div>
-      
+
       <!-- Bouton Alignement -->
       <div id="alignment-type" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose alignment type">
@@ -83,7 +83,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="codons-display" class="dropdown-item" href="#">Codons</a></li>
         </ul>
       </div>
-      
+
       <!-- Bouton Export -->
       <div id="export" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
@@ -94,7 +94,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="selecp" class="dropdown-item" href="#">Alignment</a></li>
         </ul>
       </div>
-      
+
       <!-- Champs Seuils sup. et inf. -->
       <div id="thresholds-group" class="btn-group" role="group" aria-label="">
         <button class="btn btn-sm btn-outline-secondary">
@@ -149,7 +149,7 @@ var treeRoot;
 var cladeRoot;
 var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees en cladograme
 var nodeWidth = 80;                  // Largeur
-var nodeHeight = 15;                  // Hauteur
+var nodeHeight = 30;                  // Hauteur
 // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
 var stringWidth;                      // Largeur affichage arbre
 var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
@@ -202,6 +202,44 @@ var nbLeaves = 0;
 var nbSites = 0;
 var upperThresholdMode = true;
 
+// Simon
+// Dico des aa ( a ameliorer)
+
+var coloraa = new Object();
+coloraa["H"] = "red";
+coloraa["K"] = "red";
+coloraa["R"] = "red";
+coloraa["Q"] = "red";
+coloraa["N"] = "red";
+
+
+coloraa["G"] = "orange";
+coloraa["P"] = "orange";
+coloraa["S"] = "orange";
+coloraa["T"] = "orange";
+
+coloraa["F"] = "blue";
+coloraa["W"] = "blue";
+coloraa["Y"] = "blue";
+
+coloraa["I"] = "green";
+coloraa["L"] = "green";
+coloraa["M"] = "green";
+coloraa["V"] = "green";
+
+
+
+coloraa["-"] = "white";
+
+var colordna = new Object();
+colordna["---"] = "white";
+colordna["GAT"] = "red";
+colordna["GGG"] = "yellow";
+colordna["GCC"] = "green";
+colordna["AAA"] = "blue";
+
+var  dico_aa = new Object();
+var  dico_dna = new Object();
 console.log("isCodon",isCodon);
 
 if (!isStorageSupported(myStorage)) {
@@ -369,6 +407,46 @@ function updateLayout(cRoot,firstLoad=0) {
   } else {
     phylogeny_setloss(treeRoot,nodeWidth);
   }
+
+  // Remplissage du dico nom de sequence => tableau de couleurs
+  if (firstLoad == 1) {
+    var nodes_ini = treeRoot.descendants()
+    var leaves_ini = nodes_ini.filter(function (e) {
+      return !e.children;
+    });
+    var leaves_sequences = leaves_ini.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+    leaves_sequences.forEach (function (d,i) {
+      var leaf_name = d.data.name;
+      var col_aas = [];
+      var col_dnas = [];
+      console.log("SEQUENCE NAME = "+leaf_name);
+      var dna_sequence = d.data.lastEvent.dnaAlign;
+      var aa_sequence = d.data.lastEvent.aaAlign;
+      var aas = aa_sequence.split("");
+      aas.forEach (function (aa,j) {
+        var col = coloraa[aa];
+        if (col == undefined) {col  = "grey"};
+        col_aas.push(col);
+      })
+      dico_aa[leaf_name] = col_aas;
+
+      var dnas = dna_sequence.split("");
+      for (i = 0; i < dnas.length-3; i+=3) {
+        var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
+        var col = colordna[codon];
+        if (col == undefined) {col  = "grey"};
+        col_dnas.push(col);
+        console.log("DNA "+codon);
+      }
+      // dnas.forEach (function (dna,j) {
+      //   var col = colordna[dna];
+      //   if (col == undefined) {col  = "grey"};
+      //   col_dnas.push(col);
+      // })
+      dico_dna[leaf_name] = col_dnas;
+
+    })
+  }
   updateSvg(treeRoot,firstLoad);
   updateScroll();
 }
@@ -426,7 +504,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // var results = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
 
   // console.log('resultsJSON', resultsJSON);
-  
+
   // results = results.split(' ');
   // var resultsJSON = [];
   // // var site = 0;
@@ -600,7 +678,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .enter()
     .append("g")
     .attr("class", "node");
-  
+
   nodeEnter
     .append("g")
       .attr("class", "gsymbol")
@@ -914,7 +992,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       }
       return name
     });
-  
+
   // Get tree characteristics (do this only once)
   if (firstLoad) {
     nbBranches = g.selectAll('path.symbol').size();
@@ -934,7 +1012,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var leaves = nodes.filter(function (e) {
     return !e.children;
   });
-  
+
   var widthSVG0 = resultsJSON.length;
   var heightSVG0 = 60;
   var psGraphGlobalWidth = resultsJSON.length;
@@ -946,12 +1024,12 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .attr('height',  heightSVG0);
 
   d3.select('#ps-graph-global').remove();
-  
+
   if (!document.getElementById('ps-graph-global')) {
     // Ajout du graphe des résultats au SVG
     svg0.append('g')
       .attr('id', 'ps-graph-global')
-      .attr('transform', 'translate('+psGraphGlobalMargins.left+', '+psGraphGlobalMargins.top+')'); 
+      .attr('transform', 'translate('+psGraphGlobalMargins.left+', '+psGraphGlobalMargins.top+')');
   }
 
   var psGraphGlobal = d3.select('#ps-graph-global');
@@ -976,7 +1054,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .style('fill', function(d) {
         return getColorFromResult(d);
       });
-  
+
   // Handle click-drag events on the small graph
   document.getElementById(compactWindow.attr('id')).onmousedown = function(e) {
     scrollAlignment(e);
@@ -1007,18 +1085,18 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .style('fill', 'rgba(0,0,0,0.17)')
         .style('stroke', navWindowColor)
         .style('stroke-width', '0');
-    
+
     if (automaticBoundaries) {
       leftBoundary = siteStart;
       rightBoundary = siteEnd;
     }
     updateNodeColors();
   };
-  
+
   // ======================================================
   // | Début : graphe des résultats de sélection positive |
   // ======================================================
-  var svg2 = d3.select("#svg2");
+  var  svg2 = d3.select("#svg2");
   svg2
     .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50)
     .attr("height",  heightSVG + margin.top + margin.down + 100);
@@ -1059,7 +1137,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       // })
       .attr('class', 'ps-rects')
       // .attr('title', function(d) {
-      //   return d.site;  
+      //   return d.site;
       // })
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return y(0) - y(d); })
@@ -1076,7 +1154,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         showTooltip();
       })
       .on('mouseout', hideTooltip);
-  
+
   // Ajout du seuil supérieur au graphe
   psGraph.append('line')
     .attr('x1', x(1))
@@ -1097,13 +1175,19 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     // .style('stroke', psThresholdLowBgColor)
     .style('stroke-width', '1')
     .style('stroke-dasharray', ('4, 4'));
-  
+
   psGraph.append('br');
 
   // ====================================================
   // | Fin : graphe des résultats de sélection positive |
   // ====================================================
-  
+
+
+
+
+
+
+
   // ==============================
   // | Début : blocs de séquences |
   // ==============================
@@ -1177,12 +1261,13 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var aaSequence = d3.select('.aa-sequence');
   var dnaSequence = d3.select('.dna-sequence');
   var targetSequence = displaySeqType == 'AA' ? aaSequence : dnaSequence;
-  for (i = 0; i < resultsJSON.length; i ++) {
+/*  for (i = 0; i < resultsJSON.length; i ++) {
       // Ajout d'un rectangle coloré par site
       targetSequence.append('rect')
         .attr('x', function(d) {return (i - siteOffset)*hStep;})
         .attr('width', hStep)
-        .attr('y', function(d) {return minYSeq - d.y - hStepBase;})
+        .attr('y', function(d) {
+          return minYSeq - d.y - hStepBase;})
         .attr('height', maxYSeq - minYSeq + hStepBase*2)
         .style('fill', () => {
           return getColorFromResult(resultsJSON[i]);
@@ -1196,19 +1281,143 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
           //   return psMissingBgColor;
           // }
         });
-  }
-  
-  // Alignement : ajout des AA / codons (version séquence entière)
-  seqTextAA.append('text')
+  }*/
+
+// Simon : Alignement : ajout des coelurs AA
+
+  aa_dataset = []
+  d3.selectAll(".aa_block").remove(); // on vire  tout
+  var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+  leaves_sequences.forEach (function (d,i) {
+    var index = i;
+    var seqname =  d.data.name;
+    var aas = dico_aa[seqname];
+    aas.forEach (function (aa,j) {
+      var opac =  getOpacFromResult(resultsJSON[j]);
+      var locnode = {
+        index:i,
+        name:d.data.name,
+        y:d.y,
+        pos:j,
+        col:aa,
+        opac:opac,
+      };
+      aa_dataset.push(locnode);
+      })
+    });
+
+
+
+// Simon bloc DNA
+
+dna_dataset = []
+d3.selectAll(".dna_block").remove();
+var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.dnaAlign);});
+    leaves_sequences.forEach (function (d,i) {
+      var index = i;
+      var seqname =  d.data.name;
+      var dnas = dico_dna[seqname];
+      dnas.forEach (function (dna,j) {
+        var opac =  getOpacFromResult(resultsJSON[j]);
+        var locnode = {
+        index:i,
+        name:d.data.name,
+        y:d.y,
+        pos:j,
+        col:dna,
+        opac:opac,
+      };
+      dna_dataset.push(locnode);
+      })
+    });
+
+seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
+
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
+
+    var aaDiv = d3.select('#svg2')
+      .append('g')
+      .attr('id', 'aa-container')
+      .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
+
+    var aablock =
+      aaDiv.selectAll(".aa_block")
+      .data(aa_dataset);
+      //EXIT
+      aablock.exit().remove();
+      //ENTER
+      var aablockEnter =
+      aablock
+      .enter()
+      .append("g")
+      .attr("class", "aa_block");
+      //ENTER + updatesATE
+      aablockEnter
+      .merge(aablock)
+      .attr("transform",function(d,i) {
+        var transx = (d.pos)*hStep + margin.left + 30 ;
+        var transy = d.y +5;
+        return "translate("+transx+", "+transy+")";
+      })
+      .append("rect")
+      .attr('width', function(d) { return hStep; })
+      .attr('height', function(d) { return 10 })
+      .style("fill", function(d){ return (d.col)})
+      .style("opacity", function(d){
+        if (displaySeqType != "AA") {
+          return 0
+        } else {
+          return d.opac
+        }
+      });
+
+
+      var dnaDiv = d3.select('#svg2')
+        .append('g')
+        .attr('id', 'dna-container')
+        .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
+
+      var dnablock =
+        dnaDiv.selectAll(".dna_block")
+        .data(dna_dataset);
+        //EXIT
+        dnablock.exit().remove();
+        //ENTER
+        var dnablockEnter =
+        dnablock
+        .enter()
+        .append("g")
+        .attr("class", "dna_block");
+        //ENTER + updatesATE
+        dnablockEnter
+        .merge(dnablock)
+        .attr("transform",function(d,i) {
+          var transx = (d.pos)*hStep + margin.left + 30 ;
+          var transy = d.y +5;
+          return "translate("+transx+", "+transy+")";
+        })
+        .append("rect")
+        .attr('width', function(d) { return hStep; })
+        .attr('height', function(d) { return 10 })
+        .style("fill", function(d){ return (d.col)})
+        .style("opacity", function(d){
+          if (displaySeqType != "Nuc") {
+            return 0
+          } else {
+            return d.opac
+          }
+        });
+
 
   // ==============================================================
   // Fin modif : blocs de séquences
@@ -1243,6 +1452,42 @@ function getColorFromResult(res) {
       }
     } else {
       return psMissingBgColor;
+    }
+  }
+}
+
+
+// Simon
+function getOpacFromResult(res) {
+  if (upperThresholdMode) {
+    if (res >= psThresholdHigh) {
+      //return psThresholdHighBgColor;
+      return 1.0;
+    } else if (res >= psThresholdLow) {
+//      return psThresholdLowBgColor;
+      return 0.5;
+    } else if (res >= 0) {
+      //return psBelowThresholdBgColor;
+      return 0.25;
+    } else {
+      //return psMissingBgColor;
+      return 0.1;
+    }
+  } else {
+    if (res >= 0) {
+      if (res <= psThresholdLow) {
+        //return psThresholdHighBgColor;
+        return 1.0;
+      } else if (res <= psThresholdHigh) {
+        //return psThresholdLowBgColor;
+        return 0.5;
+      } else {
+        //return psBelowThresholdBgColor;
+        return 0.25;
+      }
+    } else {
+      // return psMissingBgColor;
+      return 0.1;
     }
   }
 }
@@ -1814,7 +2059,7 @@ function removesortDuplicates(target_array) {
 // Actions sur les boutons
 // -----------------------
 $('#selectCrossref').on('click', function(event) {
-  selectedCrossref=$( "#selectCrossref option:selected" ).text(); 
+  selectedCrossref=$( "#selectCrossref option:selected" ).text();
   selectedCrossrefURL=crossref[selectedCrossref].url;
   myStorage.setItem("crossref",selectedCrossref);
   updateLayout(cladeRoot);
@@ -1912,8 +2157,8 @@ $('#moreHeigth').on('click', function(event, dropdownData) {
   updateLayout(cladeRoot);
 });
 $('#lessHeigth').on('click', function(event, dropdownData) {
-  // if (nodeHeight - modStepY >= 15 ) {
-  if (true) {
+  if (nodeHeight - modStepY >= 30 ) {
+  // if (true) {
     nodeHeight -= modStepY;
     updateLayout(cladeRoot);
   }
@@ -1955,7 +2200,7 @@ $(document).ready(function() {
   if (!isCodon) {
       $('#alignment-type').hide();
   }
-    
+
   if (!branchSite) {
     $('#left-boundary, #right-boundary').prop('disabled', true);
   }
@@ -1995,7 +2240,7 @@ $(document).ready(function() {
   $(window).on('ready resize', function() {
     $('main').css('margin-top', $('header').outerHeight());
   });
-    
+
   // Gestion du bouton pour le type d'alignement
   $('#alignment-type').on('click', function(event, dropdownData) {
     var target = event.toElement || event.relatedTarget || event.target || function () { throw "Failed to attach an event target!"; }
@@ -2027,7 +2272,7 @@ $(document).ready(function() {
       default:
     }
   });
-  
+
   // Gestion de la modification des seuils
   $('#ps-threshold-high, #ps-threshold-low').on('change', function(event) {
     // On a modifié un des seuils
