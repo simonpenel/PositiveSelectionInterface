@@ -148,8 +148,13 @@ form {
 }
 
 
-
 /* <style> displaytree.ejs */
+
+.aa_rect {
+  .border-top-width: 0;
+  .border-bottom-width: 10px;
+
+}
 .node {
   cursor: pointer;
 }

@@ -1361,18 +1361,19 @@ seqTextAA.append('text')
         return "translate("+transx+", "+transy+")";
       })
       .append("rect")
+      .attr("class","aa_rect")
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 15 })
       .attr("stroke","black")
       .style("top", "0px")
       .attr("stroke-opacity", 1)
-      .attr('stroke-width', function(d){
+/*      .attr('stroke-width', function(d){
         if (displaySeqType != "AA") {
           return 0
         } else {
           return d.opac *2
         }
-      })
+      })*/
       .style("fill", function(d){ return (d.col)})
       .style("opacity", function(d){
         if (displaySeqType != "AA") {
