@@ -1357,18 +1357,29 @@ seqTextAA.append('text')
       .merge(aablock)
       .attr("transform",function(d,i) {
         var transx = (d.pos)*hStep + margin.left + 30 ;
-        var transy = d.y +5;
+        var transy = d.y - 7;
         return "translate("+transx+", "+transy+")";
       })
       .append("rect")
       .attr('width', function(d) { return hStep; })
-      .attr('height', function(d) { return 10 })
+      .attr('height', function(d) { return 15 })
+      .attr("stroke","black")
+      .style("top", "0px")
+      .attr("stroke-opacity", 1)
+      .attr('stroke-width', function(d){
+        if (displaySeqType != "AA") {
+          return 0
+        } else {
+          return d.opac *2
+        }
+      })
       .style("fill", function(d){ return (d.col)})
       .style("opacity", function(d){
         if (displaySeqType != "AA") {
           return 0
         } else {
-          return d.opac
+/*          return d.opac*/
+          return 0.5
         }
       });
 
@@ -1455,32 +1466,32 @@ function getOpacFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
       //return psThresholdHighBgColor;
-      return 1.0;
+      return 2.0;
     } else if (res >= psThresholdLow) {
 //      return psThresholdLowBgColor;
-      return 0.5;
+      return 1.0;
     } else if (res >= 0) {
       //return psBelowThresholdBgColor;
-      return 0.25;
+      return 0.0;
     } else {
       //return psMissingBgColor;
-      return 0.1;
+      return 0.0;
     }
   } else {
     if (res >= 0) {
       if (res <= psThresholdLow) {
         //return psThresholdHighBgColor;
-        return 1.0;
+        return 2.0;
       } else if (res <= psThresholdHigh) {
         //return psThresholdLowBgColor;
-        return 0.5;
+        return 0.0;
       } else {
         //return psBelowThresholdBgColor;
-        return 0.25;
+        return 0.0;
       }
     } else {
       // return psMissingBgColor;
-      return 0.1;
+      return 0.0;
     }
   }
 }
