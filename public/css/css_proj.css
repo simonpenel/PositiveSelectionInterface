@@ -112,7 +112,7 @@ p {
   margin: 0 auto;
   margin-top: 40px;
   margin-bottom: 40px;
-  width: 250px; 
+  width: 250px;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -147,14 +147,6 @@ form {
   padding: 1rem;
 }
 
-
-/* <style> displaytree.ejs */
-
-.aa_rect {
-  .border-top-width: 0;
-  .border-bottom-width: 10px;
-
-}
 .node {
   cursor: pointer;
 }
@@ -254,7 +246,7 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  
+
   background: #FFF;
 }
 main {
