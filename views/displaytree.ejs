@@ -117,6 +117,9 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
     <div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
       <svg id="svg0"></svg>
     </div>
+    <div id="selpos" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
+        <svg id="svg3"></svg>
+    </div>
   </header>
   <main>
     <div id="tree-container" style="border:2px solid lightgrey; float: left; overflow-y: auto; width: 40%;">
@@ -184,6 +187,7 @@ var isCodon = (xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon)=="tru
 var collapseMode = 'collapseOff';
 var navWindowColor = '#000000';
 var alignmentWindow = $('#alignment-container');
+var selposWindow = $('#selpos');
 var compactWindow = $('#navigator-container');
 var resultsJSON = null;
 var resultsShown;
@@ -1019,9 +1023,13 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var psGraphGlobalHeight = 60;
   var psGraphGlobalMargins = {top:0, right:0, bottom:0, left:0};
   var svg0 = d3.select('#svg0');
-  svg0
-    .attr('width', widthSVG0 + 15)
-    .attr('height',  heightSVG0);
+  var svg3 = d3.select('#svg3');
+  svg3
+    // .attr('width', widthSVG0 + 15)
+    // .attr('height',  heightSVG0*3)
+    .attr("position","fixed")
+    .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50)
+    .attr("height",   100);
 
   d3.select('#ps-graph-global').remove();
 
@@ -1093,6 +1101,32 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     updateNodeColors();
   };
 
+  document.getElementById(selposWindow.attr('id')).onscroll = function() {
+    // Generic scrolling (even without the small graph)
+    // Draw rectangle at currently visualized site
+    $('.navigation-window').remove();
+    var siteNumber = - Math.trunc((60 + seq_lg - selposWindow.scrollLeft() - selposWindow.innerWidth()/2)/hStep) - 2;
+    var navWindowWidth = selposWindow.innerWidth()/hStep;
+    var siteStart = Math.trunc(siteNumber - navWindowWidth/2) + 5;
+    var siteEnd = Math.trunc(siteNumber + navWindowWidth/2) + 5;
+    var navWindowRect = psGraphGlobal
+      .append('rect')
+        .attr('class', 'navigation-window')
+        .attr('x', siteStart)
+        .attr('y', 0)
+        .attr('width', navWindowWidth)
+        .attr('height', psGraphGlobalHeight)
+        .style('fill', 'rgba(0,0,0,0.17)')
+        .style('stroke', navWindowColor)
+        .style('stroke-width', '0');
+
+    if (automaticBoundaries) {
+      leftBoundary = siteStart;
+      rightBoundary = siteEnd;
+    }
+    updateNodeColors();
+  };
+
   // ======================================================
   // | Début : graphe des résultats de sélection positive |
   // ======================================================
@@ -1109,7 +1143,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .domain([0, maxStatJSON(resultsJSON)])
     .range([psGraphHeight, 0]);
   // === Ajout du graphe des résultats au SVG ===
-  var psGraph = svg2.append('g')
+  var psGraph = svg3.append('g')
     .attr('id', 'ps-graph')
     .attr('transform', 'translate('+(50 + seq_lg)+', '+psGraphMargins.top+')');
   // === Ajout de l'axe x au graphe ===
@@ -1383,6 +1417,7 @@ seqTextAA.append('text')
         return "translate("+transx+", "+transy+")";
       })
       .append("rect")
+      .attr("class","aa_rect")
       .attr("transform","translate(0,15)" )
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 2 })
@@ -1589,7 +1624,7 @@ function scrollAlignment(event) {
   var siteStart = Math.trunc((leftScroll - (60 + seq_lg))/hStep)+2;
   var siteEnd = Math.trunc((rightScroll - (60 + seq_lg))/hStep)+2;
   alignmentWindow.scrollLeft(leftScroll, 0);
-
+  selposWindow.scrollLeft(leftScroll, 0);
   if (automaticBoundaries) {
     leftBoundary = siteStart;
     rightBoundary = siteEnd;
@@ -1601,6 +1636,9 @@ function updateScroll() {
   alignmentWindow
     .scrollLeft(alignmentWindow.scrollLeft()+1)
     .scrollLeft(alignmentWindow.scrollLeft()-1);
+  selposWindow
+      .scrollLeft(selposWindow.scrollLeft()+1)
+      .scrollLeft(selposWindow.scrollLeft()-1);
 }
 
 function reloadGlobalResults() {
@@ -2274,6 +2312,7 @@ $(document).ready(function() {
           $("#aminoacid-display").css('color', '#000000');
           updateLayout(cladeRoot);
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()*3);
+          selposWindow.scrollLeft(selposWindow.scrollLeft()*3);
         }
         break;
       case "Amino Acids": // Amino Acids to Codons
@@ -2284,6 +2323,7 @@ $(document).ready(function() {
           $("#codons-display").css('color', '#000000');
           $("#aminoacid-display").css('color', '#FF0000');
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()/3);
+          selposWindow.scrollLeft(selposWindow.scrollLeft()/3);          
           updateLayout(cladeRoot);
         }
         break;
