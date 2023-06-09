@@ -117,8 +117,13 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
     <div id="navigator-container" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
       <svg id="svg0"></svg>
     </div>
-    <div id="selpos" style="border:2px solid lightgrey; overflow-y: hidden; width: 100%;">
+    <div>
+      <div id="bidon" style="border:2px solid lightgrey; float: left; overflow-y: auto; width: 40%;">
+        <svg id="svgbidon"></svg>
+      </div>
+    <div id="selpos" style="border:2px solid lightgrey; overflow-x: auto; overflow-y: auto;">
         <svg id="svg3"></svg>
+    </div>
     </div>
   </header>
   <main>
@@ -1027,9 +1032,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   svg3
     // .attr('width', widthSVG0 + 15)
     // .attr('height',  heightSVG0*3)
-    .attr("position","fixed")
-    .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50)
-    .attr("height",   100);
+    // .attr("position","fixed")
+    .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50);
+    // .attr("height",   10);
 
   d3.select('#ps-graph-global').remove();
 
@@ -1094,6 +1099,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .style('stroke', navWindowColor)
         .style('stroke-width', '0');
 
+    // autre scroll
+    var ss =  alignmentWindow.scrollLeft();
+    selposWindow.scrollLeft(ss, 0);
     if (automaticBoundaries) {
       leftBoundary = siteStart;
       rightBoundary = siteEnd;
@@ -1119,6 +1127,11 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .style('fill', 'rgba(0,0,0,0.17)')
         .style('stroke', navWindowColor)
         .style('stroke-width', '0');
+
+      var ss =  selposWindow.scrollLeft();
+      alignmentWindow.scrollLeft(ss, 0);
+        // scroll l'autre
+
 
     if (automaticBoundaries) {
       leftBoundary = siteStart;
@@ -2323,7 +2336,7 @@ $(document).ready(function() {
           $("#codons-display").css('color', '#000000');
           $("#aminoacid-display").css('color', '#FF0000');
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()/3);
-          selposWindow.scrollLeft(selposWindow.scrollLeft()/3);          
+          selposWindow.scrollLeft(selposWindow.scrollLeft()/3);
           updateLayout(cladeRoot);
         }
         break;
