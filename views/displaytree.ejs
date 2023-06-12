@@ -1417,12 +1417,11 @@ seqTextAA.append('text')
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
-      .attr("transform",function(d,i) {
-        var transx = (d.pos)*hStep + margin.left + 30 ;
-        var transy = d.y - 7;
-        console.log("merde "+d.pos);
-        return "translate("+transx+", "+transy+")";
-      })
+      // .attr("transform",function(d,i) {
+      //   var transx = (d.pos)*hStep + margin.left + 30 ;
+      //   var transy = d.y - 7;
+      //   return "translate("+transx+", "+transy+")";
+      // })
       .append("rect")
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 15 })
@@ -1483,11 +1482,11 @@ seqTextAA.append('text')
         //ENTER + updatesATE
         dnablockEnter
         .merge(dnablock)
-        .attr("transform",function(d,i) {
-          var transx = (d.pos)*hStep + margin.left + 30 ;
-          var transy = d.y - 7;
-          return "translate("+transx+", "+transy+")";
-        })
+        // .attr("transform",function(d,i) {
+        //   var transx = (d.pos)*hStep + margin.left + 30 ;
+        //   var transy = d.y - 7;
+        //   return "translate("+transx+", "+transy+")";
+        // })
         .append("rect")
         .attr('width', function(d) { return hStep; })
         .attr('height', function(d) { return 10 })
