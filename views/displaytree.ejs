@@ -215,6 +215,7 @@ var upperThresholdMode = true;
 // Dico des aa ( a ameliorer)
 
 var coloraa = new Object();
+if (isCodon == 1) {
 coloraa["H"] = "red";
 coloraa["K"] = "red";
 coloraa["R"] = "red";
@@ -235,17 +236,20 @@ coloraa["I"] = "green";
 coloraa["L"] = "green";
 coloraa["M"] = "green";
 coloraa["V"] = "green";
-
-
-
 coloraa["-"] = "white";
-
-var colordna = new Object();
-colordna["---"] = "white";
-colordna["GAT"] = "red";
-colordna["GGG"] = "yellow";
-colordna["GCC"] = "green";
-colordna["AAA"] = "blue";
+}
+else {
+coloraa["A"] = "blue";
+coloraa["T"] = "red";
+coloraa["G"] = "green";
+coloraa["C"] = "yellow";
+}
+var  colorcodon= new Object();
+colorcodon["---"] = "white";
+colorcodon["GAT"] = "red";
+colorcodon["GGG"] = "yellow";
+colorcodon["GCC"] = "green";
+colorcodon["AAA"] = "blue";
 
 var  dico_aa = new Object();
 var  dico_dna = new Object();
@@ -456,14 +460,14 @@ function updateLayout(cRoot,firstLoad=0) {
         var dnas = dna_sequence.split("");
         for (i = 0; i < dnas.length-3; i+=3) {
           var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
-          var col = colordna[codon];
+          var col = colorcodon[codon];
           if (col == undefined) {col  = "grey"};
           col_dnas.push(col);
           console.log("DNA "+codon);
         }
       }
       // dnas.forEach (function (dna,j) {
-      //   var col = colordna[dna];
+      //   var col = colorcodon[dna];
       //   if (col == undefined) {col  = "grey"};
       //   col_dnas.push(col);
       // })
