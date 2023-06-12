@@ -386,6 +386,7 @@ function  main_display() {
 // Fonction de mise a jour de l'affichage
 // ---------------------------------------
 function updateLayout(cRoot,firstLoad=0) {
+  console.log("displaySeqType="+displaySeqType);
   var treeRoot = d3.hierarchy(cRoot, function(d) {
     return d.clade;
   });
@@ -428,7 +429,6 @@ function updateLayout(cRoot,firstLoad=0) {
     };
     phylogeny_setloss(treeRoot,nodeWidth);
   }
-
   // Remplissage du dico nom de sequence => tableau de couleurs
   if (firstLoad == 1) {
     console.log("MAXLENGTH = "+max_tree_length  +" nodewidth =" +nodeWidth);
@@ -1384,7 +1384,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     });
 
   console.log("aa_dataset and dna_dataset OK");
-
+  console.log("displaySeqType = "+displaySeqType);
 seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
@@ -1420,6 +1420,7 @@ seqTextAA.append('text')
       .attr("transform",function(d,i) {
         var transx = (d.pos)*hStep + margin.left + 30 ;
         var transy = d.y - 7;
+        console.log("merde "+d.pos);
         return "translate("+transx+", "+transy+")";
       })
       .append("rect")
@@ -1441,6 +1442,9 @@ seqTextAA.append('text')
       .merge(aablock)
       .attr("transform",function(d,i) {
         var transx = (d.pos)*hStep + margin.left + 30 ;
+        if (isCodon == 0 ) {
+          transx = transx - 80 // ???
+        }
         var transy = d.y - 7;
         return "translate("+transx+", "+transy+")";
       })
@@ -1457,7 +1461,6 @@ seqTextAA.append('text')
           return 0
         } else {
         return d.opac
-
         }
       });
 
