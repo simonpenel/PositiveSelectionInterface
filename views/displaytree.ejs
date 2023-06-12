@@ -1420,7 +1420,7 @@ seqTextAA.append('text')
         }
       });
 
-
+      // Rectangles qui soulignent les position sel pos
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
@@ -1451,7 +1451,6 @@ seqTextAA.append('text')
         .attr('id', 'dna-container')
         .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
 
-
       var dnablock =
         dnaDiv.selectAll(".dna_block")
         .data(dna_dataset);
@@ -1468,13 +1467,37 @@ seqTextAA.append('text')
         .merge(dnablock)
         .attr("transform",function(d,i) {
           var transx = (d.pos)*hStep + margin.left + 30 ;
-          var transy = d.y +5;
+          var transy = d.y - 7;
           return "translate("+transx+", "+transy+")";
         })
         .append("rect")
         .attr('width', function(d) { return hStep; })
         .attr('height', function(d) { return 10 })
         .style("fill", function(d){ return (d.col)})
+        .style("opacity", function(d){
+          if (displaySeqType != "Nuc") {
+            return 0
+          } else {
+            return 0.5
+          }
+        });
+        // Rectangles qui soulignent les position sel pos
+        //ENTER + updates
+        dnablockEnter
+        .merge(dnablock)
+        .attr("transform",function(d,i) {
+          var transx = (d.pos)*hStep + margin.left + 30 ;
+          var transy = d.y - 7;
+          return "translate("+transx+", "+transy+")";
+        })
+        .append("rect")
+        .attr("class","dna_rect")
+        .attr("transform","translate(0,15)" )
+        .attr('width', function(d) { return hStep; })
+        .attr('height', function(d) { return 2 })
+        .attr("stroke","black")
+        .attr("stroke-opacity", 1)
+        .style("fill", "black")
         .style("opacity", function(d){
           if (displaySeqType != "Nuc") {
             return 0
