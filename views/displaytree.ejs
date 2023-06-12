@@ -618,7 +618,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var heightSVG = maxY - minY;
   var ajustementX = resultsJSON.length*hStep - 120;
   var ajustementY = -200;
-  var decalageY = -90;
+  // var decalageY = -90;
+  var decalageY = -150;
 
   svg1.attr("width", widthSVG + margin.right + margin.left);
   svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
