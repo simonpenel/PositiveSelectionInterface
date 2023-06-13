@@ -1049,6 +1049,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var psGraphGlobalMargins = {top:0, right:0, bottom:0, left:0};
   var svg0 = d3.select('#svg0');
   svg0.attr('width', widthSVG0 + 15)
+      .attr("height",psGraphGlobalHeight);
+      
   var svg3 = d3.select('#svg3');
   svg3
     // .attr('width', widthSVG0 + 15)
