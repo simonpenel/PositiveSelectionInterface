@@ -1459,7 +1459,8 @@ seqTextAA.append('text')
       .attr("class","aa_rect")
       .attr("transform","translate(0,15)" )
       .attr('width', function(d) { return hStep; })
-      .attr('height', function(d) { return d.opac * 4 })
+/*      .attr('height', function(d) { return d.opac * 4 })*/
+      .attr('height', function(d) { return  4 })
       .attr("stroke","black")
       .attr("stroke-opacity", 1)
       .style("fill", "black")
@@ -1467,7 +1468,7 @@ seqTextAA.append('text')
         if (displaySeqType != "AA") {
           return 0
         } else {
-        return d.opac
+        return d.opac 
         }
       });
 
@@ -1519,7 +1520,7 @@ seqTextAA.append('text')
         .attr("class","dna_rect")
         .attr("transform","translate(0,15)" )
         .attr('width', function(d) { return hStep; })
-        .attr('height', function(d) { return  d.opac * 4 })
+        .attr('height', function(d) { return  4 })
         .attr("stroke","black")
         .attr("stroke-opacity", 1)
         .style("fill", "black")
@@ -1576,10 +1577,10 @@ function getOpacFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
       //return psThresholdHighBgColor;
-      return 2.0;
+      return 1.0;
     } else if (res >= psThresholdLow) {
 //      return psThresholdLowBgColor;
-      return 1.0;
+      return 0.5;
     } else if (res >= 0) {
       //return psBelowThresholdBgColor;
       return 0.0;
@@ -1591,7 +1592,7 @@ function getOpacFromResult(res) {
     if (res >= 0) {
       if (res <= psThresholdLow) {
         //return psThresholdHighBgColor;
-        return 2.0;
+        return 1.0;
       } else if (res <= psThresholdHigh) {
         //return psThresholdLowBgColor;
         return 0.0;
