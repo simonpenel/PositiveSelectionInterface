@@ -10,11 +10,11 @@ Positional arguments:
 
 """
 
-# 
+#
 # Modified by Genna BEN HASSEN, Camille SIHARATH and Grégoire ALIZADEH NOIRET, 16 December 2021
 # Modified by Grégoire ALIZADEH NOIRET, 19 July 2022
 # Modified by Laurent GUÉGUEN, 6 March 2023
-# 
+#
 
 import argparse
 import json
@@ -89,46 +89,53 @@ def loadDico(fileDico):
     return speciesDico
 
 
+def geneticCode():
+  matches = {
+    # DNA
+    'AAA':'K', 'AAC':'N', 'AAG':'K', 'AAT':'N',
+    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+    'AGA':'R', 'AGC':'S', 'AGG':'R', 'AGT':'S',
+    'ATA':'I', 'ATC':'I', 'ATG':'M', 'ATT':'I',
+    'CAA':'Q', 'CAC':'H', 'CAG':'Q', 'CAT':'H',
+    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+    'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
+    'GAA':'E', 'GAC':'D', 'GAG':'E', 'GAT':'D',
+    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+    'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
+    'TAA':'*', 'TAC':'Y', 'TAG':'*', 'TAT':'Y',
+    'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
+    'TGA':'*', 'TGC':'C', 'TGG':'W', 'TGT':'C',
+    'TTA':'L', 'TTC':'F', 'TTG':'L', 'TTT':'F',
+
+    # RNA
+    'AAU':'N',
+    'ACU':'T',
+    'AGU':'S',
+    'AUA':'I', 'AUC':'I', 'AUG':'M', 'AUU':'I',
+    'CAU':'H',
+    'CCU':'P',
+    'CGU':'R',
+    'CUA':'L', 'CUC':'L', 'CUG':'L', 'CUU':'L',
+    'GAU':'D',
+    'GCU':'A',
+    'GGU':'G',
+    'GUA':'V', 'GUC':'V', 'GUG':'V', 'GUU':'V',
+    'UAA':'*', 'UAC':'Y', 'UAG':'*', 'UAU':'Y',
+    'UCA':'S', 'UCC':'S', 'UCG':'S', 'UCU':'S',
+    'UGA':'*', 'UGC':'C', 'UGG':'W', 'UGU':'C',
+    'UUA':'L', 'UUC':'F', 'UUG':'L', 'UUU':'F',
+
+
+  }
+  return(matches)
+
+
 def nucToAmino(nuc_seq:str):
     '''Converts a DNA/RNA sequence into a proteic sequence.'''
 
-    matches = {
-        'AAA':'K', 'AAC':'N', 'AAG':'K', 'AAT':'N',
-        'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
-        'AGA':'R', 'AGC':'S', 'AGG':'R', 'AGT':'S',
-        'ATA':'I', 'ATC':'I', 'ATG':'M', 'ATT':'I',
-        'CAA':'Q', 'CAC':'H', 'CAG':'Q', 'CAT':'H',
-        'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
-        'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
-        'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L',
-        'GAA':'E', 'GAC':'D', 'GAG':'E', 'GAT':'D',
-        'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
-        'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
-        'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V',
-        'TAA':'*', 'TAC':'Y', 'TAG':'*', 'TAT':'Y',
-        'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S',
-        'TGA':'*', 'TGC':'C', 'TGG':'W', 'TGT':'C',
-        'TTA':'L', 'TTC':'F', 'TTG':'L', 'TTT':'F',
-
-        'AAU':'N',
-        'ACU':'T',
-        'AGU':'S',
-        'AUA':'I', 'AUC':'I', 'AUG':'M', 'AUU':'I',
-        'CAU':'H',
-        'CCU':'P',
-        'CGU':'R',
-        'CUA':'L', 'CUC':'L', 'CUG':'L', 'CUU':'L',
-        'GAU':'D',
-        'GCU':'A',
-        'GGU':'G',
-        'GUA':'V', 'GUC':'V', 'GUG':'V', 'GUU':'V',
-        'UAA':'*', 'UAC':'Y', 'UAG':'*', 'UAU':'Y',
-        'UCA':'S', 'UCC':'S', 'UCG':'S', 'UCU':'S',
-        'UGA':'*', 'UGC':'C', 'UGG':'W', 'UGU':'C',
-        'UUA':'L', 'UUC':'F', 'UUG':'L', 'UUU':'F',
-
-        '---':'-'
-    }
+    matches=geneticCode()
     aa = ''
     codons = [nuc_seq[i:i+3].upper() for i in range(0, len(nuc_seq), 3)]
     for codon in codons:
@@ -227,7 +234,7 @@ def loadResultsBranchSite(resultsFile, nostat_value=-1.0, skipMissingSites=False
             numl += 1
         else:
           numl=site
-          
+
         for i in range(nbcol):
           col_lists[i].append(line[i+1])
 
@@ -236,10 +243,10 @@ def loadResultsBranchSite(resultsFile, nostat_value=-1.0, skipMissingSites=False
     d_cols = {}
     for i in range(len(col_lists)):
       d_cols[col_headers[i]] = col_lists[i]
-        
+
       ## col_lists: [['0.00885554', '0.25866598', '0.03920189'], ...]
       ## d_cols {'38': ['0.00885554', '0.25866598', '0.03920189'], ...}
-        
+
     d_cols_2 = dict(d_cols)
     nbs=len(d_cols['0'])
     print(nbs)
@@ -255,7 +262,7 @@ def loadResultsBranchSite(resultsFile, nostat_value=-1.0, skipMissingSites=False
         col_text = '['+col_text[:-2]+']' # [:-2] to remove last space and comma
         d_cols_2[col_key] = col_text
         ## d_cols_2: {1: '[0.1248, 0.12381, ...]', ...}
-        
+
     nb_branches = len(col_lists)
     print(nb_branches, 'branches found in results')
 
@@ -275,7 +282,7 @@ def cleanTree(tree:str):
 
     tree = re.sub(r'([\),])([0-9]+):', r'\1:', tree)
     tree = re.sub(r'([\),])(:[0-9]+):', r'\1:', tree)
-    
+
     new_tree = ''
     branch_id = 0
     if ':' in tree:
@@ -326,7 +333,7 @@ def createPhyloXML(fam,newick,results):
     text = file.read()
     file.close()
     os.remove('tmpfile-'+rd+'.xml')
-    
+
     p = XMLParser(huge_tree=True)
     text = text.replace("phy:", "")
 
@@ -346,6 +353,7 @@ def createPhyloXML(fam,newick,results):
     tree = etree.fromstring(text, parser=p)
     treename = etree.Element("name")
     treename.text = fam
+
     ins = tree.find('phylogeny')
     ins.append(treename)
 
@@ -373,7 +381,7 @@ def createPhyloXML(fam,newick,results):
             if (not  sp):
                 print ("undefined species for "+ cds)
                 sp = "undefined"
-     
+
             famspecies[sp] = 1
 
             ## Find sequence for current leaf name
@@ -390,17 +398,6 @@ def createPhyloXML(fam,newick,results):
 
             evrec = etree.Element("eventsRec")
             leaf = etree.Element("leaf")
-            if 'crossdico' in globals():
-                crossref = etree.Element("crossref")
-                if cds in crossdico[0]:
-                    response = crossdico[0][cds]
-                    tabbuf = response.split("|")
-                    print (tabbuf)
-                    for buf in tabbuf:
-                        print ("process "+buf)
-                        tabcross = buf.split(":")
-                        if len(tabcross) > 1 :
-                            crossref.set(tabcross[0], tabcross[1])
             leaf.set('speciesLocation', sp)
             if 'seqdefdico' in globals():
                 if cds in seqdefdico:
@@ -415,11 +412,9 @@ def createPhyloXML(fam,newick,results):
                 isCodon="false"
                 leaf.set('aaAlign', seq_alg) # raw sequence (any type)
 
-            if 'crossdico' in globals():
-                leaf.append(crossref)
             evrec.append(leaf)
             element.append(evrec)
-    
+
     ## Match branch IDs and branch results, then add branch info
     if args.isBranchsite:
         for element in tree.iter('clade'):
@@ -440,7 +435,7 @@ def createPhyloXML(fam,newick,results):
                 col_str = json.dumps(dummy_col)
                 branch_info.set('results', col_str)
                 element.append(branch_info)
-    
+
     print ("Number of leaves : ")
     print (nbfeuille)
     print ("Length of sequences : ")
@@ -450,7 +445,7 @@ def createPhyloXML(fam,newick,results):
 
     LengthMaxSeqID = etree.Element('maxSeqIdLength')
     LengthMaxSeqID.text = str(maxSeqIdLength)
-    
+
     treesize =  etree.Element("size")
     treesize.set('leaves',str(nbfeuille))
     treesize.set('isCodon',str(isCodon))
@@ -463,11 +458,19 @@ def createPhyloXML(fam,newick,results):
       globalResultsElement = etree.Element('global_results')
       globalResultsElement.set('results', str(results))
       e.append(globalResultsElement) # add the tag containing results
-      
+
+    geneticcode = etree.Element("geneticCode")
+    gC = geneticCode()
+    for cod,aa in gC.items():
+      geneticcode.set(cod,aa)
+
+    e.append(geneticcode) # add the tag containing geneticcode
+
+
     text =  minidom.parseString(ElementTree.tostring(subtree[0])).toprettyxml()
     # remove blank lines
     cleantext = "\n".join([ll.rstrip() for ll in text.splitlines() if ll.strip()])
-    #  print(cleantext)
+    # print(cleantext)
     return cleantext
 
 MAX_SITE = 100000

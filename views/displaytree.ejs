@@ -215,42 +215,44 @@ var upperThresholdMode = true;
 // Dico des aa ( a ameliorer)
 
 var coloraa = new Object();
-if (isCodon == 1) {
-coloraa["H"] = "red";
-coloraa["K"] = "red";
-coloraa["R"] = "red";
-coloraa["Q"] = "red";
-coloraa["N"] = "red";
 
+coloraa["K"]= "rgb(230,51,25)"  
+coloraa["R"]= "rgb(230,51,25)"
 
-coloraa["G"] = "orange";
-coloraa["P"] = "orange";
-coloraa["S"] = "orange";
-coloraa["T"] = "orange";
+coloraa["A"]= "rgb(25,128,230)"
+coloraa["F"]= "rgb(25,128,230)"
+coloraa["I"]= "rgb(25,128,230)"
+coloraa["L"]= "rgb(25,128,230)"
+coloraa["M"]= "rgb(25,128,230)"
+coloraa["V"]= "rgb(25,128,230)"
+coloraa["W"]= "rgb(25,128,230)"
 
-coloraa["F"] = "blue";
-coloraa["W"] = "blue";
-coloraa["Y"] = "blue";
+coloraa["N"]= "rgb(25,204,25)"
+coloraa["Q"]= "rgb(25,204,25)"
+coloraa["S"]= "rgb(25,204,25)"
+coloraa["T"]= "rgb(25,204,25)"
 
-coloraa["I"] = "green";
-coloraa["L"] = "green";
-coloraa["M"] = "green";
-coloraa["V"] = "green";
+coloraa["H"]= "rgb(25,179,179)"
+coloraa["Y"]= "rgb(25,179,179)"
+
+coloraa["C"]= "rgb(230,128,128)"
+
+coloraa["D"]= "rgb(204,77,204)"
+coloraa["E"]= "rgb(204,77,204)"
+
+coloraa["P"]= "rgb(204,204,0)"
+
+coloraa["G"]= "rgb(230,153,77)"
+
 coloraa["-"] = "white";
-}
-else {
-coloraa["A"] = "blue";
-coloraa["T"] = "red";
-coloraa["G"] = "green";
-coloraa["C"] = "yellow";
-}
-var  colorcodon= new Object();
-colorcodon["---"] = "white";
-colorcodon["GAT"] = "red";
-colorcodon["GGG"] = "yellow";
-colorcodon["GCC"] = "green";
-colorcodon["AAA"] = "blue";
+  
+var colordna = new Object();
+var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 
+  for (d in geneticcode){ 
+      colordna[d] = coloraa[geneticcode[d]];
+  }
+  
 var  dico_aa = new Object();
 var  dico_dna = new Object();
 console.log("isCodon",isCodon);
@@ -390,7 +392,6 @@ function  main_display() {
 // Fonction de mise a jour de l'affichage
 // ---------------------------------------
 function updateLayout(cRoot,firstLoad=0) {
-  console.log("displaySeqType="+displaySeqType);
   var treeRoot = d3.hierarchy(cRoot, function(d) {
     return d.clade;
   });
@@ -417,25 +418,13 @@ function updateLayout(cRoot,firstLoad=0) {
   layout(treeRoot);
   // Traitement des distances dans le cas d'un arbre de gene de type phyloxml
   if (tagSimpleGene) {
-    if (firstLoad == 1) {
-      var max_tree_length =  getmaxlength(treeRoot,0);
-      if (max_tree_length > 0) {
-        nodeWidth = Math.floor(nodeWidth / max_tree_length) * 3.0;
-      }
-    };
     phylogeny(treeRoot,nodeWidth);
   } else {
-    if (firstLoad == 1) {
-      var max_tree_length =  getmaxlength(treeRoot,0);
-      if (max_tree_length > 0) {
-        nodeWidth = Math.floor(nodeWidth / max_tree_length) * 3.0;
-      }
-    };
     phylogeny_setloss(treeRoot,nodeWidth);
   }
+
   // Remplissage du dico nom de sequence => tableau de couleurs
   if (firstLoad == 1) {
-    console.log("MAXLENGTH = "+max_tree_length  +" nodewidth =" +nodeWidth);
     var nodes_ini = treeRoot.descendants()
     var leaves_ini = nodes_ini.filter(function (e) {
       return !e.children;
@@ -456,18 +445,15 @@ function updateLayout(cRoot,firstLoad=0) {
       })
       dico_aa[leaf_name] = col_aas;
 
-      if (dna_sequence != undefined) {
-        var dnas = dna_sequence.split("");
-        for (i = 0; i < dnas.length-3; i+=3) {
-          var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
-          var col = colorcodon[codon];
-          if (col == undefined) {col  = "grey"};
-          col_dnas.push(col);
-          console.log("DNA "+codon);
-        }
+      var dnas = dna_sequence.split("");
+      for (i = 0; i < dnas.length-3; i+=3) {
+        var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
+        var col = colordna[codon];
+        if (col == undefined) {col  = "grey"};
+        col_dnas.push(col);
       }
       // dnas.forEach (function (dna,j) {
-      //   var col = colorcodon[dna];
+      //   var col = colordna[dna];
       //   if (col == undefined) {col  = "grey"};
       //   col_dnas.push(col);
       // })
@@ -618,8 +604,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var heightSVG = maxY - minY;
   var ajustementX = resultsJSON.length*hStep - 120;
   var ajustementY = -200;
-  // var decalageY = -90;
-  var decalageY = -150;
+  var decalageY = -90;
 
   svg1.attr("width", widthSVG + margin.right + margin.left);
   svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
@@ -1048,9 +1033,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var psGraphGlobalHeight = 60;
   var psGraphGlobalMargins = {top:0, right:0, bottom:0, left:0};
   var svg0 = d3.select('#svg0');
-  svg0.attr('width', widthSVG0 + 15)
-      .attr("height",psGraphGlobalHeight);
-      
   var svg3 = d3.select('#svg3');
   svg3
     // .attr('width', widthSVG0 + 15)
@@ -1392,7 +1374,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     });
 
   console.log("aa_dataset and dna_dataset OK");
-  console.log("displaySeqType = "+displaySeqType);
+
 seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .attr('x', function(d) {return 1;})
@@ -1425,11 +1407,11 @@ seqTextAA.append('text')
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
-      // .attr("transform",function(d,i) {
-      //   var transx = (d.pos)*hStep + margin.left + 30 ;
-      //   var transy = d.y - 7;
-      //   return "translate("+transx+", "+transy+")";
-      // })
+      .attr("transform",function(d,i) {
+        var transx = (d.pos)*hStep + margin.left + 30 ;
+        var transy = d.y - 7;
+        return "translate("+transx+", "+transy+")";
+      })
       .append("rect")
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 15 })
@@ -1443,15 +1425,12 @@ seqTextAA.append('text')
         }
       });
 
-      // Rectangles qui soulignent les position sel pos
+
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
       .attr("transform",function(d,i) {
         var transx = (d.pos)*hStep + margin.left + 30 ;
-        if (isCodon == 0 ) {
-          transx = transx - 80 // ???
-        }
         var transy = d.y - 7;
         return "translate("+transx+", "+transy+")";
       })
@@ -1459,8 +1438,7 @@ seqTextAA.append('text')
       .attr("class","aa_rect")
       .attr("transform","translate(0,15)" )
       .attr('width', function(d) { return hStep; })
-/*      .attr('height', function(d) { return d.opac * 4 })*/
-      .attr('height', function(d) { return  4 })
+      .attr('height', function(d) { return 2 })
       .attr("stroke","black")
       .attr("stroke-opacity", 1)
       .style("fill", "black")
@@ -1468,7 +1446,8 @@ seqTextAA.append('text')
         if (displaySeqType != "AA") {
           return 0
         } else {
-        return d.opac 
+        return d.opac
+
         }
       });
 
@@ -1476,6 +1455,7 @@ seqTextAA.append('text')
         .append('g')
         .attr('id', 'dna-container')
         .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+
 
       var dnablock =
         dnaDiv.selectAll(".dna_block")
@@ -1491,39 +1471,15 @@ seqTextAA.append('text')
         //ENTER + updatesATE
         dnablockEnter
         .merge(dnablock)
-        // .attr("transform",function(d,i) {
-        //   var transx = (d.pos)*hStep + margin.left + 30 ;
-        //   var transy = d.y - 7;
-        //   return "translate("+transx+", "+transy+")";
-        // })
+        .attr("transform",function(d,i) {
+          var transx = (d.pos)*hStep + margin.left + 30 ;
+          var transy = d.y +5;
+          return "translate("+transx+", "+transy+")";
+        })
         .append("rect")
         .attr('width', function(d) { return hStep; })
         .attr('height', function(d) { return 10 })
         .style("fill", function(d){ return (d.col)})
-        .style("opacity", function(d){
-          if (displaySeqType != "Nuc") {
-            return 0
-          } else {
-            return 0.5
-          }
-        });
-        // Rectangles qui soulignent les position sel pos
-        //ENTER + updates
-        dnablockEnter
-        .merge(dnablock)
-        .attr("transform",function(d,i) {
-          var transx = (d.pos)*hStep + margin.left + 30 ;
-          var transy = d.y - 7;
-          return "translate("+transx+", "+transy+")";
-        })
-        .append("rect")
-        .attr("class","dna_rect")
-        .attr("transform","translate(0,15)" )
-        .attr('width', function(d) { return hStep; })
-        .attr('height', function(d) { return  4 })
-        .attr("stroke","black")
-        .attr("stroke-opacity", 1)
-        .style("fill", "black")
         .style("opacity", function(d){
           if (displaySeqType != "Nuc") {
             return 0
@@ -1577,10 +1533,10 @@ function getOpacFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
       //return psThresholdHighBgColor;
-      return 1.0;
+      return 2.0;
     } else if (res >= psThresholdLow) {
 //      return psThresholdLowBgColor;
-      return 0.5;
+      return 1.0;
     } else if (res >= 0) {
       //return psBelowThresholdBgColor;
       return 0.0;
@@ -1592,7 +1548,7 @@ function getOpacFromResult(res) {
     if (res >= 0) {
       if (res <= psThresholdLow) {
         //return psThresholdHighBgColor;
-        return 1.0;
+        return 2.0;
       } else if (res <= psThresholdHigh) {
         //return psThresholdLowBgColor;
         return 0.0;
@@ -1919,17 +1875,6 @@ function phylogeny(treeRoot,offset) {
     d.x = phylodist*offset;
   });
 }
-
-function getmaxlength(treeRoot,max) {
-  treeRoot.each(function (d) {
-    var phylodist = phylo(d);
-    if (phylodist > max) {
-      max = phylodist;
-    }
-  });
-  return max;
-}
-
 
 // Fonction qui decale la position x d'un "loss"
 // ---------------------------------------------
