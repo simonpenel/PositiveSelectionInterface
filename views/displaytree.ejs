@@ -215,38 +215,44 @@ var upperThresholdMode = true;
 // Dico des aa ( a ameliorer)
 
 var coloraa = new Object();
-coloraa["H"] = "red";
-coloraa["K"] = "red";
-coloraa["R"] = "red";
-coloraa["Q"] = "red";
-coloraa["N"] = "red";
 
+coloraa["K"]= "rgb(230,51,25)"  
+coloraa["R"]= "rgb(230,51,25)"
 
-coloraa["G"] = "orange";
-coloraa["P"] = "orange";
-coloraa["S"] = "orange";
-coloraa["T"] = "orange";
+coloraa["A"]= "rgb(25,128,230)"
+coloraa["F"]= "rgb(25,128,230)"
+coloraa["I"]= "rgb(25,128,230)"
+coloraa["L"]= "rgb(25,128,230)"
+coloraa["M"]= "rgb(25,128,230)"
+coloraa["V"]= "rgb(25,128,230)"
+coloraa["W"]= "rgb(25,128,230)"
 
-coloraa["F"] = "blue";
-coloraa["W"] = "blue";
-coloraa["Y"] = "blue";
+coloraa["N"]= "rgb(25,204,25)"
+coloraa["Q"]= "rgb(25,204,25)"
+coloraa["S"]= "rgb(25,204,25)"
+coloraa["T"]= "rgb(25,204,25)"
 
-coloraa["I"] = "green";
-coloraa["L"] = "green";
-coloraa["M"] = "green";
-coloraa["V"] = "green";
+coloraa["H"]= "rgb(25,179,179)"
+coloraa["Y"]= "rgb(25,179,179)"
 
+coloraa["C"]= "rgb(230,128,128)"
 
+coloraa["D"]= "rgb(204,77,204)"
+coloraa["E"]= "rgb(204,77,204)"
+
+coloraa["P"]= "rgb(204,204,0)"
+
+coloraa["G"]= "rgb(230,153,77)"
 
 coloraa["-"] = "white";
-
+  
 var colordna = new Object();
-colordna["---"] = "white";
-colordna["GAT"] = "red";
-colordna["GGG"] = "yellow";
-colordna["GCC"] = "green";
-colordna["AAA"] = "blue";
+var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 
+  for (d in geneticcode){ 
+      colordna[d] = coloraa[geneticcode[d]];
+  }
+  
 var  dico_aa = new Object();
 var  dico_dna = new Object();
 console.log("isCodon",isCodon);
@@ -445,7 +451,6 @@ function updateLayout(cRoot,firstLoad=0) {
         var col = colordna[codon];
         if (col == undefined) {col  = "grey"};
         col_dnas.push(col);
-        console.log("DNA "+codon);
       }
       // dnas.forEach (function (dna,j) {
       //   var col = colordna[dna];
