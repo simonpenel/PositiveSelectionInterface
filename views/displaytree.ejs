@@ -214,7 +214,7 @@ var upperThresholdMode = true;
 // Simon
 // Dico des aa ( a ameliorer)
 
-var coloraa = new Object();
+/*var coloraa = new Object();
 
 coloraa["K"]= "rgb(230,51,25)"  
 coloraa["R"]= "rgb(230,51,25)"
@@ -245,12 +245,63 @@ coloraa["P"]= "rgb(204,204,0)"
 coloraa["G"]= "rgb(230,153,77)"
 
 coloraa["-"] = "white";
+  */
+
+var rgbaa = new Object();
+
+rgbaa["K"]= [230,51,25];  
+rgbaa["R"]= [230,51,25];
+
+rgbaa["A"]= [25,128,230];
+rgbaa["F"]= [25,128,230];
+rgbaa["I"]= [25,128,230];
+rgbaa["L"]= [25,128,230];
+rgbaa["M"]= [25,128,230];
+rgbaa["V"]= [25,128,230];
+rgbaa["W"]= [25,128,230];
+
+rgbaa["N"]= [25,204,25];
+rgbaa["Q"]= [25,204,25];
+rgbaa["S"]= [25,204,25];
+rgbaa["T"]= [25,204,25];
+
+rgbaa["H"]= [25,179,179];
+rgbaa["Y"]= [25,179,179];
+
+rgbaa["C"]= [230,128,128];
+
+rgbaa["D"]= [204,77,204];
+rgbaa["E"]= [204,77,204];
+
+rgbaa["P"]= [204,204,0];
+
+rgbaa["G"]= [230,153,77];
+
+rgbaa["-"] = [255,255,255];
   
+
+// Fonction rgb ->cold
+// ---------------------------------------
+function  rgb2col(rgb) {
+  var col = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+  return col
+}
+
 var colordna = new Object();
 var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 
   for (d in geneticcode){ 
-      colordna[d] = coloraa[geneticcode[d]];
+    var col = "grey";
+    var _aa = geneticcode[d];
+    if (_aa != undefined)  {
+      var _rgb = rgbaa[_aa];
+      if (_rgb != undefined) {
+        col = rgb2col(_rgb)
+      }
+
+    }
+    colordna[d] = col;
+    //colordna[d] = rgb2col(rgbaa[geneticcode[d]]);
   }
   
 var  dico_aa = new Object();
@@ -451,8 +502,13 @@ function updateLayout(cRoot,firstLoad=0) {
       var aa_sequence = d.data.lastEvent.aaAlign;
       var aas = aa_sequence.split("");
       aas.forEach (function (aa,j) {
-        var col = coloraa[aa];
-        if (col == undefined) {col  = "grey"};
+        var col = rgbaa[aa];
+        if (col == undefined) {
+          col  = "grey"
+        }
+        else {
+          col = rgb2col(col);
+        };
         col_aas.push(col);
       })
       dico_aa[leaf_name] = col_aas;
