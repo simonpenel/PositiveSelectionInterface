@@ -372,6 +372,7 @@ else {
 // Fonction d'affichage principale
 // ---------------------------------------
 function  main_display() {
+  $('#redondance').hide();
   // Arbre d'especes (lu dans monarbre.js)
   // var speciesTreeRoot = d3.hierarchy(cladeRootSpecies, function(d) {
     // return d.clade;
@@ -2332,6 +2333,8 @@ $(document).ready(function() {
           $("#toggle-seqtype").html("Current display: "+displaySeqType);
           $("#codons-display").css('color', '#FF0000');
           $("#aminoacid-display").css('color', '#000000');
+          $('#redondance').show();
+
           updateLayout(cladeRoot);
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()*3);
           selposWindow.scrollLeft(selposWindow.scrollLeft()*3);
@@ -2344,6 +2347,7 @@ $(document).ready(function() {
           $(".aa-sequence").css("display", "block");
           $("#codons-display").css('color', '#000000');
           $("#aminoacid-display").css('color', '#FF0000');
+          $('#redondance').hide();
           alignmentWindow.scrollLeft(alignmentWindow.scrollLeft()/3);
           selposWindow.scrollLeft(selposWindow.scrollLeft()/3);
           updateLayout(cladeRoot);
