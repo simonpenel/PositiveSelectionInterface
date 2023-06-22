@@ -84,6 +84,15 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
         </ul>
       </div>
 
+
+        <div class="btn-group" role="group" aria-label="Redundance">
+          <!-- Bouton redondance -->
+          <button id="redondance" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Redundancy" data-toggle="tooltip" data-placement="top" title="Reduce tree height">
+            <span>Redundancy</span>
+          </button>
+        </div>
+
+
       <!-- Bouton Export -->
       <div id="export" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
@@ -280,6 +289,8 @@ rgbaa["G"]= [230,153,77];
 rgbaa["-"] = [255,255,255];
 rgbaa["*"] = [0,0,0];
 
+var flag_redond = 1;
+
 // Fonction rgb ->cold
 // ---------------------------------------
 function  rgb2col(rgb) {
@@ -288,6 +299,7 @@ function  rgb2col(rgb) {
 }
 
 var colordna = new Object();
+var colordna_red = new Object();
 var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 geneticcode["---"] = "-";
 
@@ -321,26 +333,26 @@ for (d in geneticcode){
 /*Redefinit les couleurs des codons*/
 console.log("REDOND = ");
 console.log(redond_dna);
-var step_satur = 64;
+var step_satur = 120;
 
 for (d in redond_dna){
   var _codons =  redond_dna[d];
   if (d != "*" && d!= "-") {
-    for (i = 1;i < _codons.length;i++) {
+    for (i = 0;i < _codons.length;i++) {
       var _rgb =  rgbaa[d];
       var new_rgb = [128,128,128];
       console.log("red"+d+" => "+_codons[i]+ " : " +_rgb[0]+ " : " +_rgb[1]+ " : " +_rgb[2]);
-      if (_rgb[0] > 128) { new_rgb[0] = _rgb[0] - (i* step_satur / _codons.length)};
-/*      if (_rgb[0] < 128) { new_rgb[0] = _rgb[0] + (i* step_satur / _codons.length)};*/
+      if (_rgb[0] > 128) { new_rgb[0] = _rgb[0] - Math.floor(i* step_satur / _codons.length)};
+      if (_rgb[0] < 128) { new_rgb[0] = _rgb[0] + Math.floor(i* step_satur / _codons.length)};
 
-      if (_rgb[1] > 128) { new_rgb[1] = _rgb[1] - (i* step_satur / _codons.length)};
-/*      if (_rgb[1] < 128) { new_rgb[1] = _rgb[1] + (i* step_satur / _codons.length)};*/
+      if (_rgb[1] > 128) { new_rgb[1] = _rgb[1] - Math.floor(i* step_satur / _codons.length)};
+      if (_rgb[1] < 128) { new_rgb[1] = _rgb[1] + Math.floor(i* step_satur / _codons.length)};
 
-      if (_rgb[2] > 128) { new_rgb[2] = _rgb[2] - (i* step_satur / _codons.length)};
-/*      if (_rgb[2] < 128) { new_rgb[2] = _rgb[2] + (i* step_satur / _codons.length)};   
-*/
+      if (_rgb[2] > 128) { new_rgb[2] = _rgb[2] - Math.floor(i* step_satur / _codons.length)};
+      if (_rgb[2] < 128) { new_rgb[2] = _rgb[2] + Math.floor(i* step_satur / _codons.length)};   
+
       console.log(_codons[i]+ "avant "+ colordna[_codons[i]]+ " apres "+ rgb2col(new_rgb));
-      colordna[_codons[i]] =    rgb2col(new_rgb);
+      colordna_red[_codons[i]] =    rgb2col(new_rgb);
     }
   }
 } 
@@ -528,7 +540,8 @@ function updateLayout(cRoot,firstLoad=0) {
   }
 
   // Remplissage du dico nom de sequence => tableau de couleurs
-  if (firstLoad == 1) {
+  if ((firstLoad == 1) ||  (firstLoad == 2)) {
+
     var nodes_ini = treeRoot.descendants()
     var leaves_ini = nodes_ini.filter(function (e) {
       return !e.children;
@@ -558,7 +571,14 @@ function updateLayout(cRoot,firstLoad=0) {
         var dnas = dna_sequence.split("");
         for (i = 0; i < dnas.length-3; i+=3) {
           var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
-          var col = colordna[codon];
+          var col = "grey";
+          if (flag_redond  == -1) {
+            col = colordna_red[codon];
+              console.log("redundant color "+ col);
+          } else {
+             col = colordna[codon];
+              console.log("classical color "+ col);
+          }
           if (col == undefined) {col  = "grey"};
           col_dnas.push(col);
         }
@@ -567,6 +587,7 @@ function updateLayout(cRoot,firstLoad=0) {
 
     })
   }
+
   updateSvg(treeRoot,firstLoad);
   updateScroll();
 }
@@ -2214,6 +2235,11 @@ $('#lessHeigth').on('click', function(event, dropdownData) {
     nodeHeight -= modStepY;
     updateLayout(cladeRoot);
   }
+});
+$('#redondance').on('click', function(event, dropdownData) {
+    flag_redond = - flag_redond;
+    console.log("REDOND "+flag_redond);
+    updateLayout(cladeRoot,2);
 });
 $('#export').on('click', function(event, dropdownData) {
   var target = event.toElement || event.relatedTarget || event.target || function () { throw "Failed to attach an event target!"; }
