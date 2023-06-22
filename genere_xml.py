@@ -127,7 +127,6 @@ def geneticCode():
     'UGA':'*', 'UGC':'C', 'UGG':'W', 'UGU':'C',
     'UUA':'L', 'UUC':'F', 'UUG':'L', 'UUU':'F',
 
-
   }
   return(matches)
 
@@ -136,6 +135,7 @@ def nucToAmino(nuc_seq:str):
     '''Converts a DNA/RNA sequence into a proteic sequence.'''
 
     matches=geneticCode()
+    matches["---"] = "-";
     aa = ''
     codons = [nuc_seq[i:i+3].upper() for i in range(0, len(nuc_seq), 3)]
     for codon in codons:
