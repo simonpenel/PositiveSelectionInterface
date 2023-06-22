@@ -418,8 +418,20 @@ function updateLayout(cRoot,firstLoad=0) {
   layout(treeRoot);
   // Traitement des distances dans le cas d'un arbre de gene de type phyloxml
   if (tagSimpleGene) {
+      if (firstLoad == 1) {
+        var max_tree_length =  getmaxlength(treeRoot,0);
+        if (max_tree_length > 0) {
+          nodeWidth = Math.floor(nodeWidth / max_tree_length) * 3.0;
+        }
+    };
     phylogeny(treeRoot,nodeWidth);
   } else {
+      if (firstLoad == 1) {
+        var max_tree_length =  getmaxlength(treeRoot,0);
+        if (max_tree_length > 0) {
+        nodeWidth = Math.floor(nodeWidth / max_tree_length) * 3.0;
+      }
+    };
     phylogeny_setloss(treeRoot,nodeWidth);
   }
 
@@ -445,12 +457,14 @@ function updateLayout(cRoot,firstLoad=0) {
       })
       dico_aa[leaf_name] = col_aas;
 
-      var dnas = dna_sequence.split("");
-      for (i = 0; i < dnas.length-3; i+=3) {
-        var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
-        var col = colordna[codon];
-        if (col == undefined) {col  = "grey"};
-        col_dnas.push(col);
+      if (dna_sequence != undefined) {
+        var dnas = dna_sequence.split("");
+        for (i = 0; i < dnas.length-3; i+=3) {
+          var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
+          var col = colordna[codon];
+          if (col == undefined) {col  = "grey"};
+          col_dnas.push(col);
+        }
       }
       // dnas.forEach (function (dna,j) {
       //   var col = colordna[dna];
@@ -604,7 +618,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var heightSVG = maxY - minY;
   var ajustementX = resultsJSON.length*hStep - 120;
   var ajustementY = -200;
-  var decalageY = -90;
+  //  var decalageY = -90;
+  var decalageY = -150;
 
   svg1.attr("width", widthSVG + margin.right + margin.left);
   svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
@@ -1033,6 +1048,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var psGraphGlobalHeight = 60;
   var psGraphGlobalMargins = {top:0, right:0, bottom:0, left:0};
   var svg0 = d3.select('#svg0');
+  svg0.attr('width', widthSVG0 + 15)
+      .attr("height",psGraphGlobalHeight);
   var svg3 = d3.select('#svg3');
   svg3
     // .attr('width', widthSVG0 + 15)
@@ -1471,15 +1488,39 @@ seqTextAA.append('text')
         //ENTER + updatesATE
         dnablockEnter
         .merge(dnablock)
-        .attr("transform",function(d,i) {
-          var transx = (d.pos)*hStep + margin.left + 30 ;
-          var transy = d.y +5;
-          return "translate("+transx+", "+transy+")";
-        })
+        // .attr("transform",function(d,i) {
+        //   var transx = (d.pos)*hStep + margin.left + 30 ;
+        //   var transy = d.y - 7;
+        //   return "translate("+transx+", "+transy+")";
+        // })
         .append("rect")
         .attr('width', function(d) { return hStep; })
         .attr('height', function(d) { return 10 })
         .style("fill", function(d){ return (d.col)})
+        .style("opacity", function(d){
+          if (displaySeqType != "Nuc") {
+            return 0
+          } else {
+            return 0.5
+          }
+        });
+        // Rectangles qui soulignent les position sel pos
+        //ENTER + updates
+        dnablockEnter
+        .merge(dnablock)
+        .attr("transform",function(d,i) {
+          var transx = (d.pos)*hStep + margin.left + 30 ;
+          var transy = d.y - 7;
+          return "translate("+transx+", "+transy+")";
+        })
+        .append("rect")
+        .attr("class","dna_rect")
+        .attr("transform","translate(0,15)" )
+        .attr('width', function(d) { return hStep; })
+        .attr('height', function(d) { return  4 })
+        .attr("stroke","black")
+        .attr("stroke-opacity", 1)
+        .style("fill", "black")
         .style("opacity", function(d){
           if (displaySeqType != "Nuc") {
             return 0
@@ -1865,6 +1906,18 @@ function phylo(n) {
   }
   return dist;
 }
+
+
+function getmaxlength(treeRoot,max) {
+  treeRoot.each(function (d) {
+    var phylodist = phylo(d);
+    if (phylodist > max) {
+      max = phylodist;
+    }
+  });
+  return max;
+}
+
 
 // Fonction pour utiliser les longueurs de branches lors de l'affichage
 // d'un arbre
