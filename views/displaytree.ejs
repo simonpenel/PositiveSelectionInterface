@@ -1488,11 +1488,6 @@ seqTextAA.append('text')
         //ENTER + updatesATE
         dnablockEnter
         .merge(dnablock)
-        // .attr("transform",function(d,i) {
-        //   var transx = (d.pos)*hStep + margin.left + 30 ;
-        //   var transy = d.y - 7;
-        //   return "translate("+transx+", "+transy+")";
-        // })
         .append("rect")
         .attr('width', function(d) { return hStep; })
         .attr('height', function(d) { return 10 })
@@ -1574,10 +1569,10 @@ function getOpacFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
       //return psThresholdHighBgColor;
-      return 2.0;
+      return 1.0;
     } else if (res >= psThresholdLow) {
 //      return psThresholdLowBgColor;
-      return 1.0;
+      return 0.5;
     } else if (res >= 0) {
       //return psBelowThresholdBgColor;
       return 0.0;
@@ -1589,7 +1584,7 @@ function getOpacFromResult(res) {
     if (res >= 0) {
       if (res <= psThresholdLow) {
         //return psThresholdHighBgColor;
-        return 2.0;
+        return 1.0;
       } else if (res <= psThresholdHigh) {
         //return psThresholdLowBgColor;
         return 0.0;
