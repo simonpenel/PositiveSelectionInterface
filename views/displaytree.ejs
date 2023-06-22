@@ -570,7 +570,7 @@ function updateLayout(cRoot,firstLoad=0) {
 
       if (dna_sequence != undefined) {
         var dnas = dna_sequence.split("");
-        for (i = 0; i < dnas.length-3; i+=3) {
+        for (i = 0; i <= dnas.length-3; i+=3) {
           var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
           var col = "grey";
           if (flag_redond  == -1) {
