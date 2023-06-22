@@ -278,7 +278,7 @@ rgbaa["P"]= [204,204,0];
 rgbaa["G"]= [230,153,77];
 
 rgbaa["-"] = [255,255,255];
-  
+rgbaa["*"] = [0,0,0];
 
 // Fonction rgb ->cold
 // ---------------------------------------
@@ -304,7 +304,47 @@ geneticcode["---"] = "-";
     colordna[d] = col;
     //colordna[d] = rgb2col(rgbaa[geneticcode[d]]);
   }
-  
+
+var redond_dna = new Object();
+
+for (d in geneticcode){ 
+    var _aa = geneticcode[d];
+    if (_aa in redond_dna) {
+      redond_dna[_aa].push(d);
+    }
+    else {
+      redond_dna[_aa] = [d];
+    }
+  }
+
+
+/*Redefinit les couleurs des codons*/
+console.log("REDOND = ");
+console.log(redond_dna);
+var step_satur = 64;
+
+for (d in redond_dna){
+  var _codons =  redond_dna[d];
+  if (d != "*" && d!= "-") {
+    for (i = 1;i < _codons.length;i++) {
+      var _rgb =  rgbaa[d];
+      var new_rgb = [128,128,128];
+      console.log("red"+d+" => "+_codons[i]+ " : " +_rgb[0]+ " : " +_rgb[1]+ " : " +_rgb[2]);
+      if (_rgb[0] > 128) { new_rgb[0] = _rgb[0] - (i* step_satur / _codons.length)};
+/*      if (_rgb[0] < 128) { new_rgb[0] = _rgb[0] + (i* step_satur / _codons.length)};*/
+
+      if (_rgb[1] > 128) { new_rgb[1] = _rgb[1] - (i* step_satur / _codons.length)};
+/*      if (_rgb[1] < 128) { new_rgb[1] = _rgb[1] + (i* step_satur / _codons.length)};*/
+
+      if (_rgb[2] > 128) { new_rgb[2] = _rgb[2] - (i* step_satur / _codons.length)};
+/*      if (_rgb[2] < 128) { new_rgb[2] = _rgb[2] + (i* step_satur / _codons.length)};   
+*/
+      console.log(_codons[i]+ "avant "+ colordna[_codons[i]]+ " apres "+ rgb2col(new_rgb));
+      colordna[_codons[i]] =    rgb2col(new_rgb);
+    }
+  }
+} 
+
 var  dico_aa = new Object();
 var  dico_dna = new Object();
 console.log("isCodon",isCodon);
