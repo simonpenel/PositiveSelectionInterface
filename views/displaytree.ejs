@@ -1424,14 +1424,6 @@ seqTextAA.append('text')
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
-      .attr("transform",function(d,i) {
-        var transx = (d.pos)*hStep + margin.left + 30 ;
-        if (isCodon == 0 ) {
-          transx = transx - 80 // ???
-        }
-        var transy = d.y - 7;
-        return "translate("+transx+", "+transy+")";
-      })
       .append("rect")
       .attr('width', function(d) { return hStep; })
       .attr('height', function(d) { return 15 })
