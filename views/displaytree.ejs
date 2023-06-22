@@ -466,11 +466,6 @@ function updateLayout(cRoot,firstLoad=0) {
           col_dnas.push(col);
         }
       }
-      // dnas.forEach (function (dna,j) {
-      //   var col = colordna[dna];
-      //   if (col == undefined) {col  = "grey"};
-      //   col_dnas.push(col);
-      // })
       dico_dna[leaf_name] = col_dnas;
 
     })
@@ -493,30 +488,10 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // Ajustement du pas selon le type de séquences affichées
   hStep = displaySeqType == 'AA' ? hStepBase : hStepBase*3;
   var seqblocks = d3.selectAll('.seqblock');
-  // var results = JSON.parse(resultsText);
-  // console.log(results);
-  // var results = resultsText;
-  // console.log('firstLoad:', firstLoad);
-  // console.log('results:', results);
   if (!resultsJSON && branchSite) {
     showTooltip();
     writeTooltip('Please click a node to display branch data');
     resultsJSON = new Array(maxSeqLen).fill(-1);
-    // console.log('Results undefined, branch-site');
-    // resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
-    // resultsJSON = undefined;
-    // var fakeResults = resultsJSON.forEach(function (i) {
-    //   console.log(i);
-    //   return 0;
-    // });
-    // resultsJSON = fakeResults;
-    // console.log('!resultsJSON', resultsJSON);
-    // console.log('global results:', xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
-    // console.log('global results JSON:', resultsJSON);
-  // } else if (firstLoad && resultsText) {
-  //   var results = resultsText;
-  // } else if (!firstLoad && resultsText) {
-  //   var results = resultsText;
   } else if (!resultsJSON && !branchSite) {
     hideTooltip();
     resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
@@ -524,24 +499,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   } else {
     maxSeqLen = resultsJSON.length;
   }
-  // else {
-  //   // console.log('resultsJSON:', resultsJSON);
-  //   // resultsJSON = JSON.parse(resultsText);
-  //   resultsJSON = resultsJSON;
-  // }
-  // var results = xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results);
 
-  // console.log('resultsJSON', resultsJSON);
-
-  // results = results.split(' ');
-  // var resultsJSON = [];
-  // // var site = 0;
-  // // var stat = 0.0;
-  // results.forEach(function (d,i) {
-  //   d = d.split(':');
-  //   result = {site:parseInt(d[0]), stat:parseFloat(d[1])};
-  //   resultsJSON.push(result);
-  // });
   resultsJSON = resultsJSON;
   // console.log(resultsJSON);
   var psGraphMargins = {top: 20, right: 50, bottom: 50, left: 50+seq_lg};
@@ -588,9 +546,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var nodes = treeRoot.descendants();
   var links = treeRoot.links();
 
-  // console.log('treeRoot', treeRoot);
-  // console.log('nodes', nodes);
-  // console.log('links', links);
 
   // Coloration du pattern si il existe
   if ((pattern != "none") && (pattern !== ' ') && (pattern !== undefined)) {
@@ -762,17 +717,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .append("text")
     .attr("class", "label")
     .on("click", function(d) {
-      // if (d.data.lastEvent && d.data.lastEvent.crossref) {
-      //   // Si la balise crossref est presente on fait un lien vers l'url
-      //   // qui requete l'identifiant dans la base de donnees selectionnee
-      //   var cross=d.data.lastEvent.crossref;
-      //   if (selectedCrossref !== null) {
-      //     name = cross[selectedCrossref];
-      //     url = selectedCrossrefURL.replace("IDENTIFIANT",name);
-      //   }
-      //   window.open(url);
-      // }
-      // console.log(d.data.branch_info.id, d.data.branch_info.results);
     });
   nodeEnter
     .append("text")
@@ -806,44 +750,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     });
   allNodes
     .select(".symbol")
-    // .attr("fill", function(d) {//Couleur de remplissage du symbole des noeuds
-    //   switch (d.data.lastEvent.eventType) {
-    //     case "monophyletic":
-    //       // return setLeafColour(d.data.lastEvent.speciesLocation);
-    //       break;
-    //     case "speciation":
-    //       return configLayout.color.speciation;
-    //       break;
-    //     case "speciationOutLoss":
-    //       return configLayout.color.speciationOutLoss
-    //       break;
-    //     case "branchingOut":
-    //       return configLayout.color.branchingOut
-    //       break;
-    //     case "speciationOut":
-    //       return configLayout.color.speciationOut
-    //       break;
-    //     case "bifurcationOut":
-    //       return configLayout.color.bifurcationOut
-    //       break;
-    //     case "transferBack":
-    //       return configLayout.color.transferBack
-    //       break;
-    //     case "duplication":
-    //       return configLayout.color.duplication
-    //       break;
-    //     case "speciationLoss":
-    //       return configLayout.color.speciationLoss
-    //       break;
-    //     case "leaf":
-    //       // return setLeafColour(d.data.lastEvent.speciesLocation);
-    //       break;
-    //     case "loss":
-    //       return configLayout.color.loss
-    //       break;
-    //     default:
-    //     }
-    //   })
     .attr("d", function(d) { //Type de symbol
        // Verification si le noeud est collapse
       if (d.data.nodeinfo && d.data.lastEvent) {
@@ -893,50 +799,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       } else {
         return symbol.type(d3.symbolCross)();
       }
-    })
-    // .attr("stroke-width", "0px")
-    // .filter(function (d) {
-    //    return d.data._clade? true : false;
-    // })
-    // .attr("fill", "white")
-    // .attr("stroke-width", "2px")
-    // .attr("stroke", function(d) {   //Couleur de trait du symbol
-    //   switch (d.data.lastEvent.eventType) {
-    //     case "speciation":
-    //       return configLayout.color.speciation
-    //       break;
-    //     case "speciationOutLoss":
-    //       return configLayout.color.speciationOutLoss
-    //       break;
-    //     case "speciationOut":
-    //       return configLayout.color.speciationOut
-    //       break;
-    //     case "bifurcationOut":
-    //       return configLayout.color.bifurcationOut
-    //       break;
-    //     case "transferBack":
-    //       return configLayout.color.transferBack
-    //       break;
-    //     case "duplication":
-    //       return configLayout.color.duplication
-    //       break;
-    //     case "speciationLoss":
-    //       return configLayout.color.speciationLoss
-    //       break;
-    //     case "leaf":
-    //       return configLayout.color.leaf
-    //       break;
-    //     case "monophyletic":
-    //       // return configLayout.color.leaf
-    //       // return setLeafColour(d.data.lastEvent.speciesLocation)
-    //       break;
-    //     case "loss":
-    //       return configLayout.color.loss
-    //       break;
-    //     default:
-    //   }
-    // })
-    ;
+    });
   allNodes
     .select(".label")
     .transition()
@@ -972,15 +835,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
           name = ">>>>"+name+"<<<<";
         }
       }
-      // if (options.includes("species")&& d.data.lastEvent.eventType === "leaf") {
-      //   name += " " + d.data.lastEvent.speciesLocation.replace("(INTERNAL)","") ;
-      // }
-      // if (options.includes("species")&& d.data.lastEvent.eventType === "monophyletic") {
-      //   name += " " + d.data.lastEvent.speciesLocation.replace("(INTERNAL)","") ;
-      // }
-      // if (d.data.lastEvent && d.data.lastEvent.destinationSpecies) {
-      //   name += " ( -> " + d.data.lastEvent.destinationSpecies + ")";
-      // }
+
       return name;
     })
     .style("fill",function (d) {
@@ -1330,27 +1185,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var aaSequence = d3.select('.aa-sequence');
   var dnaSequence = d3.select('.dna-sequence');
   var targetSequence = displaySeqType == 'AA' ? aaSequence : dnaSequence;
-/*  for (i = 0; i < resultsJSON.length; i ++) {
-      // Ajout d'un rectangle coloré par site
-      targetSequence.append('rect')
-        .attr('x', function(d) {return (i - siteOffset)*hStep;})
-        .attr('width', hStep)
-        .attr('y', function(d) {
-          return minYSeq - d.y - hStepBase;})
-        .attr('height', maxYSeq - minYSeq + hStepBase*2)
-        .style('fill', () => {
-          return getColorFromResult(resultsJSON[i]);
-          // if (resultsJSON[i] >= psThresholdHigh) {
-          //   return psThresholdHighBgColor;
-          // } else if (resultsJSON[i] >= psThresholdLow) {
-          //   return psThresholdLowBgColor;
-          // } else if (resultsJSON[i] >= 0) {
-          //   return psBelowThresholdBgColor;
-          // } else {
-          //   return psMissingBgColor;
-          // }
-        });
-  }*/
+
 
 // Simon : Alignement : ajout des coelurs AA
   console.log("Genere aa_dataset and dna_dataset");
