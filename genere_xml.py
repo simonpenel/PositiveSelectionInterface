@@ -126,7 +126,6 @@ def geneticCode():
     'UCA':'S', 'UCC':'S', 'UCG':'S', 'UCU':'S',
     'UGA':'*', 'UGC':'C', 'UGG':'W', 'UGU':'C',
     'UUA':'L', 'UUC':'F', 'UUG':'L', 'UUU':'F',
-
   }
   return(matches)
 
@@ -465,7 +464,6 @@ def createPhyloXML(fam,newick,results):
       geneticcode.set(cod,aa)
 
     e.append(geneticcode) # add the tag containing geneticcode
-
 
     text =  minidom.parseString(ElementTree.tostring(subtree[0])).toprettyxml()
     # remove blank lines

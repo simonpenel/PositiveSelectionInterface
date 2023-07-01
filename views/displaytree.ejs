@@ -298,6 +298,8 @@ function  rgb2col(rgb) {
   return col
 }
 
+coloraa["-"] = "white";
+  
 var colordna = new Object();
 var colordna_red = new Object();
 var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
@@ -355,8 +357,12 @@ for (d in redond_dna){
       colordna_red[_codons[i]] =    rgb2col(new_rgb);
     }
   }
-} 
+}
 
+  for (d in geneticcode){ 
+      colordna[d] = coloraa[geneticcode[d]];
+  }
+  
 var  dico_aa = new Object();
 var  dico_dna = new Object();
 console.log("isCodon",isCodon);
