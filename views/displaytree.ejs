@@ -225,7 +225,7 @@ var upperThresholdMode = true;
 
 /*var coloraa = new Object();
 
-coloraa["K"]= "rgb(230,51,25)"  
+coloraa["K"]= "rgb(230,51,25)"
 coloraa["R"]= "rgb(230,51,25)"
 
 coloraa["A"]= "rgb(25,128,230)"
@@ -256,60 +256,100 @@ coloraa["G"]= "rgb(230,153,77)"
 coloraa["-"] = "white";
   */
 
-var rgbaa = new Object();
+// var rgbaa = new Object();
+//
+// rgbaa["K"]= [230,51,25];
+// rgbaa["R"]= [230,51,25];
+//
+// rgbaa["A"]= [25,128,230];
+// rgbaa["F"]= [25,128,230];
+// rgbaa["I"]= [25,128,230];
+// rgbaa["L"]= [25,128,230];
+// rgbaa["M"]= [25,128,230];
+// rgbaa["V"]= [25,128,230];
+// rgbaa["W"]= [25,128,230];
+//
+// rgbaa["N"]= [25,204,25];
+// rgbaa["Q"]= [25,204,25];
+// rgbaa["S"]= [25,204,25];
+// rgbaa["T"]= [25,204,25];
+//
+// rgbaa["H"]= [25,179,179];
+// rgbaa["Y"]= [25,179,179];
+//
+// rgbaa["C"]= [230,128,128];
+//
+// rgbaa["D"]= [204,77,204];
+// rgbaa["E"]= [204,77,204];
+//
+// rgbaa["P"]= [204,204,0];
+//
+// rgbaa["G"]= [230,153,77];
+//
+// rgbaa["-"] = [255,255,255];
+// rgbaa["*"] = [0,0,0];
 
-rgbaa["K"]= [230,51,25];  
-rgbaa["R"]= [230,51,25];
 
-rgbaa["A"]= [25,128,230];
-rgbaa["F"]= [25,128,230];
-rgbaa["I"]= [25,128,230];
-rgbaa["L"]= [25,128,230];
-rgbaa["M"]= [25,128,230];
-rgbaa["V"]= [25,128,230];
-rgbaa["W"]= [25,128,230];
+var hslaa = new Object();
 
-rgbaa["N"]= [25,204,25];
-rgbaa["Q"]= [25,204,25];
-rgbaa["S"]= [25,204,25];
-rgbaa["T"]= [25,204,25];
+hslaa["K"]= [8,80,50];
+hslaa["R"]= [8,80,50];
 
-rgbaa["H"]= [25,179,179];
-rgbaa["Y"]= [25,179,179];
+hslaa["A"]= [210,80,50];
+hslaa["F"]= [210,80,50];
+hslaa["I"]= [210,80,50];
+hslaa["L"]= [210,80,50];
+hslaa["M"]= [210,80,50];
+hslaa["V"]= [210,80,50];
+hslaa["W"]= [210,80,50];
 
-rgbaa["C"]= [230,128,128];
+hslaa["N"]= [120,78,45];
+hslaa["Q"]= [120,78,45];
+hslaa["S"]= [120,78,45];
+hslaa["T"]= [120,78,45];
 
-rgbaa["D"]= [204,77,204];
-rgbaa["E"]= [204,77,204];
+hslaa["H"]= [180,75,40];
+hslaa["Y"]= [180,75,40];
 
-rgbaa["P"]= [204,204,0];
+hslaa["C"]= [0,67,70];
 
-rgbaa["G"]= [230,153,77];
+hslaa["D"]= [300,55,55];
+hslaa["E"]= [300,55,55];
 
-rgbaa["-"] = [255,255,255];
-rgbaa["*"] = [0,0,0];
+hslaa["P"]= [60,100,40];
+
+hslaa["G"]= [30,75,60];
+
+hslaa["-"] = [0,0,100];
+hslaa["*"] = [0,0,0];
 
 var flag_redond = 1;
 
 // Fonction rgb ->cold
 // ---------------------------------------
-function  rgb2col(rgb) {
-  var col = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+// function  rgb2col(rgb) {
+//   var col = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+//   return col
+// }
+
+// Fonction rgb ->cold
+// ---------------------------------------
+function  hsl2col(rgb) {
+  var col = "hsl("+rgb[0]+","+rgb[1]+"%,"+rgb[2]+"%)";
   return col
 }
-
 var colordna = new Object();
 var colordna_red = new Object();
 var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 geneticcode["---"] = "-";
 
-  for (d in geneticcode){ 
+  for (d in geneticcode){
     var col = "grey";
     var _aa = geneticcode[d];
     if (_aa != undefined)  {
-      var _rgb = rgbaa[_aa];
-      if (_rgb != undefined) {
-        col = rgb2col(_rgb)
+      var _hsl = hslaa[_aa];
+      if (_hsl != undefined) {
+        col = hsl2col(_hsl)
       }
 
     }
@@ -319,7 +359,7 @@ geneticcode["---"] = "-";
 
 var redond_dna = new Object();
 
-for (d in geneticcode){ 
+for (d in geneticcode){
     var _aa = geneticcode[d];
     if (_aa in redond_dna) {
       redond_dna[_aa].push(d);
@@ -333,29 +373,19 @@ for (d in geneticcode){
 /*Redefinit les couleurs des codons*/
 console.log("REDOND = ");
 console.log(redond_dna);
-var step_satur = 90;
+var step_satur = 50;
 
 for (d in redond_dna){
   var _codons =  redond_dna[d];
   if (d != "*" && d!= "-") {
     for (i = 0;i < _codons.length;i++) {
-      var _rgb =  rgbaa[d];
-      var new_rgb = [128,128,128];
-      console.log("red"+d+" => "+_codons[i]+ " : " +_rgb[0]+ " : " +_rgb[1]+ " : " +_rgb[2]);
-      if (_rgb[0] > 128) { new_rgb[0] = _rgb[0] - Math.floor(i* step_satur / _codons.length)};
-      if (_rgb[0] < 128) { new_rgb[0] = _rgb[0] + Math.floor(i* step_satur / _codons.length)};
-
-      if (_rgb[1] > 128) { new_rgb[1] = _rgb[1] - Math.floor(i* step_satur / _codons.length)};
-      if (_rgb[1] < 128) { new_rgb[1] = _rgb[1] + Math.floor(i* step_satur / _codons.length)};
-
-      if (_rgb[2] > 128) { new_rgb[2] = _rgb[2] - Math.floor(i* step_satur / _codons.length)};
-      if (_rgb[2] < 128) { new_rgb[2] = _rgb[2] + Math.floor(i* step_satur / _codons.length)};   
-
-      console.log(_codons[i]+ "avant "+ colordna[_codons[i]]+ " apres "+ rgb2col(new_rgb));
-      colordna_red[_codons[i]] =    rgb2col(new_rgb);
+      var _hsl =  hslaa[d];
+      var new_hsl = [_hsl[0],_hsl[1],_hsl[2] + Math.floor(i* step_satur / _codons.length)];
+      console.log(_codons[i]+ " avant "+ colordna[_codons[i]]+ " apres "+ hsl2col(new_hsl));
+      colordna_red[_codons[i]] =    hsl2col(new_hsl);
     }
   }
-} 
+}
 
 var  dico_aa = new Object();
 var  dico_dna = new Object();
@@ -557,12 +587,12 @@ function updateLayout(cRoot,firstLoad=0) {
       var aa_sequence = d.data.lastEvent.aaAlign;
       var aas = aa_sequence.split("");
       aas.forEach (function (aa,j) {
-        var col = rgbaa[aa];
+        var col = hslaa[aa];
         if (col == undefined) {
           col  = "grey"
         }
         else {
-          col = rgb2col(col);
+          col = hsl2col(col);
         };
         col_aas.push(col);
       })
