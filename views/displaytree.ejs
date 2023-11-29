@@ -197,6 +197,7 @@ var psThresholdLowBgColor = "#FFFF00";
 var psBelowThresholdBgColor = "#DDDDDD";
 var psMissingBgColor = "#FFFFFF";
 var seq_lg = xmlparser.flatTree(recTree.phyloxml.phylogeny.maxSeqIdLength)*10;
+console.log("maxseq = "+seq_lg);
 var isCodon = (xmlparser.flatTree(recTree.phyloxml.phylogeny.size.isCodon)=="true");
 var collapseMode = 'collapseOff';
 var navWindowColor = '#000000';
@@ -1397,10 +1398,6 @@ seqTextAA.append('text')
       .merge(aablock)
       .attr("transform",function(d,i) {
         var transx = (d.pos)*hStep + margin.left + 30 ;
-        if (branchSite) {
-         transx = (d.pos)*hStep + seq_lg + 50 ;
-        }
-        
         if (isCodon == 0 ) {
           transx = transx - 80 // ???
         }
