@@ -58,6 +58,11 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
             <span>Width +</span>
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           </button>
+          <!-- Bouton Increase width -->
+          <button id="loga" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Logarithmic scale" data-toggle="tooltip" data-placement="top" title="Logarithmic scale">
+            <span>Logarithmic</span>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>          
         </div>
         <div class="btn-group" role="group" aria-label="Height buttons">
           <!-- Bouton Reduce height -->
@@ -2260,6 +2265,14 @@ $('#lessWidth').on('click', function(event, dropdownData) {
     nodeWidth = modStepX;
   }
   myStorage.setItem("width",nodeWidth);
+  updateLayout(cladeRoot);
+});
+$('#loga').on('click', function(event, dropdownData) {
+  if (logBranchLength) {
+    logBranchLength = false;
+  }else {
+    logBranchLength = true;
+  }
   updateLayout(cladeRoot);
 });
 $('#moreHeigth').on('click', function(event, dropdownData) {
