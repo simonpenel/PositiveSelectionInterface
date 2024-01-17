@@ -1349,7 +1349,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   d3.selectAll(".dna_block").remove();*/
 
   d3.select("#aa-container").remove(); // on vire  tout
-  d3.selectAll("#dna-container").remove();
+  d3.select("#dna-container").remove();
 
   var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
 
