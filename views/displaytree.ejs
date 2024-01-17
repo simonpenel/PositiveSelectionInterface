@@ -2182,7 +2182,7 @@ $('#selectCrossref').on('click', function(event) {
   selectedCrossref=$( "#selectCrossref option:selected" ).text();
   selectedCrossrefURL=crossref[selectedCrossref].url;
   myStorage.setItem("crossref",selectedCrossref);
-  updateLayout(cladeRoot);
+  //updateLayout(cladeRoot);
 });
 $('#selectCrossref').ready(function() {
     // selectedCrossref="HOGENOM";
@@ -2214,7 +2214,7 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#000000');
-      updateLayout(cladeRoot);
+/*      updateLayout(cladeRoot);*/
       break;
     case "Switch children":
       action = svgEvents.switchChildren;
@@ -2222,7 +2222,7 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#FF0000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#000000');
-      updateLayout(cladeRoot);
+/*      updateLayout(cladeRoot);*/
       break;
     case "Collapse/Expand":
       action = svgEvents.collapse;
@@ -2230,7 +2230,7 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#FF0000');
       $('#subtree').css('color','#000000');
-      updateLayout(cladeRoot);
+/*      updateLayout(cladeRoot);*/
       break;
     case "Sub Tree/Upper Tree":
       action = svgEvents.focus;
@@ -2238,7 +2238,7 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#FF0000');
-      updateLayout(cladeRoot);
+/*      updateLayout(cladeRoot);*/
       break;
     default:
   }
