@@ -1343,11 +1343,16 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
 // Simon : Alignement : ajout des coelurs AA
   console.log("Genere aa_dataset and dna_dataset");
-  aa_dataset = []
-  dna_dataset = []
-  d3.selectAll(".aa_block").remove(); // on vire  tout
-  d3.selectAll(".dna_block").remove();
+  aa_dataset = [];
+  dna_dataset = [];
+/*  d3.selectAll(".aa_block").remove(); // on vire  tout
+  d3.selectAll(".dna_block").remove();*/
+
+  d3.select("#aa-container").remove(); // on vire  tout
+  d3.selectAll("#dna-container").remove();
+
   var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
+
   leaves_sequences.forEach (function (d,i) {
     var index = i;
     var seqname =  d.data.name;
