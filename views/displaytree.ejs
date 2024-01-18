@@ -1389,14 +1389,14 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
 seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
-    .style("font", hLetter+"px courrier")
+/*    .style("font", hLetter+"px courrier")*/
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
 
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
-    .style("font", hLetter+"px courrier")
+/*    .style("font", hLetter+"px courrier")*/
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
