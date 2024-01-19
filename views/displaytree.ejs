@@ -1384,7 +1384,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         col:aa,
         opac:opac,
       };
-      aa_dataset.push(locnode);
+      if (displaySeqType == 'AA') {
+        aa_dataset.push(locnode);
+      }
       })
       var dnas = dico_dna[seqname];
       dnas.forEach (function (dna,j) {
@@ -1397,7 +1399,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         col:dna,
         opac:opac,
       };
-      dna_dataset.push(locnode);
+      if (displaySeqType == 'Nuc') {
+        dna_dataset.push(locnode);
+      }
       })
     });
 
@@ -1419,6 +1423,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
   console.log("sequences  OK");
 
+  if (displaySeqType == 'AA') {
   var aaDiv = d3.select('#svg2')
       .append('g')
       .attr('id', 'aa-container')
@@ -1468,7 +1473,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .attr("stroke-opacity", 1)
       .style("fill", "black")
       .style("opacity",opacityAA);
-
+    }
+    if (displaySeqType == 'Nuc') {
       var dnaDiv = d3.select('#svg2')
         .append('g')
         .attr('id', 'dna-container')
@@ -1515,6 +1521,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .attr("stroke-opacity", 1)
         .style("fill", "black")
         .style("opacity", opacityNuc);
+      }
         console.log("sequence blocs OK");
 
   // ==============================================================
