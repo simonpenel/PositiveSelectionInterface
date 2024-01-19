@@ -1175,7 +1175,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     }
     updateNodeColors();
   };
-
+  
+  console.log("mise en place des graphes");
   // ======================================================
   // | Début : graphe des résultats de sélection positive |
   // ======================================================
@@ -1260,7 +1261,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .style('stroke-dasharray', ('4, 4'));
 
   psGraph.append('br');
-
+  console.log("graphes OK");
   // ====================================================
   // | Fin : graphe des résultats de sélection positive |
   // ====================================================
@@ -1350,6 +1351,17 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   console.log("Genere aa_dataset and dna_dataset");
   aa_dataset = [];
   dna_dataset = [];
+  var opacityAA = 0;
+  var opacityNuc = 0;
+  
+  if (displaySeqType == 'AA') {
+      opacityAA = 0.5;
+      opacityNuc = 0.0;
+  }
+  else {
+    opacityAA = 0.0;
+    opacityNuc = 0.5;
+  }
 /*  d3.selectAll(".aa_block").remove(); // on vire  tout
   d3.selectAll(".dna_block").remove();*/
 
@@ -1427,17 +1439,10 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       aablockEnter
       .merge(aablock)
       .append("rect")
-      .attr('width', function(d) { return hStep; })
-      .attr('height', function(d) { return hLetter })
+      .attr('width', hStep)
+      .attr('height', hLetter )
       .style("fill", function(d){ return (d.col)})
-      .style("opacity", function(d){
-        if (displaySeqType != "AA") {
-          return 0
-        } else {
-/*          return d.opac*/
-          return 0.5
-        }
-      });
+      .style("opacity",opacityAA);
 
 
       //ENTER + updatesATE
@@ -1457,19 +1462,12 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .append("rect")
       .attr("class","aa_rect")
       .attr("transform","translate(0,15)" )
-      .attr('width', function(d) { return hStep; })
-      .attr('height', function(d) { return 2 })
+      .attr('width', hStep)
+      .attr('height', 2)
       .attr("stroke","black")
       .attr("stroke-opacity", 1)
       .style("fill", "black")
-      .style("opacity", function(d){
-        if (displaySeqType != "AA") {
-          return 0
-        } else {
-        return d.opac
-
-        }
-      });
+      .style("opacity",opacityAA);
 
       var dnaDiv = d3.select('#svg2')
         .append('g')
@@ -1492,16 +1490,10 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         dnablockEnter
         .merge(dnablock)
         .append("rect")
-        .attr('width', function(d) { return hStep; })
-        .attr('height', function(d) { return hLetter })
+        .attr('width', hStep)
+        .attr('height', hLetter )
         .style("fill", function(d){ return (d.col)})
-        .style("opacity", function(d){
-          if (displaySeqType != "Nuc") {
-            return 0
-          } else {
-            return 0.5
-          }
-        });
+        .style("opacity", opacityNuc);
         // Rectangles qui soulignent les position sel pos
         //ENTER + updates
         dnablockEnter
@@ -1517,18 +1509,12 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .append("rect")
         .attr("class","dna_rect")
         .attr("transform","translate(0,15)" )
-        .attr('width', function(d) { return hStep; })
-        .attr('height', function(d) { return  4 })
+        .attr('width', hStep)
+        .attr('height', 4 )
         .attr("stroke","black")
         .attr("stroke-opacity", 1)
         .style("fill", "black")
-        .style("opacity", function(d){
-          if (displaySeqType != "Nuc") {
-            return 0
-          } else {
-            return d.opac
-          }
-        });
+        .style("opacity", opacityNuc);
         console.log("sequence blocs OK");
 
   // ==============================================================
