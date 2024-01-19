@@ -1391,7 +1391,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
   console.log("aa_dataset and dna_dataset OK");
 
-seqTextAA.append('text')
+  seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .style("font-size",fitPoliceSize+"px")
     .attr('x', function(d) {return 1;})
@@ -1405,11 +1405,12 @@ seqTextAA.append('text')
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
 
-    var aaDiv = d3.select('#svg2')
+  console.log("sequences  OK");
+
+  var aaDiv = d3.select('#svg2')
       .append('g')
       .attr('id', 'aa-container')
       .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-
 
     var aablock =
       aaDiv.selectAll(".aa_block")
@@ -1528,7 +1529,7 @@ seqTextAA.append('text')
             return d.opac
           }
         });
-
+        console.log("sequence blocs OK");
 
   // ==============================================================
   // Fin modif : blocs de séquences
