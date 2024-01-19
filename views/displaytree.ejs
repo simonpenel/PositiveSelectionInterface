@@ -173,6 +173,7 @@ var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees
 var nodeWidth = 80;                  // Largeur
 var nodeHeight = 30;                  // Hauteur
 var hLetter = 15;
+var fitPoliceSize = 16.667;           // Taille de la police des aa et dna 
 // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
 var stringWidth;                      // Largeur affichage arbre
 var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
@@ -1389,7 +1390,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
 seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
-/*    .style("font", hLetter+"px courrier")*/
+    .style("font-size",fitPoliceSize+"px")
     .attr('x', function(d) {return 1;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
@@ -1765,7 +1766,7 @@ function saveSVGAlignment(){
   });
   $('.seqblock g text').css({
     'letter-spacing':(alignmentLetterSpacing)+'px',
-    'font-size': '16.667px',
+    'font-size': fitPoliceSize+'px',
   });
   var style = "\n";
   var img = new Image();
@@ -2324,7 +2325,7 @@ $('#export').on('click', function(event, dropdownData) {
       });
       $('.seqblock g text').css({
         'letter-spacing': (alignmentLetterSpacing)+'px',
-        'font-size': '16.667px',
+        'font-size': fitPoliceSize+'px',
       });
       break;
     default:
