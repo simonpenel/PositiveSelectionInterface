@@ -562,9 +562,12 @@ function updateLayout(cRoot,firstLoad=0) {
   if (tagSimpleGene) {
       if (firstLoad == 1) {
         var max_tree_length =  getmaxlength(treeRoot,0);
+        console.log("MAX TREE LENGTH SIMPLE "+max_tree_length);
+        console.log("MAX TREE nodeWidth 1 "+nodeWidth);
         if (max_tree_length > 0) {
           nodeWidth = Math.floor(nodeWidth / max_tree_length) * 3.0;
         }
+        console.log("MAX TREE nodeWidth 2"+nodeWidth);
     };
     phylogeny(treeRoot,nodeWidth);
   } else {
@@ -2279,8 +2282,21 @@ $('#lessWidth').on('click', function(event, dropdownData) {
 $('#loga').on('click', function(event, dropdownData) {
   if (logBranchLength) {
     logBranchLength = false;
+    var max_tree_length =  getmaxlength(treeRoot,0);
+        console.log("MAX TREE LENGTH "+max_tree_length)
+    if (max_tree_length > 0) {
+      nodeWidth = Math.floor(80 / max_tree_length) * 3.0;
+    }
+    console.log("MAX TREE nodeWidth "+nodeWidth);
   }else {
     logBranchLength = true;
+    var max_tree_length =  getmaxlength(treeRoot,0);
+    console.log("MAX TREE LENGTH LOG "+max_tree_length)
+    if (max_tree_length > 0) {
+      nodeWidth = Math.floor(80 / max_tree_length) * 3.0;
+    }
+    console.log("MAX TREE nodeWidth "+nodeWidth);
+
   }
   updateLayout(cladeRoot);
 });
