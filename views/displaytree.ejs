@@ -2316,8 +2316,8 @@ $('#loga').on('click', function(event, dropdownData) {
 });
 $('#moreHeigth').on('click', function(event, dropdownData) {
   nodeHeight += modStepY;
-  hLetter = nodeHeight  ;
-  if (nodeHeight >= 15) {
+  hLetter = nodeHeight  - 2   ;
+  if (nodeHeight > 15) {
       hLetter = 15 ;
       hUnderline = 15 ;
       hStepBase = hStepNormal;
@@ -2328,12 +2328,15 @@ $('#moreHeigth').on('click', function(event, dropdownData) {
   updateLayout(cladeRoot);
 });
 $('#lessHeigth').on('click', function(event, dropdownData) {
-  if (nodeHeight - modStepY >= 0 ) {
+  if (nodeHeight - modStepY >= 10 ) {
   // if (true) {
     nodeHeight -= modStepY;
-    if (nodeHeight < 15) {
-      hLetter = nodeHeight ;
-      hUnderline = 10 ;
+    if (nodeHeight <= 15) {
+      hLetter = nodeHeight - 2 ;
+      hUnderline = 12 ;
+      if (nodeHeight <= 10) {
+        hUnderline = 9 ;
+      }
       hStepBase = hStepSmall;
       alignmentLetterSpacing = alignmentLetterSmallSpacing;
       fitPoliceSize = fitSmallPoliceSize;
