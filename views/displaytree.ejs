@@ -170,10 +170,10 @@ var g;                                // Conteneur principal
 var diagonal = svgLinks.shoulder;     // cf links.js
 var symbol = d3.symbol().size(128);   // Symbol des noeuds
 var color = d3.scaleOrdinal(d3.schemeCategory20); // Echelle des couleurs
-var options ;                         // Options d'affichage
+var options;                         // Options d'affichage
 var action;                           // Action associee au clic
-var selectedCrossref ;                // Reference croisée choisie (nom de la sequence)
-var selectedCrossrefURL ;             // URL associe
+var selectedCrossref;                // Reference croisée choisie (nom de la sequence)
+var selectedCrossrefURL;             // URL associe
 var crossref;                         // Objet decrivant les differentes ref croisees associees a la famille
 var spattern=pattern.split('\n');     // pattern a chercher et a afficher dans l'arbre
 // Exemple getfam?fam=CLU_005912_4_2_C&pattern=0:PETMA_GL476433.PE1+0:ANOCA_6.PE486+1:XENTR_GL172641_1.PE38+1:XENTR_GL172642_1.PE97
@@ -270,7 +270,7 @@ geneticcode["---"] = "-";
 for (d in geneticcode){
   var col = "grey";
   var _aa = geneticcode[d];
-  if (_aa != undefined)  {
+  if (_aa != undefined) {
     var _hsl = hslaa[_aa];
     if (_hsl != undefined) {
       col = hsl2col(_hsl)
@@ -291,27 +291,22 @@ for (d in geneticcode){
     }
   }
 
-
 /*Redefinit les couleurs des codons*/
-console.log("REDOND = ");
-console.log(redond_dna);
 var step_satur = 50;
-
 for (d in redond_dna){
-  var _codons =  redond_dna[d];
+  var _codons = redond_dna[d];
   if (d != "*" && d!= "-") {
-    for (i = 0;i < _codons.length;i++) {
+    for (i = 0; i < _codons.length; i++) {
       var _hsl =  hslaa[d];
       var new_hsl = [_hsl[0],_hsl[1],_hsl[2] + Math.floor(i* step_satur / _codons.length)];
-      console.log(_codons[i]+ " avant "+ colordna[_codons[i]]+ " apres "+ hsl2col(new_hsl));
-      colordna_red[_codons[i]] =    hsl2col(new_hsl);
+      console.log(_codons[i]+ ": avant "+ colordna[_codons[i]]+ ", apres "+ hsl2col(new_hsl));
+      colordna_red[_codons[i]] = hsl2col(new_hsl);
     }
   }
 }
 
 var  dico_aa = new Object();
 var  dico_dna = new Object();
-console.log("isCodon",isCodon);
 
 if (!isStorageSupported(myStorage)) {
   console.log("window.localStorage problem");
@@ -322,13 +317,10 @@ else {
 }
 
 // Fonction d'affichage principale
-// ---------------------------------------
+// -------------------------------
 function  main_display() {
   $('#redondance').hide();
-  // Arbre d'especes (lu dans monarbre.js)
-  // var speciesTreeRoot = d3.hierarchy(cladeRootSpecies, function(d) {
-    // return d.clade;
-  // });
+  // Gestion des pattern (pas utile ici)
   // Transforme le tableau de [index:sequences] en tableau de tableau de [sequences].
   // a ameliorer, pas tres propre
   pattern.forEach(function(d,i){
@@ -349,27 +341,22 @@ function  main_display() {
   // -phyloxml ()
   if (recTree.recGeneTree) {
     cladeRoot = recTree.recGeneTree.phylogeny.clade;
-    // treeRoot = recTree.recGeneTree.phylogeny;
   }
   if (recTree.recPhylo) {
     cladeRoot = recTree.recPhylo.recGeneTree.phylogeny.clade;
-    // treeRoot = recTree.recPhylo.recGeneTree.phylogeny;
-  }
+    }
   if (recTree.phyloxml) {
     cladeRoot = recTree.phyloxml.phylogeny.clade;
-    // treeRoot = recTree.phyloxml.phylogeny;
     tagSimpleGene = true;
   }
 
   // Creation du SVG
-  // ===============
-  // Definit  la div tooltip
-  div = d3.select("body").append("div")
+  div = d3.select("body").append("div")  // Definit  la div de classe tooltip
     .attr("class", "tooltip")
     .style("opacity", 1)
     .style('position', 'absolute');
-  svg1 = d3.select("#svg1");   // selectionne la div svg1
-  g = svg1.append("g")      // ajoute element au svg1
+  svg1 = d3.select("#svg1");    // selectionne la div svg1
+  g = svg1.append("g")          // ajoute l'element treeAlign au svg1
     .attr("id", "treeAlign");
   var transition = d3.transition();
   margin = {
@@ -387,7 +374,6 @@ function  main_display() {
   options = stringOptions.split(",");
 
   // Action associee au click
-  // action = svgEvents.switchChildren;
   action = svgEvents.showBranchResults;
   var stringAction = myStorage.getItem("action");
   if ((stringAction === null )||(stringAction === undefined)||(stringAction === "undefined")){
@@ -435,11 +421,13 @@ function  main_display() {
     // specifiques aux arbres recPhyloXML
     cladeRoot =  xmlparser.flatTree(cladeRoot,flatTreeConfig);
   }
+  
   var _cladeRoot = null;
   var _Parent = null;
   treeRoot = d3.hierarchy(cladeRoot, function(d) {
     return d.clade;
   });
+  
   addNumberSeqSpec(treeRoot);
   updateLayout(cladeRoot,1);
 }
@@ -497,7 +485,6 @@ function updateLayout(cRoot,firstLoad=0) {
 
   // Remplissage du dico nom de sequence => tableau de couleurs
   if ((firstLoad == 1) ||  (firstLoad == 2)) {
-
     var nodes_ini = treeRoot.descendants()
     var leaves_ini = nodes_ini.filter(function (e) {
       return !e.children;
@@ -507,7 +494,7 @@ function updateLayout(cRoot,firstLoad=0) {
       var leaf_name = d.data.name;
       var col_aas = [];
       var col_dnas = [];
-      console.log("SEQUENCE NAME = "+leaf_name);
+      console.log("SEQUENCE NAME = " + leaf_name);
       var dna_sequence = d.data.lastEvent.dnaAlign;
       var aa_sequence = d.data.lastEvent.aaAlign;
       var aas = aa_sequence.split("");
@@ -525,17 +512,17 @@ function updateLayout(cRoot,firstLoad=0) {
 
       if (dna_sequence != undefined) {
         var dnas = dna_sequence.split("");
-        for (i = 0; i <= dnas.length-3; i+=3) {
-          var codon  = dnas[i]+dnas[i+1]+dnas[i+2];
+        for (i = 0; i <= dnas.length-3; i += 3) {
+          var codon = dnas[i]+dnas[i+1]+dnas[i+2];
           var col = "grey";
-          if (flag_redond  == -1) {
+          if (flag_redond == -1) {
             col = colordna_red[codon];
               console.log("redundant color "+ col);
           } else {
              col = colordna[codon];
               console.log("classical color "+ col);
           }
-          if (col == undefined) {col  = "grey"};
+          if (col == undefined) {col = "grey"};
           col_dnas.push(col);
         }
       }
@@ -560,7 +547,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // | Début modif : variables pour graphe et séquences |
   // ====================================================
   // Ajustement du pas selon le type de séquences affichées
-  hStep = displaySeqType == 'AA' ? hStepBase : hStepBase*3;
+  hStep = displaySeqType == 'AA' ? hStepBase : hStepBase*3 ;
   var seqblocks = d3.selectAll('.seqblock');
   if (!resultsJSON && branchSite) {
     showTooltip();
@@ -575,7 +562,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   }
 
   resultsJSON = resultsJSON;
-  // console.log(resultsJSON);
   var psGraphMargins = {top: 20, right: 50, bottom: 50, left: 50+seq_lg};
   var psGraphWidth = resultsJSON.length*hStep;
   var psGraphHeight = 100;
@@ -1219,7 +1205,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .attr('class', 'node seqblock')
     .attr('transform', function(d) {
       var transx = psGraphMargins.left;
-      var transy = d.y ; // fonctionne seulement avec nodeHeight = 15 *amod*
+      var transy = d.y; // fonctionne seulement avec nodeHeight = 15 *amod*
       return 'translate('+transx+', '+transy+')';
     });
     seqblocksEnter.append("text")
@@ -1374,9 +1360,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
          transx = (d.pos)*hStep + seq_lg + 50 ;
         }
         if (isCodon == 0 ) {
-          transx = transx - 80 // ???
+          transx = transx - 80 ;// ???
         }
-        var transy = d.y - 7;
+        var transy = d.y - 7 ;
         return "translate("+transx+", "+transy+")";
       })
       .append("rect")
@@ -1430,7 +1416,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
           if (branchSite) {
             transx = (d.pos)*hStep + seq_lg + 50 ;
           }         
-          var transy = d.y - 7;
+          var transy = d.y - 7 ;
           return "translate("+transx+", "+transy+")";
         })
         .append("rect")
@@ -2224,7 +2210,7 @@ $('#loga').on('click', function(event, dropdownData) {
 $('#moreHeigth').on('click', function(event, dropdownData) {
   $('#lessHeigth').css('cursor','pointer')
   nodeHeight += modStepY;
-  hLetter = nodeHeight  - 2   ;
+  hLetter = nodeHeight - 2 ;
   if (nodeHeight > 10) {
     hUnderline = 12 ;
   }
