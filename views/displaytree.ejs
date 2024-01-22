@@ -173,8 +173,9 @@ var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees
 var nodeWidth = 80;                  // Largeur
 var nodeHeight = 30;                  // Hauteur
 var hLetter = 15;
-var fitPoliceSize = 16.667;           // Taille de la police des aa et dna 
-// var fitPoliceSize = 10.003;           // Taille de la police des aa et dna 
+var fitNormalPoliceSize = 16.667;           // Taille de la police des aa et dna 
+var fitSmallPoliceSize = 10.003;           // Taille de la police des aa et dna 
+var fitPoliceSize = fitNormalPoliceSize;           // Taille de la police des aa et dna 
 
 // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
 var stringWidth;                      // Largeur affichage arbre
@@ -196,11 +197,13 @@ var patterns= [];
 var div;
 var myStorage = window.localStorage;    // utilisation de localStorage pour consrever les preferences
 var displaySeqType = 'AA';
-var hStepBase = 12;
-// var hStepBase = 6;
+var hStepNormal = 12;
+var hStepSmall = 6;
+var hStepBase = hStepNormal;
 var hStep;
-var alignmentLetterSpacing = hStepBase - 10;
-// var alignmentLetterSpacing = 0;
+var alignmentLetterNormalSpacing = hStepBase - 10;
+var alignmentLetterSmallSpacing = 0; 
+var alignmentLetterSpacing =  alignmentLetterNormalSpacing;
 var psThresholdHigh = parseFloat($('#ps-threshold-high').val()) || parseFloat(1.0);
 var psThresholdLow = parseFloat($('#ps-threshold-low').val()) || parseFloat(0.9);
 var psThresholdHighBgColor = "#FF0000";
@@ -1010,8 +1013,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       // }
     })
     .style("font-family","sans-serif")
-    .style("font-size","12px")
-    .style("font-weight","bold")
+    .style("font-size",12+"px")
+    // .style("font-weight","bold")
     .style("text-decoration",function (d) {
       if (d.data.lastEvent) {
         var pa = d.data.lastEvent.pattern;
@@ -1420,7 +1423,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
-/*    .style("font", hLetter+"px courrier")*/
+    .style("font-size",fitPoliceSize+"px")
     .attr('x', function(d) {return 0;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
@@ -1476,7 +1479,13 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .attr("stroke","black")
       .attr("stroke-opacity", 1)
       .style("fill", "black")
-      .style("opacity",opacityAA);
+      .style("opacity",function(d){
+        if (displaySeqType != "AA") {
+          return 0
+        } else {
+        return d.opac
+        }
+      });
     }
     if (displaySeqType == 'Nuc') {
       var dnaDiv = d3.select('#svg2')
@@ -1524,7 +1533,13 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .attr("stroke","black")
         .attr("stroke-opacity", 1)
         .style("fill", "black")
-        .style("opacity", opacityNuc);
+        .style("opacity", function(d){
+          if (displaySeqType != "Nuc") {
+            return 0
+          } else {
+          return d.opac
+          }
+          });
       }
         console.log("sequence blocs OK");
 
@@ -2303,6 +2318,9 @@ $('#moreHeigth').on('click', function(event, dropdownData) {
   hLetter = nodeHeight  ;
   if (nodeHeight >= 15) {
       hLetter = 15 ;
+      hStepBase = hStepNormal;
+      fitPoliceSize = fitNormalPoliceSize;
+      alignmentLetterSpacing = alignmentLetterNormalSpacing;
     } 
   console.log("node = "+nodeHeight+"; letter = "+hLetter);
   updateLayout(cladeRoot);
@@ -2313,6 +2331,9 @@ $('#lessHeigth').on('click', function(event, dropdownData) {
     nodeHeight -= modStepY;
     if (nodeHeight < 15) {
       hLetter = nodeHeight ;
+      hStepBase = hStepSmall;
+      alignmentLetterSpacing = alignmentLetterSmallSpacing;
+      fitPoliceSize = fitSmallPoliceSize;
     }    
       console.log("node = "+nodeHeight+"; letter = "+hLetter);
     updateLayout(cladeRoot);
