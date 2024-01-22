@@ -18,7 +18,6 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
   <header>
     <nav id="main-nav" class="navbar navbar-default navbar-fixed-top">
       <%- include('../partials/header') %>
-
       <!-- Bouton Action -->
       <div id="action" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose action on node">
@@ -31,24 +30,16 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="subtree" class="dropdown-item" href="#">Sub Tree/Upper Tree</a></li>
         </ul>
       </div>
-
-      <!-- Bouton Collapse -->
-      <!-- <button type="button" class="btn btn-default btn-sm" aria-label="Collapse" data-toggle="tooltip" data-placement="top" title="Collapse the tree" id="globalcollapse">
-        <span>Compact tree</span>
-      </button> -->
-
       <!-- Bouton Expand -->
       <div class="btn-group" role="group" aria-label="">
         <button id="globalexpand" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Expand" data-toggle="tooltip" data-placement="top" title="Expand the tree (takes time on big trees!)">
           <span>Expand tree</span>
         </button>
       </div>
-
       <!-- Boutons Width / Height -->
       <div class="btn-group" role="group" aria-label="Tree size buttons">
         <div class="btn-group" role="group" aria-label="Width buttons">
           <!-- Bouton Reduce width -->
-          </button>
           <button id="lessWidth" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Less width" data-toggle="tooltip" data-placement="top" title="Reduce tree width">
             <span>Width -</span>
             <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
@@ -77,7 +68,6 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           </button>
         </div>
       </div>
-
       <!-- Bouton Alignement -->
       <div id="alignment-type" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose alignment type">
@@ -88,16 +78,12 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="codons-display" class="dropdown-item" href="#">Codons</a></li>
         </ul>
       </div>
-
-
-        <div class="btn-group" role="group" aria-label="Redundance">
-          <!-- Bouton redondance -->
-          <button id="redondance" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Redundancy" data-toggle="tooltip" data-placement="top" title="Reduce tree height">
-            <span>Redundancy</span>
-          </button>
-        </div>
-
-
+      <div class="btn-group" role="group" aria-label="Redundance">
+        <!-- Bouton redondance -->
+        <button id="redondance" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Redundancy" data-toggle="tooltip" data-placement="top" title="Reduce tree height">
+          <span>Redundancy</span>
+        </button>
+      </div>
       <!-- Bouton Export -->
       <div id="export" class="dropdown">
         <button class="btn dropdown-toggle btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Choose Export">
@@ -108,7 +94,6 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
           <li><a id="selecp" class="dropdown-item" href="#">Alignment</a></li>
         </ul>
       </div>
-
       <!-- Champs Seuils sup. et inf. -->
       <div id="thresholds-group" class="btn-group" role="group" aria-label="">
         <button class="btn btn-sm btn-outline-secondary">
@@ -157,6 +142,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
 
 <!-- Code JS pour l'affichage de l'arbre -->
 <script type="text/javascript">
+
 // Recuperation des variables envoyees via Express
 // ----------------------------------------------
 var recTree = <%- arbre %>;
@@ -165,20 +151,18 @@ pattern = '';
 var branchSite = <%- branchSite %>;
 var logBranchLength = <%- logBranchLength %>;
 
-  // Variables globales
+// Variables globales
 // ------------------
 var treeRoot;
 var cladeRoot;
-var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees en cladograme
-var nodeWidth = 80;                  // Largeur
-var nodeHeight = 30;                  // Hauteur
-var hLetter = 15;
-var hUnderline = 15;
-var fitNormalPoliceSize = 16.667;           // Taille de la police des aa et dna 
-var fitSmallPoliceSize = 10.003;           // Taille de la police des aa et dna 
-var fitPoliceSize = fitNormalPoliceSize;           // Taille de la police des aa et dna 
-
-// var x0Align = 350;                  // Cordonee horizonatle de l'alignement
+var layout = d3.layout.cladogram();  // Fonction  D3 qui transforme les donnees en cladograme
+var nodeWidth = 80;                  // Largeur de l'arbre
+var nodeHeight = 30;                 // Hauteur de l'arbre
+var hLetter = 15;                    // Hauteur des blocs de couleurs
+var hUnderline = 15;                 // Position du soulignage
+var fitNormalPoliceSize = 16.667;    // Taille de la police des aa et dna en mode normal
+var fitSmallPoliceSize = 10.003;     // Taille de la police des aa et dna en mode reduit
+var fitPoliceSize = fitNormalPoliceSize;  // Taille de la police des aa et dna 
 var stringWidth;                      // Largeur affichage arbre
 var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
 var svg;                              // La div SVG
@@ -196,12 +180,12 @@ var spattern=pattern.split('\n');     // pattern a chercher et a afficher dans l
 pattern=spattern;
 var patterns= [];
 var div;
-var myStorage = window.localStorage;    // utilisation de localStorage pour consrever les preferences
-var displaySeqType = 'AA';
-var hStepNormal = 12;
-var hStepSmall = 6;
-var hStepBase = hStepNormal;
-var hStep;
+var myStorage = window.localStorage;  // utilisation de localStorage pour consrever les preferences
+var displaySeqType = 'AA';      // type de sequence
+var hStepNormal = 12;           // Epaisseur du carré de couleur en mode normal
+var hStepSmall = 6;             // Epaisseur du carré de couleur en mode reduit
+var hStepBase = hStepNormal;    // Epaisseur du carré de base
+var hStep;                      // Epaisseur du carré ( different si aa ou dna)
 var alignmentLetterNormalSpacing = hStepBase - 10;
 var alignmentLetterSmallSpacing = 0; 
 var alignmentLetterSpacing =  alignmentLetterNormalSpacing;
@@ -237,74 +221,7 @@ var upperThresholdMode = true;
 
 // Simon
 // Dico des aa ( a ameliorer)
-
-/*var coloraa = new Object();
-
-coloraa["K"]= "rgb(230,51,25)"
-coloraa["R"]= "rgb(230,51,25)"
-
-coloraa["A"]= "rgb(25,128,230)"
-coloraa["F"]= "rgb(25,128,230)"
-coloraa["I"]= "rgb(25,128,230)"
-coloraa["L"]= "rgb(25,128,230)"
-coloraa["M"]= "rgb(25,128,230)"
-coloraa["V"]= "rgb(25,128,230)"
-coloraa["W"]= "rgb(25,128,230)"
-
-coloraa["N"]= "rgb(25,204,25)"
-coloraa["Q"]= "rgb(25,204,25)"
-coloraa["S"]= "rgb(25,204,25)"
-coloraa["T"]= "rgb(25,204,25)"
-
-coloraa["H"]= "rgb(25,179,179)"
-coloraa["Y"]= "rgb(25,179,179)"
-
-coloraa["C"]= "rgb(230,128,128)"
-
-coloraa["D"]= "rgb(204,77,204)"
-coloraa["E"]= "rgb(204,77,204)"
-
-coloraa["P"]= "rgb(204,204,0)"
-
-coloraa["G"]= "rgb(230,153,77)"
-
-coloraa["-"] = "white";
-  */
-
-// var rgbaa = new Object();
-//
-// rgbaa["K"]= [230,51,25];
-// rgbaa["R"]= [230,51,25];
-//
-// rgbaa["A"]= [25,128,230];
-// rgbaa["F"]= [25,128,230];
-// rgbaa["I"]= [25,128,230];
-// rgbaa["L"]= [25,128,230];
-// rgbaa["M"]= [25,128,230];
-// rgbaa["V"]= [25,128,230];
-// rgbaa["W"]= [25,128,230];
-//
-// rgbaa["N"]= [25,204,25];
-// rgbaa["Q"]= [25,204,25];
-// rgbaa["S"]= [25,204,25];
-// rgbaa["T"]= [25,204,25];
-//
-// rgbaa["H"]= [25,179,179];
-// rgbaa["Y"]= [25,179,179];
-//
-// rgbaa["C"]= [230,128,128];
-//
-// rgbaa["D"]= [204,77,204];
-// rgbaa["E"]= [204,77,204];
-//
-// rgbaa["P"]= [204,204,0];
-//
-// rgbaa["G"]= [230,153,77];
-//
-// rgbaa["-"] = [255,255,255];
-// rgbaa["*"] = [0,0,0];
-
-
+// ==========================
 var hslaa = new Object();
 
 hslaa["K"]= [8,80,50];
@@ -340,37 +257,27 @@ hslaa["*"] = [0,0,0];
 
 var flag_redond = 1;
 
-// Fonction rgb ->cold
-// ---------------------------------------
-// function  rgb2col(rgb) {
-//   var col = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
-//   return col
-// }
-
-// Fonction rgb ->cold
-// ---------------------------------------
 function  hsl2col(rgb) {
   var col = "hsl("+rgb[0]+","+rgb[1]+"%,"+rgb[2]+"%)";
   return col
 }
+
 var colordna = new Object();
 var colordna_red = new Object();
 var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
 geneticcode["---"] = "-";
 
-  for (d in geneticcode){
-    var col = "grey";
-    var _aa = geneticcode[d];
-    if (_aa != undefined)  {
-      var _hsl = hslaa[_aa];
-      if (_hsl != undefined) {
-        col = hsl2col(_hsl)
-      }
-
+for (d in geneticcode){
+  var col = "grey";
+  var _aa = geneticcode[d];
+  if (_aa != undefined)  {
+    var _hsl = hslaa[_aa];
+    if (_hsl != undefined) {
+      col = hsl2col(_hsl)
     }
-    colordna[d] = col;
-    //colordna[d] = rgb2col(rgbaa[geneticcode[d]]);
   }
+  colordna[d] = col;
+}
 
 var redond_dna = new Object();
 
