@@ -174,6 +174,8 @@ var nodeWidth = 80;                  // Largeur
 var nodeHeight = 30;                  // Hauteur
 var hLetter = 15;
 var fitPoliceSize = 16.667;           // Taille de la police des aa et dna 
+// var fitPoliceSize = 10.003;           // Taille de la police des aa et dna 
+
 // var x0Align = 350;                  // Cordonee horizonatle de l'alignement
 var stringWidth;                      // Largeur affichage arbre
 var tagSimpleGene = false;            // True si arbre de gene de type PhyloXML, False si arbre de gene de type RecPhyloXML
@@ -195,8 +197,10 @@ var div;
 var myStorage = window.localStorage;    // utilisation de localStorage pour consrever les preferences
 var displaySeqType = 'AA';
 var hStepBase = 12;
+// var hStepBase = 6;
 var hStep;
 var alignmentLetterSpacing = hStepBase - 10;
+// var alignmentLetterSpacing = 0;
 var psThresholdHigh = parseFloat($('#ps-threshold-high').val()) || parseFloat(1.0);
 var psThresholdLow = parseFloat($('#ps-threshold-low').val()) || parseFloat(0.9);
 var psThresholdHighBgColor = "#FF0000";
@@ -1410,14 +1414,14 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .style("font-size",fitPoliceSize+"px")
-    .attr('x', function(d) {return 1;})
+    .attr('x', function(d) {return 0;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
 
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
 /*    .style("font", hLetter+"px courrier")*/
-    .attr('x', function(d) {return 1;})
+    .attr('x', function(d) {return 0;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
 
