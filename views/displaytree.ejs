@@ -2317,6 +2317,9 @@ $('#loga').on('click', function(event, dropdownData) {
 $('#moreHeigth').on('click', function(event, dropdownData) {
   nodeHeight += modStepY;
   hLetter = nodeHeight  - 2   ;
+  if (nodeHeight > 10) {
+    hUnderline = 12 ;
+  }
   if (nodeHeight > 15) {
       hLetter = 15 ;
       hUnderline = 15 ;
