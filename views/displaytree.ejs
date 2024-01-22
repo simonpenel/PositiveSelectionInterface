@@ -2315,6 +2315,7 @@ $('#loga').on('click', function(event, dropdownData) {
   updateLayout(cladeRoot);
 });
 $('#moreHeigth').on('click', function(event, dropdownData) {
+  $('#lessHeigth').css('cursor','pointer')
   nodeHeight += modStepY;
   hLetter = nodeHeight  - 2   ;
   if (nodeHeight > 10) {
@@ -2339,6 +2340,7 @@ $('#lessHeigth').on('click', function(event, dropdownData) {
       hUnderline = 12 ;
       if (nodeHeight <= 10) {
         hUnderline = 9 ;
+        $('#lessHeigth').css('cursor','not-allowed')
       }
       hStepBase = hStepSmall;
       alignmentLetterSpacing = alignmentLetterSmallSpacing;
