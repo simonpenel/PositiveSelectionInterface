@@ -173,6 +173,7 @@ var layout = d3.layout.cladogram();   // Fonction  D3 qui transforme les donnees
 var nodeWidth = 80;                  // Largeur
 var nodeHeight = 30;                  // Hauteur
 var hLetter = 15;
+var hUnderline = 15;
 var fitNormalPoliceSize = 16.667;           // Taille de la police des aa et dna 
 var fitSmallPoliceSize = 10.003;           // Taille de la police des aa et dna 
 var fitPoliceSize = fitNormalPoliceSize;           // Taille de la police des aa et dna 
@@ -1473,7 +1474,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       })
       .append("rect")
       .attr("class","aa_rect")
-      .attr("transform","translate(0,15)" )
+      .attr("transform","translate(0,"+hUnderline+")" )
       .attr('width', hStep)
       .attr('height', 2)
       .attr("stroke","black")
@@ -1527,7 +1528,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         })
         .append("rect")
         .attr("class","dna_rect")
-        .attr("transform","translate(0,15)" )
+        .attr("transform","translate(0,"+hUnderline+")" )
         .attr('width', hStep)
         .attr('height', 2 )
         .attr("stroke","black")
@@ -2318,6 +2319,7 @@ $('#moreHeigth').on('click', function(event, dropdownData) {
   hLetter = nodeHeight  ;
   if (nodeHeight >= 15) {
       hLetter = 15 ;
+      hUnderline = 15 ;
       hStepBase = hStepNormal;
       fitPoliceSize = fitNormalPoliceSize;
       alignmentLetterSpacing = alignmentLetterNormalSpacing;
@@ -2331,6 +2333,7 @@ $('#lessHeigth').on('click', function(event, dropdownData) {
     nodeHeight -= modStepY;
     if (nodeHeight < 15) {
       hLetter = nodeHeight ;
+      hUnderline = 10 ;
       hStepBase = hStepSmall;
       alignmentLetterSpacing = alignmentLetterSmallSpacing;
       fitPoliceSize = fitSmallPoliceSize;
