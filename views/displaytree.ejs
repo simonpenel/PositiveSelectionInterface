@@ -259,53 +259,10 @@ hslaa["*"] = [0,0,0];
 
 var flag_redond = 1;
 
-function  hsl2col(hsl) {
-  var col = "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
-  return col
-}
-
 var colordna = new Object();
 var colordna_red = new Object();
-var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
-geneticcode["---"] = "-";
 
-for (d in geneticcode){
-  var col = "grey";
-  var _aa = geneticcode[d];
-  if (_aa != undefined) {
-    var _hsl = hslaa[_aa];
-    if (_hsl != undefined) {
-      col = hsl2col(_hsl)
-    }
-  }
-  colordna[d] = col;
-}
-
-var redond_dna = new Object();
-
-for (d in geneticcode){
-    var _aa = geneticcode[d];
-    if (_aa in redond_dna) {
-      redond_dna[_aa].push(d);
-    }
-    else {
-      redond_dna[_aa] = [d];
-    }
-  }
-
-/*Redefinit les couleurs des codons*/
-var step_satur = 50;
-for (d in redond_dna){
-  var _codons = redond_dna[d];
-  if (d != "*" && d!= "-") {
-    for (i = 0; i < _codons.length; i++) {
-      var _hsl =  hslaa[d];
-      var new_hsl = [_hsl[0],_hsl[1],_hsl[2] + Math.floor(i* step_satur / _codons.length)];
-      console.log(_codons[i]+ ": avant "+ colordna[_codons[i]]+ ", apres "+ hsl2col(new_hsl));
-      colordna_red[_codons[i]] = hsl2col(new_hsl);
-    }
-  }
-}
+define_colordna()
 
 var  dico_aa = new Object();
 var  dico_dna = new Object();
@@ -1439,6 +1396,51 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
 // Autres fonctions utilitaires
 // ----------------------------
+
+
+function  hsl2col(hsl) {
+  var col = "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
+  return col
+}
+
+function define_colordna (){
+  var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
+  geneticcode["---"] = "-";
+
+  var redond_dna = new Object();
+
+  for (d in geneticcode){
+    var col = "grey";
+    var _aa = geneticcode[d];
+    if (_aa != undefined) {
+      var _hsl = hslaa[_aa];
+      if (_hsl != undefined) {
+        col = hsl2col(_hsl)
+      }
+      if (_aa in redond_dna) {
+        redond_dna[_aa].push(d);
+      }
+      else {
+      redond_dna[_aa] = [d];
+      }
+    }
+    colordna[d] = col;
+  }
+
+  /*Redefinit les couleurs des codons*/
+  var step_satur = 50;
+  for (d in redond_dna){
+    var _codons = redond_dna[d];
+    if (d != "*" && d!= "-") {
+      for (i = 0; i < _codons.length; i++) {
+        var _hsl =  hslaa[d];
+        var new_hsl = [_hsl[0],_hsl[1],_hsl[2] + Math.floor(i* step_satur / _codons.length)];
+        console.log(_codons[i]+ ": avant "+ colordna[_codons[i]]+ ", apres "+ hsl2col(new_hsl));
+        colordna_red[_codons[i]] = hsl2col(new_hsl);
+      }
+    }
+  }
+}
 
 function getColorFromResult(res) {
   if (upperThresholdMode) {
