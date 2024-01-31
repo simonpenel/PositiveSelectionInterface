@@ -259,8 +259,8 @@ hslaa["*"] = [0,0,0];
 
 var flag_redond = 1;
 
-function  hsl2col(rgb) {
-  var col = "hsl("+rgb[0]+","+rgb[1]+"%,"+rgb[2]+"%)";
+function  hsl2col(hsl) {
+  var col = "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
   return col
 }
 
@@ -434,8 +434,7 @@ function  main_display() {
   updateLayout(cladeRoot,1);
 }
 
-// Definitions des autres fonctions
-// --------------------------------
+
 // Fonction de mise a jour de l'affichage
 // ---------------------------------------
 function updateLayout(cRoot,firstLoad=0) {
@@ -1436,8 +1435,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   firstLoad = 0;
     console.log('Fin updatesvg');
 }
-// Fin de la fonction updateSvg
-// ----------------------------
+
 
 // Autres fonctions utilitaires
 // ----------------------------
@@ -1467,7 +1465,6 @@ function getColorFromResult(res) {
     }
   }
 }
-
 
 // Simon
 function getOpacFromResult(res) {
