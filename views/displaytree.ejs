@@ -218,6 +218,8 @@ var nbBranches = 0;
 var nbLeaves = 0;
 var nbSites = 0;
 var upperThresholdMode = true;
+var modStepX = 150; // Pas de la variation en largeur
+var modStepY = 5;   // Pas de la variation en hauteur
 
 // Simon
 // Dico des aa ( a ameliorer)
@@ -1639,6 +1641,8 @@ function isStorageSupported(storage) {
   }
 }
 
+// Fonction sauve le svg de l'arbre
+// ---------------------------------
 function saveSVGTree(){
   $("a#tree").css('color', '#FF0000');
   $("a#selecp").css('color', '#000000');
@@ -1657,6 +1661,8 @@ function saveSVGTree(){
   window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page)</p> <img src="' + img.src + '"/>');
 };
 
+// Fonction sauve le svg de l'alignement
+// -------------------------------------
 function saveSVGAlignment(){
   $("a#tree").css('color', '#000000');
   $("a#selecp").css('color', '#FF0000');
@@ -1805,7 +1811,8 @@ function phylo(n) {
   return dist;
 }
 
-
+// Fonction de calcul de la longueur max d'un arbre
+// ------------------------------------------------
 function getmaxlength(treeRoot,max) {
   treeRoot.each(function (d) {
     var phylodist = phylo(d);
@@ -1815,7 +1822,6 @@ function getmaxlength(treeRoot,max) {
   });
   return max;
 }
-
 
 // Fonction pour utiliser les longueurs de branches lors de l'affichage
 // d'un arbre
@@ -2008,6 +2014,7 @@ function collapseVeryBigTree(treeRoot,patterns) {
     }
   });
 }
+
 // Fonction de suppression d'un element unique dans un tableau
 // -----------------------------------------------------------
 function removeSingle(target_array) {
@@ -2023,6 +2030,7 @@ function removeSingle(target_array) {
   }
   return target_array;
 }
+
 // Fonction de suppression des  elements multiples dans un tableau
 // ---------------------------------------------------------------
 function removeDuplicates(target_array) {
@@ -2038,6 +2046,7 @@ function removeDuplicates(target_array) {
   }
   return target_array;
 }
+
 // Fonction  suppression des  elements multiples dans un tableau et classe par occurence
 // -------------------------------------------------------------------------------------
 function removesortDuplicates(target_array) {
@@ -2079,7 +2088,6 @@ function removesortDuplicates(target_array) {
   }
   return sorted_array;
 }
-
 
 // Actions sur les boutons
 // -----------------------
@@ -2162,8 +2170,6 @@ $('#globalexpand').on('click', function(event, dropdownData) {
   expandTree(treeRoot);
   updateLayout(cladeRoot);
 });
-var modStepX = 150;
-var modStepY = 5;
 $('#moreWidth').on('click', function(event, dropdownData) {
   nodeWidth += modStepX;
   myStorage.setItem("width",nodeWidth);
