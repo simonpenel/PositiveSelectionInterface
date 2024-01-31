@@ -1398,11 +1398,15 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 // ----------------------------
 
 
+// Fonction tableau hsl -> chaine de caractere hsl
+// -----------------------------------------------
 function  hsl2col(hsl) {
   var col = "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
   return col
 }
 
+// Definit les couleurs des codons a partir de la couleur des aa
+// -------------------------------------------------------------
 function define_colordna (){
   var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
   geneticcode["---"] = "-";
@@ -1442,6 +1446,8 @@ function define_colordna (){
   }
 }
 
+// Renvoie la couleur associee au taux
+// -----------------------------------
 function getColorFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
@@ -1468,7 +1474,8 @@ function getColorFromResult(res) {
   }
 }
 
-// Simon
+// Renvoie l'opacite associee au taux
+// ----------------------------------
 function getOpacFromResult(res) {
   if (upperThresholdMode) {
     if (res >= psThresholdHigh) {
@@ -1504,6 +1511,7 @@ function getOpacFromResult(res) {
 }
 
 // Fonction de calcul de la statistique maximale dans les résultats
+// ----------------------------------------------------------------
 function maxStatJSON(jsonResultsList) {
     var currentmax = jsonResultsList[0];
     jsonResultsList.forEach(function(res) {
@@ -1518,7 +1526,10 @@ function maxStatJSON(jsonResultsList) {
     }
     return currentmax;
   }
-  function minStatJSON(jsonResultsList) {
+
+// Fonction de calcul de la statistique minimale dans les résultats
+// ----------------------------------------------------------------
+function minStatJSON(jsonResultsList) {
     var currentmin = jsonResultsList[0];
     jsonResultsList.forEach(function(res) {
       if (res < currentmin) {
@@ -1532,6 +1543,9 @@ function maxStatJSON(jsonResultsList) {
     }
   }
 
+
+// Couleur des noeuds et branches de l'arbre selon le taux
+// -------------------------------------------------------
 function colorByRate(rate) {
   if (blackWhite) {
     return 'hsl(0, 0%, '+(80-2*rate*100)+'%)';
@@ -1544,6 +1558,8 @@ function colorByRate(rate) {
   }
 }
 
+// Mise a jour de la couleur des noeuds
+// ------------------------------------
 function updateNodeColors() {
   // The color of a node depends on the number of positive sites
   g.selectAll('path.symbol')
@@ -1573,8 +1589,9 @@ function updateNodeColors() {
   }
 }
 
+// Navigation on the small graph
+// -----------------------------
 function scrollAlignment(event) {
-  // Navigation on the small graph
   // Get the site's number (mouse position in pixels) and navigate to this site in the large window
   var siteNumber = event.pageX + compactWindow.scrollLeft();
   var leftScroll = 50 + seq_lg + 10 + siteNumber*hStep - alignmentWindow.innerWidth()/2;
@@ -1589,8 +1606,9 @@ function scrollAlignment(event) {
   }
 }
 
+// Keep the navigation window visible after a branch change
+// --------------------------------------------------------
 function updateScroll() {
-  // Keep the navigation window visible after a branch change
   alignmentWindow
     .scrollLeft(alignmentWindow.scrollLeft()+1)
     .scrollLeft(alignmentWindow.scrollLeft()-1);
@@ -1599,6 +1617,9 @@ function updateScroll() {
       .scrollLeft(selposWindow.scrollLeft()-1);
 }
 
+
+// Reload 
+// ------
 function reloadGlobalResults() {
   resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
   updateLayout(cladeRoot);
@@ -1609,6 +1630,7 @@ function showTooltip() { $('.tooltip').show(); }
 function writeTooltip(text) { $('.tooltip').text(text); }
 
 // Get the rate of positive sites within the indicated boundaries
+// --------------------------------------------------------------
 function getPositiveRateJSON(textResultsList, leftB, rightB) {
   var jsonResultsList = JSON.parse(textResultsList);
   var nbPos = 0;
