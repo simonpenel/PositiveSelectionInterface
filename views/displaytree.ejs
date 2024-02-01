@@ -1213,23 +1213,18 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
 
 // Autres fonctions utilitaires
 // ----------------------------
-
-
 // Fonction tableau hsl -> chaine de caractere hsl
 // -----------------------------------------------
 function  hsl2col(hsl) {
   var col = "hsl("+hsl[0]+","+hsl[1]+"%,"+hsl[2]+"%)";
   return col
 }
-
 // Definit les couleurs des codons a partir de la couleur des aa
 // -------------------------------------------------------------
 function define_colordna (){
   var geneticcode = xmlparser.flatTree(recTree.phyloxml.phylogeny.geneticCode);
   geneticcode["---"] = "-";
-
   var redond_dna = new Object();
-
   for (d in geneticcode){
     var col = "grey";
     var _aa = geneticcode[d];
@@ -1247,7 +1242,6 @@ function define_colordna (){
     }
     colordna[d] = col;
   }
-
   /*Redefinit les couleurs des codons*/
   var step_satur = 50;
   for (d in redond_dna){
@@ -1262,7 +1256,6 @@ function define_colordna (){
     }
   }
 }
-
 // Renvoie la couleur associee au taux
 // -----------------------------------
 function getColorFromResult(res) {
@@ -1290,7 +1283,6 @@ function getColorFromResult(res) {
     }
   }
 }
-
 // Renvoie l'opacite associee au taux
 // ----------------------------------
 function getOpacFromResult(res) {
@@ -1326,7 +1318,6 @@ function getOpacFromResult(res) {
     }
   }
 }
-
 // Fonction de calcul de la statistique maximale dans les résultats
 // ----------------------------------------------------------------
 function maxStatJSON(jsonResultsList) {
@@ -1343,7 +1334,6 @@ function maxStatJSON(jsonResultsList) {
     }
     return currentmax;
   }
-
 // Fonction de calcul de la statistique minimale dans les résultats
 // ----------------------------------------------------------------
 function minStatJSON(jsonResultsList) {
@@ -1359,8 +1349,6 @@ function minStatJSON(jsonResultsList) {
       return 0;
     }
   }
-
-
 // Couleur des noeuds et branches de l'arbre selon le taux
 // -------------------------------------------------------
 function colorByRate(rate) {
@@ -1374,7 +1362,6 @@ function colorByRate(rate) {
     }
   }
 }
-
 // Mise a jour de la couleur des noeuds
 // ------------------------------------
 function updateNodeColors() {
@@ -1386,7 +1373,6 @@ function updateNodeColors() {
         return colorByRate(positiveRate);
       }
     });
-
   // The color of a branch depends on the number of positive sites in its node
   g.selectAll('path.link')
     .style('stroke', function(d) {
@@ -1405,7 +1391,6 @@ function updateNodeColors() {
       ;
   }
 }
-
 // Navigation on the small graph
 // -----------------------------
 function scrollAlignment(event) {
@@ -1422,7 +1407,6 @@ function scrollAlignment(event) {
     rightBoundary = siteEnd;
   }
 }
-
 // Keep the navigation window visible after a branch change
 // --------------------------------------------------------
 function updateScroll() {
@@ -1433,19 +1417,15 @@ function updateScroll() {
       .scrollLeft(selposWindow.scrollLeft()+1)
       .scrollLeft(selposWindow.scrollLeft()-1);
 }
-
-
 // Reload 
 // ------
 function reloadGlobalResults() {
   resultsJSON = JSON.parse(xmlparser.flatTree(recTree.phyloxml.phylogeny.global_results.results));
   updateLayout(cladeRoot);
 }
-
 function hideTooltip() { $('.tooltip').hide(); }
 function showTooltip() { $('.tooltip').show(); }
 function writeTooltip(text) { $('.tooltip').text(text); }
-
 // Get the rate of positive sites within the indicated boundaries
 // --------------------------------------------------------------
 function getPositiveRateJSON(textResultsList, leftB, rightB) {
@@ -1464,7 +1444,6 @@ function getPositiveRateJSON(textResultsList, leftB, rightB) {
   });
   return nbPos/(rightBoundary - leftBoundary + 1);
 }
-
 // Fonction de test du support local.storage
 // ------------------------------------------
 // https://michalzalecki.com/why-using-localStorage-directly-is-a-bad-idea/
@@ -1478,7 +1457,6 @@ function isStorageSupported(storage) {
     return false;
   }
 }
-
 // Fonction sauve le svg de l'arbre
 // ---------------------------------
 function saveSVGTree(){
@@ -1498,7 +1476,6 @@ function saveSVGTree(){
   // window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page) <img src="' + img.src + '"/>');
   window.open().document.write('<p>Please copy or save the the image (larger images may not display properly on the page)</p> <img src="' + img.src + '"/>');
 };
-
 // Fonction sauve le svg de l'alignement
 // -------------------------------------
 function saveSVGAlignment(){
@@ -1529,7 +1506,6 @@ function saveSVGAlignment(){
   // img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(as_text)));
   // window.open().document.write('<p>Please copy or save the the image (it may not display if it is too large) <img src="' + img.src + '"/>');
 };
-
 // Fonction recursive qui renvoie les noeuds ancestraux communs a
 // une liste de feuilles
 // ---------------------------------------------------------------
@@ -1565,7 +1541,6 @@ function recuAncestors (todo, done) {
     return (done, [])
   }
 }
-
 // Fonction de coloration du resultat d'une recherche de  pattern
 // La variable pattern est ici un tableau du nom des feuilles qui ont matchés
 // --------------------------------------------------------------------------
@@ -1631,7 +1606,6 @@ function subnode(nodes, pattern, colPattern) {
   });
   return scrollref;
 }
-
 // Fonction de calcul de la position  d'un noeud a partir des longueurs
 // de branch_length
 // --------------------------------------------------------------------
@@ -1648,7 +1622,6 @@ function phylo(n) {
   }
   return dist;
 }
-
 // Fonction de calcul de la longueur max d'un arbre
 // ------------------------------------------------
 function getmaxlength(treeRoot,max) {
@@ -1660,7 +1633,6 @@ function getmaxlength(treeRoot,max) {
   });
   return max;
 }
-
 // Fonction pour utiliser les longueurs de branches lors de l'affichage
 // d'un arbre
 // --------------------------------------------------------------------
@@ -1670,7 +1642,6 @@ function phylogeny(treeRoot,offset) {
     d.x = phylodist*offset;
   });
 }
-
 // Fonction qui decale la position x d'un "loss"
 // ---------------------------------------------
 function phylogeny_setloss(treeRoot,offset) {
@@ -1681,7 +1652,6 @@ function phylogeny_setloss(treeRoot,offset) {
     }
   });
 }
-
 // Fonction ajoute nb sequences et especes
 // ---------------------------------------
 function  addNumberSeqSpec(treeRoot) {
@@ -1707,7 +1677,6 @@ function  addNumberSeqSpec(treeRoot) {
     }
   });
 }
-
 // Fonction qui collapse les noeuds d'une certaine profondeur
 // ----------------------------------------------------------
 function expandTree(treeRoot) {
@@ -1723,7 +1692,6 @@ function expandTree(treeRoot) {
     }
   });
 }
-
 // Fonction recupere especes
 // -------------------------
 function getSpec (noeud) {
@@ -1751,7 +1719,6 @@ function getSpec (noeud) {
     return specs;
   }
 }
-
 // Fonction qui collapse les noeuds d'une certaine profondeur
 // ----------------------------------------------------------
 function expandTree(treeRoot) {
@@ -1767,7 +1734,6 @@ function expandTree(treeRoot) {
     }
   });
 }
-
 // Fonction qui collapse les noeuds d'une certaine profondeur
 // ----------------------------------------------------------
 function collapseVeryBigTree(treeRoot,patterns) {
@@ -1852,7 +1818,6 @@ function collapseVeryBigTree(treeRoot,patterns) {
     }
   });
 }
-
 // Fonction de suppression d'un element unique dans un tableau
 // -----------------------------------------------------------
 function removeSingle(target_array) {
@@ -1868,7 +1833,6 @@ function removeSingle(target_array) {
   }
   return target_array;
 }
-
 // Fonction de suppression des  elements multiples dans un tableau
 // ---------------------------------------------------------------
 function removeDuplicates(target_array) {
@@ -1884,7 +1848,6 @@ function removeDuplicates(target_array) {
   }
   return target_array;
 }
-
 // Fonction  suppression des  elements multiples dans un tableau et classe par occurence
 // -------------------------------------------------------------------------------------
 function removesortDuplicates(target_array) {
@@ -1926,17 +1889,14 @@ function removesortDuplicates(target_array) {
   }
   return sorted_array;
 }
-
 // Actions sur les boutons
 // -----------------------
 $('#selectCrossref').on('click', function(event) {
   selectedCrossref=$( "#selectCrossref option:selected" ).text();
   selectedCrossrefURL=crossref[selectedCrossref].url;
   myStorage.setItem("crossref",selectedCrossref);
-  //updateLayout(cladeRoot);
 });
 $('#selectCrossref').ready(function() {
-    // selectedCrossref="HOGENOM";
   });
 $('#action').ready(function() {
   switch (myStorage.getItem("action")) {
@@ -1965,7 +1925,6 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#000000');
-/*      updateLayout(cladeRoot);*/
       break;
     case "Switch children":
       action = svgEvents.switchChildren;
@@ -1973,7 +1932,6 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#FF0000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#000000');
-/*      updateLayout(cladeRoot);*/
       break;
     case "Collapse/Expand":
       action = svgEvents.collapse;
@@ -1981,7 +1939,6 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#FF0000');
       $('#subtree').css('color','#000000');
-/*      updateLayout(cladeRoot);*/
       break;
     case "Sub Tree/Upper Tree":
       action = svgEvents.focus;
@@ -1989,7 +1946,6 @@ $('#action').on('click', function(event, dropdownData) {
       $('#switch').css('color','#000000');
       $('#collapse').css('color','#000000');
       $('#subtree').css('color','#FF0000');
-/*      updateLayout(cladeRoot);*/
       break;
     default:
   }
@@ -2025,20 +1981,16 @@ $('#loga').on('click', function(event, dropdownData) {
   if (logBranchLength) {
     logBranchLength = false;
     var max_tree_length =  getmaxlength(treeRoot,0);
-        console.log("MAX TREE LENGTH "+max_tree_length)
     if (max_tree_length > 0) {
       nodeWidth = Math.floor(80 / max_tree_length) * 3.0;
     }
-    console.log("MAX TREE nodeWidth "+nodeWidth);
-  }else {
+  }
+  else {
     logBranchLength = true;
     var max_tree_length =  getmaxlength(treeRoot,0);
-    console.log("MAX TREE LENGTH LOG "+max_tree_length)
     if (max_tree_length > 0) {
       nodeWidth = Math.floor(80 / max_tree_length) * 3.0;
     }
-    console.log("MAX TREE nodeWidth "+nodeWidth);
-
   }
   updateLayout(cladeRoot);
 });
@@ -2105,7 +2057,6 @@ $('#export').on('click', function(event, dropdownData) {
     default:
   }
 });
-
 // The page has loaded
 $(document).ready(function() {
   $('#upperSelected').change(function() {
@@ -2116,11 +2067,9 @@ $(document).ready(function() {
     upperThresholdMode = false;
     updateLayout(cladeRoot);
   });
-
   if (!isCodon) {
       $('#alignment-type').hide();
   }
-
   if (!branchSite) {
     $('#left-boundary, #right-boundary').prop('disabled', true);
   }
@@ -2160,7 +2109,6 @@ $(document).ready(function() {
   $(window).on('ready resize', function() {
     $('main').css('margin-top', $('header').outerHeight());
   });
-
   // Gestion du bouton pour le type d'alignement
   $('#alignment-type').on('click', function(event, dropdownData) {
     var target = event.toElement || event.relatedTarget || event.target || function () { throw "Failed to attach an event target!"; }
@@ -2197,7 +2145,6 @@ $(document).ready(function() {
       default:
     }
   });
-
   // Gestion de la modification des seuils
   $('#ps-threshold-high, #ps-threshold-low').on('change', function(event) {
     // On a modifié un des seuils
