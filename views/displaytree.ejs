@@ -164,15 +164,11 @@ hslaa["-"] = [0,0,100];
 hslaa["*"] = [0,0,0];
 
 var flag_redond = 1;
-
 var colordna = new Object();
 var colordna_red = new Object();
-
 define_colordna()
-
 var  dico_aa = new Object();
 var  dico_dna = new Object();
-
 if (!isStorageSupported(myStorage)) {
   console.log("window.localStorage problem");
   $(testnav).append('It seems that <b>window.localStorage</b> is full or is not supported by your browser<br>Please check this <a href="/clear/">here</a> ');
@@ -180,7 +176,6 @@ if (!isStorageSupported(myStorage)) {
 else {
   main_display();
 }
-
 // Fonction d'affichage principale
 // -------------------------------
 function  main_display() {
@@ -214,7 +209,6 @@ function  main_display() {
     cladeRoot = recTree.phyloxml.phylogeny.clade;
     tagSimpleGene = true;
   }
-
   // Creation du SVG
   div = d3.select("body").append("div")  // Definit  la div de classe tooltip
     .attr("class", "tooltip")
@@ -230,14 +224,12 @@ function  main_display() {
     left: 200,
     right: 300
   }
-
   // Option d'affichage
   stringOptions = myStorage.getItem("options");
   if (stringOptions === null || stringOptions === undefined || stringOptions === "undefined"){
     stringOptions = "name,species";
   }
   options = stringOptions.split(",");
-
   // Action associee au click
   action = svgEvents.showBranchResults;
   var stringAction = myStorage.getItem("action");
@@ -262,7 +254,6 @@ function  main_display() {
       console.log(action);
       break;
   }
-
   // Largeur de l'arbre
   if (tagSimpleGene === false) {
     nodeWidth = nodeWidth / 5 ;
@@ -272,31 +263,26 @@ function  main_display() {
     stringWidth = nodeWidth;
     myStorage.setItem("width",stringWidth);
   }
-
   // Concerne les arbres recphyloxml
   var flatTreeConfig = {
     transferBack :false,
     speciationLoss : false,
     speciationOutLoss : false,
   }
-
   // Operation effectuee si il s'agt d'un arbre RecPhyloXML
   if (tagSimpleGene === false) {
     // cladeRoot est la racine hierarchisee en clade avec des modifs
     // specifiques aux arbres recPhyloXML
     cladeRoot =  xmlparser.flatTree(cladeRoot,flatTreeConfig);
   }
-  
   var _cladeRoot = null;
   var _Parent = null;
   treeRoot = d3.hierarchy(cladeRoot, function(d) {
     return d.clade;
-  });
-  
+  });  
   addNumberSeqSpec(treeRoot);
   updateLayout(cladeRoot,1);
 }
-
 
 // Fonction de mise a jour de l'affichage
 // ---------------------------------------
@@ -346,7 +332,6 @@ function updateLayout(cRoot,firstLoad=0) {
     };
     phylogeny_setloss(treeRoot,nodeWidth);
   }
-
   // Remplissage du dico nom de sequence => tableau de couleurs
   if ((firstLoad == 1) ||  (firstLoad == 2)) {
     var nodes_ini = treeRoot.descendants()
@@ -373,7 +358,6 @@ function updateLayout(cRoot,firstLoad=0) {
         col_aas.push(col);
       })
       dico_aa[leaf_name] = col_aas;
-
       if (dna_sequence != undefined) {
         var dnas = dna_sequence.split("");
         for (i = 0; i <= dnas.length-3; i += 3) {
@@ -391,10 +375,8 @@ function updateLayout(cRoot,firstLoad=0) {
         }
       }
       dico_dna[leaf_name] = col_dnas;
-
     })
   }
-
   updateSvg(treeRoot,firstLoad);
   updateScroll();
 }
@@ -403,10 +385,8 @@ function updateLayout(cRoot,firstLoad=0) {
 // ----------------------------------------
 function updateSvg(treeRoot,firstLoad ,config = {}) {
   console.log('Start updatesvg');
-
   // Suppression de l'ancien affichage de l'alignement et du graphe
   d3.selectAll('#ps-graph, #sequences-container').remove();
-
   // ====================================================
   // | Début modif : variables pour graphe et séquences |
   // ====================================================
@@ -424,7 +404,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   } else {
     maxSeqLen = resultsJSON.length;
   }
-
   resultsJSON = resultsJSON;
   var psGraphMargins = {top: 20, right: 50, bottom: 50, left: 50+seq_lg};
   var psGraphWidth = resultsJSON.length*hStep;
@@ -466,10 +445,8 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       speciationLoss : "symbolCircle"
     }
   }
-
   var nodes = treeRoot.descendants();
   var links = treeRoot.links();
-
   // Coloration du pattern si il existe
   if ((pattern != "none") && (pattern !== ' ') && (pattern !== undefined)) {
     // Boucle sur les differents patterns
@@ -478,8 +455,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       // var subNodes = subnode(nodes,d,i);
       scrollref = subnode(nodes,d,i);
     });
-  }
-  
+  }  
   // Dimensions du svg
   var minX = d3.min(nodes, function(d) {
     return d.x;
@@ -501,7 +477,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   svg1.attr("width", widthSVG + margin.right + margin.left);
   svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
   g.attr("transform", "translate(" + (margin.right - minX - 250) + "," + (margin.top - minY + 50 + psGraphHeight + decalageY) + ")");
-
   //  D3: Objets LINK
   var link = g.selectAll(".link").data(links);  // associe l'element link a la donnee links
   //EXIT gere les elements qui ont disparu
@@ -566,8 +541,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       // var sl = d.target.data.lastEvent.speciesLocation;
       // if (et === "transferBack" || et === "bifurcationOut" || sl == "Out") return '5,5';
       if (et === "transferBack" || et === "bifurcationOut") return '5,5';
-    });
-    
+    });  
   // D3:  Objets NODE
   var node = g.selectAll(".node").data(nodes);
   node.exit().remove();
@@ -634,7 +608,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   nodeEnter
     .append("text")
     .attr("class", "internal");
-
   var allNodes =
     nodeEnter
     .merge(node)
@@ -646,8 +619,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         return "translate(" + [d.x + 4, d.y] + ")";
       }
     })
-    .on("click",action);
-    
+    .on("click",action);  
   allNodes
     .select(".gsymbol")
     .attr("transform", function(d) {
@@ -661,8 +633,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         str += "";
       }
       return str;
-    });
-    
+    });    
   allNodes
     .select(".symbol")
     .attr("d", function(d) { //Type de symbol
@@ -714,8 +685,7 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       } else {
         return symbol.type(d3.symbolCross)();
       }
-    });
-    
+    });    
   allNodes
     .select(".label")
     .transition()
@@ -754,12 +724,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       return name;
     })
     .style("fill",function (d) {
-      // if (d.data.name && d.data.lastEvent.eventType === "leaf") {
-      //   return setLeafColour(d.data.lastEvent.speciesLocation);
-      // }
-      // if (d.data.name && d.data.lastEvent.eventType === "monophyletic") {
-      //   return setLeafColour(d.data.lastEvent.speciesLocation);
-      // }
     })
     .style("font-family","sans-serif")
     .style("font-size",12+"px")
@@ -774,7 +738,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       }
       else return "none";
     });
-    
   allNodes
     .select(".internal")
     .transition()
@@ -791,7 +754,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       }
       return name
     });
-
   // Get tree characteristics (do this only once)
   if (firstLoad) {
     nbBranches = g.selectAll('path.symbol').size();
@@ -804,14 +766,12 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       }
     });
   }
-
   // =======================
   // Selection des feuilles
   // =======================
   var leaves = nodes.filter(function (e) {
     return !e.children;
   });
-
   var widthSVG0 = resultsJSON.length;
   var heightSVG0 = 60;
   var psGraphGlobalWidth = resultsJSON.length;
@@ -821,24 +781,15 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   svg0.attr('width', widthSVG0 + 15)
       .attr("height",psGraphGlobalHeight);
   var svg3 = d3.select('#svg3');
-  svg3
-    // .attr('width', widthSVG0 + 15)
-    // .attr('height',  heightSVG0*3)
-    // .attr("position","fixed")
-    .attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50);
-    // .attr("height",   10);
-
+  svg3.attr("width",  50 + seq_lg + 10 + resultsJSON.length*hStep + 10 + seq_lg + 50);
   d3.select('#ps-graph-global').remove();
-
   if (!document.getElementById('ps-graph-global')) {
     // Ajout du graphe des résultats au SVG
     svg0.append('g')
       .attr('id', 'ps-graph-global')
       .attr('transform', 'translate('+psGraphGlobalMargins.left+', '+psGraphGlobalMargins.top+')');
   }
-
   var psGraphGlobal = d3.select('#ps-graph-global');
-
   // Calcul du décalage des sites pour le positionnement des rectangles du graphe
   // Association des données aux futurs rectangles
   var globalRects = psGraphGlobal
@@ -859,7 +810,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .style('fill', function(d) {
         return getColorFromResult(d);
       });
-
   // Handle click-drag events on the small graph
   document.getElementById(compactWindow.attr('id')).onmousedown = function(e) {
     scrollAlignment(e);
@@ -871,7 +821,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       compactWindow.off('mousemove mouseup');
     });
   };
-
   document.getElementById(alignmentWindow.attr('id')).onscroll = function() {
     // Generic scrolling (even without the small graph)
     // Draw rectangle at currently visualized site
@@ -890,7 +839,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .style('fill', 'rgba(0,0,0,0.17)')
         .style('stroke', navWindowColor)
         .style('stroke-width', '0');
-
     // autre scroll
     var ss =  alignmentWindow.scrollLeft();
     selposWindow.scrollLeft(ss, 0);
@@ -900,7 +848,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     }
     updateNodeColors();
   };
-
   document.getElementById(selposWindow.attr('id')).onscroll = function() {
     // Generic scrolling (even without the small graph)
     // Draw rectangle at currently visualized site
@@ -919,19 +866,14 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .style('fill', 'rgba(0,0,0,0.17)')
         .style('stroke', navWindowColor)
         .style('stroke-width', '0');
-
-      var ss =  selposWindow.scrollLeft();
-      alignmentWindow.scrollLeft(ss, 0);
-        // scroll l'autre
-
-
+    var ss =  selposWindow.scrollLeft();
+    alignmentWindow.scrollLeft(ss, 0);
     if (automaticBoundaries) {
       leftBoundary = siteStart;
       rightBoundary = siteEnd;
     }
     updateNodeColors();
   };
-  
   console.log("mise en place des graphes");
   // ======================================================
   // | Début : graphe des résultats de sélection positive |
@@ -959,7 +901,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   // === Ajout de l'axe y au graphe ===
   psGraph.append('g')
     .call(d3.axisLeft(y));
-
   // === Calcul du décalage des sites pour le positionnement des rectangles du graphe ===
   // === Association des données aux futurs rectangles ===
   var rects = psGraph
@@ -994,7 +935,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         showTooltip();
       })
       .on('mouseout', hideTooltip);
-
   // Ajout du seuil supérieur au graphe
   psGraph.append('line')
     .attr('x1', x(1))
@@ -1015,19 +955,11 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     // .style('stroke', psThresholdLowBgColor)
     .style('stroke-width', '1')
     .style('stroke-dasharray', ('4, 4'));
-
   psGraph.append('br');
   console.log("graphes OK");
   // ====================================================
   // | Fin : graphe des résultats de sélection positive |
   // ====================================================
-
-
-
-
-
-
-
   // ==============================
   // | Début : blocs de séquences |
   // ==============================
@@ -1096,20 +1028,16 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .style('display', function() {
         return displaySeqType == 'Nuc' ? 'block' : 'none';
       });
-
   // Alignement : ajout des rectangles
   var aaSequence = d3.select('.aa-sequence');
   var dnaSequence = d3.select('.dna-sequence');
   var targetSequence = displaySeqType == 'AA' ? aaSequence : dnaSequence;
-
-
-// Alignement : ajout des coelurs AA
+  // Alignement : ajout des coelurs AA
   console.log("Genere aa_dataset and dna_dataset");
   aa_dataset = [];
   dna_dataset = [];
   var opacityAA = 0;
   var opacityNuc = 0;
-  
   if (displaySeqType == 'AA') {
       opacityAA = 0.5;
       opacityNuc = 0.0;
@@ -1118,14 +1046,9 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     opacityAA = 0.0;
     opacityNuc = 0.5;
   }
-/*  d3.selectAll(".aa_block").remove(); // on vire  tout
-  d3.selectAll(".dna_block").remove();*/
-
   d3.select("#aa-container").remove(); // on vire  tout
   d3.select("#dna-container").remove();
-
   var leaves_sequences = leaves.filter(function(d) {return (d.data.lastEvent.aaAlign);});
-
   leaves_sequences.forEach (function (d,i) {
     var index = i;
     var seqname =  d.data.name;
@@ -1160,31 +1083,25 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       }
       })
     });
-
   console.log("aa_dataset and dna_dataset OK");
-
   seqTextAA.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .style("font-size",fitPoliceSize+"px")
     .attr('x', function(d) {return 0;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.aa;});
-
   seqTextNuc.append('text')
     .style('letter-spacing', (alignmentLetterSpacing)+'px') // Espacement des lettres pour correpondre au graphe
     .style("font-size",fitPoliceSize+"px")
     .attr('x', function(d) {return 0;})
     .attr('y', function(d) {return Math.floor(hStepBase/3);})
     .text(function(d) {return d.dna;});
-
   console.log("sequences  OK");
-
   if (displaySeqType == 'AA') {
   var aaDiv = d3.select('#svg2')
       .append('g')
       .attr('id', 'aa-container')
       .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-
     var aablock =
       aaDiv.selectAll(".aa_block")
       .data(aa_dataset);
@@ -1204,8 +1121,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
       .attr('height', hLetter )
       .style("fill", function(d){ return (d.col)})
       .style("opacity",opacityAA);
-
-
       //ENTER + updatesATE
       aablockEnter
       .merge(aablock)
@@ -1241,8 +1156,6 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
         .append('g')
         .attr('id', 'dna-container')
         .attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-
-
       var dnablock =
         dnaDiv.selectAll(".dna_block")
         .data(dna_dataset);
@@ -1286,19 +1199,17 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
           if (displaySeqType != "Nuc") {
             return 0
           } else {
-          return d.opac
+            return d.opac
           }
-          });
+        });
       }
-        console.log("sequence blocs OK");
-
+      console.log("sequence blocs OK");
   // ==============================================================
   // Fin modif : blocs de séquences
   // ==============================================================
   firstLoad = 0;
     console.log('Fin updatesvg');
 }
-
 
 // Autres fonctions utilitaires
 // ----------------------------
